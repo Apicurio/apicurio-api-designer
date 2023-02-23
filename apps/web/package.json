@@ -1,24 +1,40 @@
 {
-  "name": "web",
-  "version": "0.0.0",
+  "name": "apicurio-api-designer",
+  "version": "1.0",
+  "description": "Apicurio API Designer user interface project.",
+  "main": "server.js",
   "private": true,
+  "repository": "https://github.com/apicurio/apicurio-api-designer.git",
+  "homepage": "https://www.apicur.io/designer/",
+  "license": "Apache-2.0",
   "scripts": {
     "server": "node server.js",
     "start": "react-scripts start",
     "dev": "react-scripts start",
     "build": "react-scripts build",
-    "lint": "TIMING=1 eslint \"src/**/*.ts*\""
+    "lint": "eslint --ext=.ts,.tsx ./src"
   },
   "dependencies": {
+    "@patternfly/patternfly": "4.224.2",
+    "@patternfly/quickstarts": "1.4.0",
+    "@patternfly/react-charts": "6.94.18",
+    "@patternfly/react-core": "4.276.6",
+    "@patternfly/react-icons": "4.93.6",
+    "@patternfly/react-styles": "4.92.6",
+    "@patternfly/react-table": "4.112.39",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-scripts": "5.0.1",
     "ui": "workspace:*"
   },
   "devDependencies": {
+    "@apicurio/eslint-config": "0.2.0",
     "@types/node": "16.18.12",
     "@types/react": "17.0.53",
     "@types/react-dom": "17.0.18",
+    "@typescript-eslint/eslint-plugin": "5.53.0",
+    "@typescript-eslint/parser": "5.53.0",
+    "eslint": "8.34.0",
     "express": "4.18.2",
     "tsconfig": "workspace:*",
     "typescript": "4.9.5",

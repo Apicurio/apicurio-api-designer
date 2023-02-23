@@ -1,22 +1,22 @@
 import * as React from "react";
 
 interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  children: React.ReactNode;
-  href: string;
+    children: React.ReactNode;
+    href: string;
 }
 
 export const Link = (props: LinkProps) => {
-  const { children, href, ...rest } = props;
+    const { children, href, ...rest } = props;
 
-  if (rest.target === "_blank") {
-    rest.rel = "noopener noreferrer";
-  }
+    if (rest.target === "_blank") {
+        rest.rel = "noopener noreferrer";
+    }
 
-  return (
-    <a href={href} {...rest}>
-      <span>l:</span>
-      <span> </span>
-      <span>{children}</span>
-    </a>
-  );
+    return (
+        <a href={href} {...rest}>
+            <span>l:</span>
+            <span> </span>
+            <span>{children}</span>
+        </a>
+    );
 };
