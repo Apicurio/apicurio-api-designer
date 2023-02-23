@@ -5,13 +5,11 @@
     "clean": "turbo run clean",
     "dev": "turbo run dev --no-cache --continue",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "lint": "turbo run lint",
-    "test": "turbo run test"
+    "lint": "turbo run lint"
   },
   "devDependencies": {
-    "eslint": "^8.4.1",
-    "prettier": "^2.5.1",
-    "turbo": "latest"
+    "eslint": "8.34.0",
+    "turbo": "1.8.2"
   },
-  "packageManager": "pnpm@7.15.0"
+  "packageManager": "pnpm@7.27.1"
 }

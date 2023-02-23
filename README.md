@@ -1,37 +1,39 @@
-# Turborepo Create React App starter
+# Apicurio API Designer
 
-This is an official starter Turborepo.
+This project is the main UI project for Apicurio API Designer.  API Designer is the successor
+to Apicurio Studio.
 
 ## What's inside?
 
-This Turborepo includes the following packages/apps:
+This repository includes the following packages/apps:
 
 ### Apps and Packages
 
-- `docs`: a [create-react-app](https://create-react-app.dev) app
-- `web`: another [create-react-app](https://create-react-app.dev) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-plugin-react` and `eslint-config-prettier`)
+- `web`: the main web application
+- `ui`: a React component library used by `web` and published to npmjs
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ### Utilities
 
-This Turborepo has some additional tools already setup for you:
+This repository has some tools it requires:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [ESLint](https://eslint.org/) for code linting
-- [Jest](https://jestjs.io) test runner for all things JavaScript
-- [Prettier](https://prettier.io) for code formatting
+- [pnpm](https://pnpm.io/) for package management
 
-## Using this example
 
-Run the following command:
+## Using this repository
+
+Run the following commands:
 
 ```sh
-npx degit vercel/turbo/examples/with-create-react-app with-create-react-app
-cd with-create-react-app
 pnpm install
-git init . && git add . && git commit -m "Init"
+pnpm run dev
 ```
+
+This will install all dependencies and then run the application in development mode.
+A browser window should open automatically, but if not, you can go here:
+
+http://127.0.0.1:9003
