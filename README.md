@@ -36,4 +36,4 @@ pnpm run dev
 This will install all dependencies and then run the application in development mode.
 A browser window should open automatically, but if not, you can go here:
 
-http://127.0.0.1:9003
+http://localhost:3000/
