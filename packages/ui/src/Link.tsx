@@ -14,7 +14,7 @@ export const Link = (props: LinkProps) => {
 
   return (
     <a href={href} {...rest}>
-      <span>LINK:</span>
+      <span>l:</span>
       <span> </span>
       <span>{children}</span>
     </a>
