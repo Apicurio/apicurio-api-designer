@@ -1,4 +1,8 @@
 {
   "extends": "tsconfig/react-app.json",
+  "paths": {
+    "@app/*": ["src/app/*"],
+    "@assets/*": ["node_modules/@patternfly/react-core/dist/styles/assets/*"]
+  },
   "include": ["src"]
 }

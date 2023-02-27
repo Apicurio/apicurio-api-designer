@@ -5,7 +5,6 @@
   "main": "server.js",
   "private": true,
   "repository": "https://github.com/apicurio/apicurio-api-designer.git",
-  "homepage": "https://www.apicur.io/designer/",
   "license": "Apache-2.0",
   "scripts": {
     "server": "node server.js",
@@ -24,6 +23,7 @@
     "@patternfly/react-table": "4.112.39",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-router-dom": "5.3.4",
     "react-scripts": "5.0.1",
     "ui": "workspace:*"
   },
@@ -32,6 +32,7 @@
     "@types/node": "16.18.12",
     "@types/react": "17.0.53",
     "@types/react-dom": "17.0.18",
+    "@types/react-router-dom": "5.3.3",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
     "eslint": "8.34.0",
