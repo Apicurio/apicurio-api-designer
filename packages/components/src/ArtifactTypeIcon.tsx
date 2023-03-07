@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { ArtifactTypes } from "@apicurio/apicurio-api-designer-models";
 import styled from "styled-components";
 
+
 const icon = (type: string | undefined): string => {
     switch (type) {
         case ArtifactTypes.AVRO:
@@ -30,41 +31,16 @@ const icon = (type: string | undefined): string => {
 /**
  * Properties
  */
-export type StyledIconProps = {
-    title: string;
-    children: any;
-    type: string;
-    isShowIcon: boolean;
-    isShowLabel: boolean;
-}
-
-
-const StyledIcon = styled.div.attrs((props: StyledIconProps) => ({
-    type: props.type,
-    isShowIcon: props.isShowIcon || true,
-    isShowLabel: props.isShowLabel || true
-}))`
-    display: inline-block;
-    width: ${props => props.isShowLabel ? "auto" : "24px"};
-    height: 24px;
-    line-height: 24px;
-    text-indent: ${props => props.isShowIcon ? "32px" : "0px"};
-    background-repeat: no-repeat;
-    background-image: url("${props => icon(props.type)}");
-`;
-
-
-/**
- * Properties
- */
 export type ArtifactTypeIconProps = {
     type: string;
     isShowIcon?: boolean; // defaults to true
     isShowLabel?: boolean; // defaults to false
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const ArtifactTypeIcon: FunctionComponent<ArtifactTypeIconProps> = ({ type, isShowIcon, isShowLabel }: ArtifactTypeIconProps) => {
+const UnstyledArtifactTypeIcon: FunctionComponent<ArtifactTypeIconProps> = ({ className, type, isShowIcon, isShowLabel }: ArtifactTypeIconProps) => {
     const getTitle = (): string => {
         let title: string = type;
         switch (type) {
@@ -150,17 +126,17 @@ export const ArtifactTypeIcon: FunctionComponent<ArtifactTypeIconProps> = ({ typ
     };
 
     return (
-        <StyledIcon type={type} isShowLabel={isShowLabel||true} isShowIcon={isShowIcon||true} title={getTitle()} children={renderLabel()}  />
+        <div className={className} title={getTitle()} children={renderLabel()}  />
     );
 };
 
-//
-// export const ArtifactTypeIcon = styled(UnstyledArtifactTypeIcon)`
-//     display: inline-block;
-//     width: ${props => props.isShowLabel ? "auto" : "24px"};
-//     height: 24px;
-//     line-height: 24px;
-//     text-indent: ${props => props.isShowIcon ? "32px" : "0px"};
-//     background-repeat: no-repeat;
-//     background-image: url(${props => icon(props.type)});
-// `;
+
+export const ArtifactTypeIcon = styled(UnstyledArtifactTypeIcon)`
+    display: inline-block;
+    width: ${props => props.isShowLabel ? "auto" : "24px"};
+    height: 24px;
+    line-height: 24px;
+    text-indent: ${props => props.isShowIcon ? "32px" : "0px"};
+    background-repeat: no-repeat;
+    background-image: url(${props => icon(props.type)});
+`;

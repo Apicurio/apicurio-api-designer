@@ -176,6 +176,7 @@ importers:
       '@apicurio/apicurio-api-designer-components': workspace:*
       '@apicurio/apicurio-api-designer-models': workspace:*
       '@apicurio/apicurio-api-designer-services': workspace:*
+      '@apicurio/apicurio-api-designer-utils': workspace:*
       '@apicurio/eslint-config': 0.2.0
       '@patternfly/patternfly': 4.224.2
       '@patternfly/quickstarts': 1.4.0
@@ -202,6 +203,7 @@ importers:
       '@apicurio/apicurio-api-designer-components': link:../components
       '@apicurio/apicurio-api-designer-models': link:../models
       '@apicurio/apicurio-api-designer-services': link:../services
+      '@apicurio/apicurio-api-designer-utils': link:../utils
       '@apicurio/eslint-config': 0.2.0_vslf5xus5vvvghisrumieu5qru
       '@patternfly/patternfly': 4.224.2
       '@patternfly/quickstarts': 1.4.0_jh4ydkpplkdt6tou54v2zxs54y
@@ -233,12 +235,15 @@ importers:
       '@apicurio/eslint-config': 0.2.0
       '@rhoas/app-services-ui-shared': 0.16.6
       '@rhoas/registry-management-sdk': 0.53.0
+      '@types/history': 4.7.11
+      '@types/react-router-dom': 5.3.3
       '@types/uuid': 8.3.4
       '@typescript-eslint/eslint-plugin': 5.53.0
       '@typescript-eslint/parser': 5.53.0
       dexie: 3.2.3
       eslint: 8.34.0
       react: 17.0.2
+      react-router-dom: 5.3.4
       rimraf: 4.1.2
       tsconfig: workspace:*
       tsup: 6.6.3
@@ -251,12 +256,15 @@ importers:
       '@apicurio/eslint-config': 0.2.0_vslf5xus5vvvghisrumieu5qru
       '@rhoas/app-services-ui-shared': 0.16.6_react@17.0.2
       '@rhoas/registry-management-sdk': 0.53.0
+      '@types/history': 4.7.11
+      '@types/react-router-dom': 5.3.3
       '@types/uuid': 8.3.4
       '@typescript-eslint/eslint-plugin': 5.53.0_ny4s7qc6yg74faf3d6xty2ofzy
       '@typescript-eslint/parser': 5.53.0_7kw3g6rralp5ps6mg3uyzz6azm
       dexie: 3.2.3
       eslint: 8.34.0
       react: 17.0.2
+      react-router-dom: 5.3.4_react@17.0.2
       rimraf: 4.1.2
       tsconfig: link:../tsconfig
       tsup: 6.6.3_typescript@4.9.5
@@ -6140,7 +6148,6 @@ packages:
       tiny-invariant: 1.3.1
       tiny-warning: 1.0.3
       value-equal: 1.0.1
-    dev: false
 
   /history/5.3.0:
     resolution: {integrity: sha512-ZqaKwjjrAYUYfLG+htGaIIZ4nioX2L70ZUMIFysS3xvBsSG4x/n1V6TXV3N8ZYNuFGlDirFg32T7B6WOUPDYcQ==}
@@ -6632,7 +6639,6 @@ packages:
 
   /isarray/0.0.1:
     resolution: {integrity: sha512-D2S+3GLxWH+uhrNEcoh/fnmYeP8E8/zHl644d/jdA0g2uyXvy3sb0qxotE+ne0LtccHknQzWwZEzhak7oJ0COQ==}
-    dev: false
 
   /isarray/1.0.0:
     resolution: {integrity: sha512-VLghIWNM6ELQzo7zwmcg0NmTVyWKYjvIeM83yjp0wRDTmUnrM678fQbcKBo6n2CJEF0szoG//ytg+TKla89ALQ==}
@@ -8061,7 +8067,6 @@ packages:
     resolution: {integrity: sha512-n43JRhlUKUAlibEJhPeir1ncUID16QnEjNpwzNdO3Lm4ywrBpBZ5oLD0I6br9evr1Y9JTqwRtAh7JLoOzAQdVA==}
     dependencies:
       isarray: 0.0.1
-    dev: false
 
   /path-type/4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
@@ -9192,7 +9197,6 @@ packages:
       react-router: 5.3.4_react@17.0.2
       tiny-invariant: 1.3.1
       tiny-warning: 1.0.3
-    dev: false
 
   /react-router/5.3.4_react@17.0.2:
     resolution: {integrity: sha512-Ys9K+ppnJah3QuaRiLxk+jDWOR1MekYQrlytiXxC1RyfbdsZkS5pvKAzCCr031xHixZwpnsYNT5xysdFHQaYsA==}
@@ -9209,7 +9213,6 @@ packages:
       react-is: 16.13.1
       tiny-invariant: 1.3.1
       tiny-warning: 1.0.3
-    dev: false
 
   /react-scripts/5.0.1_r4jczrvwpygqmlxysnlturx7qm:
     resolution: {integrity: sha512-8VAmEm/ZAwQzJ+GOMLbBsTdDKOpuZh7RPs0UymvBR2vRk4iZWCskjbFnxqjrzoIvlNNRZ3QJFx6/qDSi6zSnaQ==}
@@ -9459,7 +9462,6 @@ packages:
 
   /resolve-pathname/3.0.0:
     resolution: {integrity: sha512-C7rARubxI8bXFNB/hqcp/4iUeIXJhJZvFPFPiSPRnhU5UPxzMFIl+2E6yY6c4k9giDJAhtV+enfA+G89N6Csng==}
-    dev: false
 
   /resolve-url-loader/4.0.0:
     resolution: {integrity: sha512-05VEMczVREcbtT7Bz+C+96eUO5HDNvdthIiMB34t7FcF8ehcu4wC0sSgPUubs3XW2Q3CNLJk/BJrCU9wVRymiA==}
@@ -10340,11 +10342,9 @@ packages:
 
   /tiny-invariant/1.3.1:
     resolution: {integrity: sha512-AD5ih2NlSssTCwsMznbvwMZpJ1cbhkGd2uueNxzv2jDlEeZdU04JQfRnggJQ8DrcVBGjAsCKwFBbDlVNtEMlzw==}
-    dev: false
 
   /tiny-warning/1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
-    dev: false
 
   /tippy.js/5.1.2:
     resolution: {integrity: sha512-Qtrv2wqbRbaKMUb6bWWBQWPayvcDKNrGlvihxtsyowhT7RLGEh1STWuy6EMXC6QLkfKPB2MLnf8W2mzql9VDAw==}
@@ -10707,7 +10707,6 @@ packages:
 
   /value-equal/1.0.1:
     resolution: {integrity: sha512-NOJ6JZCAWr0zlxZt+xqCHNTEKOsrks2HQd4MqhP1qy4z1SkbEP467eNx6TgDKXMvUOb+OENfJCZwM+16n7fRfw==}
-    dev: false
 
   /vary/1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
