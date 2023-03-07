@@ -1,6 +1,7 @@
 import React, { ReactElement } from "react";
 import { Route, Switch, useParams } from "react-router-dom";
-import { Link } from "@apicurio/apicurio-api-designer-components";
+import { ArtifactTypeIcon } from "@apicurio/apicurio-api-designer-components";
+import { ArtifactTypes } from "@apicurio/apicurio-api-designer-models";
 
 
 const HomePage: React.FunctionComponent = () => {
@@ -8,9 +9,19 @@ const HomePage: React.FunctionComponent = () => {
     console.info("[HomePage] Params: ", params);
     return (<div>
         <h1>Home Page</h1>
-        <p>
-            <Link href="./designs/1/editor">Test Editor Page</Link>
-        </p>
+        <div>
+            <ul>
+                <li>
+                    <ArtifactTypeIcon type={ArtifactTypes.JSON} isShowIcon={true} isShowLabel={true} />
+                </li>
+                <li>
+                    <ArtifactTypeIcon type={ArtifactTypes.XML} isShowIcon={true} isShowLabel={true} />
+                </li>
+                <li>
+                    <ArtifactTypeIcon type={ArtifactTypes.OPENAPI} isShowIcon={true} isShowLabel={true} />
+                </li>
+            </ul>
+        </div>
     </div>);
 };
 
