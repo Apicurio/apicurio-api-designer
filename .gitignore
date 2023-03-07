@@ -3,3 +3,7 @@ dist
 build
 .idea
 .turbo
+.settings
+.project
+.classpath
+target
