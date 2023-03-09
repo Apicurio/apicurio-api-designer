@@ -33,26 +33,8 @@ module.exports = (env, argv) => {
                     sideEffects: true
                 },
                 {
-                    test: /\.(ttf|eot|woff|woff2)$/,
-                    use: {
-                        loader: "file-loader",
-                        options: {
-                            limit: 5000,
-                            name: "[contenthash:8].[ext]",
-                        }
-                    }
-                },
-                {
-                    test: /\.(svg|jpg|jpeg|png|gif)$/i,
-                    use: [
-                        {
-                            loader: "url-loader",
-                            options: {
-                                limit: 5000,
-                                name: isProduction ? "[contenthash:8].[ext]" : "[name].[ext]",
-                            }
-                        }
-                    ]
+                    test: /\.(jpe?g|svg|png|gif|ico|eot|ttf|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
+                    type: 'asset/resource',
                 },
             ],
         },
