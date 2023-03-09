@@ -4,25 +4,18 @@
   "private": true,
   "license": "Apache-2.0",
   "sideEffects": false,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist/"
-  ],
+  "main": "./index.ts",
+  "types": "./index.ts",
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --dts --external react",
-    "clean": "rimraf dist",
-    "dev": "tsup src/index.ts --format cjs --watch --dts --external react",
+    "build": "tsc --noEmit --skipLibCheck",
     "lint": "eslint --ext=.ts,.tsx ./src"
   },
   "devDependencies": {
     "@apicurio/eslint-config": "0.2.0",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
-    "eslint": "8.34.0",
-    "rimraf": "4.1.2",
-    "tsconfig": "workspace:*",
-    "tsup": "6.6.3",
+    "eslint": "8.35.0",
+    "tsconfig": "*",
     "typescript": "4.9.5"
   }
 }
