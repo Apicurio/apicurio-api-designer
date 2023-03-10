@@ -18,9 +18,6 @@ module.exports = merge(common("development"), {
         historyApiFallback: true,
         open: true,
         hot: true,
-        static: {
-            directory: path.resolve(__dirname, "dist"),
-        },
         client: {
             overlay: true,
         },
