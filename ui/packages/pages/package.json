@@ -4,8 +4,8 @@
   "private": true,
   "license": "Apache-2.0",
   "sideEffects": false,
-  "main": "./index.ts",
-  "types": "./index.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "scripts": {
     "build": "tsc --noEmit --skipLibCheck",
     "lint": "eslint --ext=.ts,.tsx ./src"

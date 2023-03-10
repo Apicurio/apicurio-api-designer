@@ -57,6 +57,8 @@
     "webpack-merge": "5.8.0"
   },
   "dependencies": {
+    "@apicurio/apicurio-api-designer-models": "*",
+    "@apicurio/apicurio-api-designer-components": "*",
     "@patternfly/react-core": "4.276.6",
     "@patternfly/react-icons": "4.93.6",
     "@patternfly/react-styles": "4.92.6",
