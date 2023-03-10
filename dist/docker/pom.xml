@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<project
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>io.apicurio</groupId>
+        <artifactId>apicurio-api-designer-dist</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>apicurio-api-designer-dist-docker</artifactId>
+    <name>apicurio-api-designer-dist-docker</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <docker.app.file>app-files/apicurio-api-designer-app-${project.version}-all.tar.gz</docker.app.file>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-api-designer-app</artifactId>
+            <type>pom</type>
+            <!-- This is because when using uber-jar packaging, Quarkus will rename the original jar, so it's
+            not included in the maven repository and cannot be referenced here as a dependency.
+            TODO: Find a solution if we want to keep the original jar.
+            This will be needed for building storage options if they will depend on app module. -->
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-target-app</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/docker/app-files</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/../../app/target</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>apicurio-*.tar.gz</include>
+                                        <!--                                        <include>apicurio-*runner</include>-->
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-docker</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/docker</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/docker</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,639 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Apicurio API Designer API",
+        "version": "0.1-dev",
+        "description": "The REST API for the back-end component of the Apicurio API Designer.",
+        "contact": {
+            "name": "Apicurio",
+            "url": "https://github.com/apicurio/apicurio-api-designer",
+            "email": "apicurio@lists.jboss.org"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "paths": {
+        "/system/info": {
+            "get": {
+                "tags": [
+                    "System"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SystemInfo"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    }
+                },
+                "operationId": "getSystemInfo"
+            }
+        },
+        "/designs": {
+            "get": {
+                "tags": [
+                    "Design"
+                ],
+                "parameters": [
+                    {
+                        "name": "size",
+                        "description": "The number of artifacts to return.  Defaults to 20.",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "page",
+                        "description": "The number of artifacts to skip before starting the result set.  Defaults to 0.",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignMetaDataList"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "409": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    }
+                },
+                "operationId": "getDesigns"
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "*/*": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FileContent"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Design"
+                ],
+                "parameters": [
+                    {
+                        "name": "X-Designer-Name",
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "X-Designer-Description",
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "header"
+                    },
+                    {
+                        "name": "X-Designer-Type",
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "name": "X-Designer-Source",
+                        "description": "",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignMetaData"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    }
+                },
+                "operationId": "createDesign"
+            }
+        },
+        "/designs/{designId}": {
+            "get": {
+                "tags": [
+                    "Design"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/FileContent"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    }
+                },
+                "operationId": "getDesign"
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "*/*": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FileContent"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Design"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignMetaData"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    }
+                },
+                "operationId": "updateDesign"
+            },
+            "delete": {
+                "tags": [
+                    "Design"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "TODO"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    }
+                },
+                "operationId": "deleteDesign"
+            },
+            "parameters": [
+                {
+                    "name": "designId",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/designs/{designId}/meta": {
+            "get": {
+                "tags": [
+                    "Design"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignMetaData"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    }
+                },
+                "operationId": "getDesignMetadata"
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EditableDesignMetadata"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Design"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignMetaData"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        },
+                        "description": "TODO"
+                    }
+                },
+                "operationId": "updateDesignMetadata"
+            },
+            "parameters": [
+                {
+                    "name": "designId",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "x-codegen-contextRoot": "/apis/designer/v0"
+    },
+    "components": {
+        "schemas": {
+            "FileContent": {
+                "format": "binary",
+                "type": "string",
+                "x-codegen-inline": true
+            },
+            "AbstractList": {
+                "required": [
+                    "kind",
+                    "page",
+                    "size",
+                    "total"
+                ],
+                "type": "object",
+                "properties": {
+                    "kind": {
+                        "type": "string"
+                    },
+                    "page": {
+                        "type": "integer"
+                    },
+                    "size": {
+                        "type": "integer"
+                    },
+                    "total": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "DesignMetaDataList": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/AbstractList"
+                    },
+                    {
+                        "required": [
+                            "items"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/DesignMetaData"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "EditableDesignMetadata": {
+                "title": "EditableDesignMetaData",
+                "description": "",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ObjectReference"
+                    },
+                    {
+                        "required": [
+                            "type",
+                            "source"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "source": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ]
+            },
+            "ObjectReference": {
+                "required": [
+                    "id",
+                    "kind"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "kind": {
+                        "type": "string"
+                    },
+                    "href": {
+                        "type": "string"
+                    }
+                }
+            },
+            "DesignMetaData": {
+                "title": "DesignMetaData",
+                "description": "",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/EditableDesignMetadata"
+                    },
+                    {
+                        "required": [
+                            "createdBy",
+                            "createdOn",
+                            "modifiedBy",
+                            "modifiedOn",
+                            "type",
+                            "source"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "createdBy": {
+                                "type": "string"
+                            },
+                            "createdOn": {
+                                "format": "date-time",
+                                "type": "string"
+                            },
+                            "modifiedBy": {
+                                "type": "string"
+                            },
+                            "modifiedOn": {
+                                "format": "date-time",
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "source": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ]
+            },
+            "Error": {
+                "title": "EditableDesignMetaData",
+                "description": "",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ObjectReference"
+                    },
+                    {
+                        "required": [
+                            "code",
+                            "reason"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "reason": {
+                                "type": "string"
+                            },
+                            "code": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ]
+            },
+            "SystemInfo": {
+                "title": "SystemInfo",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "string"
+                    },
+                    "apiVersion": {
+                        "type": "string"
+                    },
+                    "builtOn": {
+                        "format": "date-time",
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Design"
+        },
+        {
+            "name": "System"
+        }
+    ],
+    "x-codegen": {
+        "bean-annotations": [
+            "io.quarkus.runtime.annotations.RegisterForReflection",
+            {
+                "annotation": "lombok.experimental.SuperBuilder",
+                "excludeEnums": true
+            },
+            {
+                "annotation": "lombok.AllArgsConstructor",
+                "excludeEnums": true
+            },
+            {
+                "annotation": "lombok.NoArgsConstructor",
+                "excludeEnums": true
+            },
+            {
+                "annotation": "lombok.EqualsAndHashCode",
+                "excludeEnums": true
+            },
+            {
+                "annotation": "lombok.ToString(callSuper = true)",
+                "excludeEnums": true
+            }
+        ]
+    }
+}

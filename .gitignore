@@ -1,5 +1,4 @@
 node_modules
-dist
 build
 .idea
 .turbo
@@ -7,3 +6,4 @@ build
 .project
 .classpath
 target
+.notes

@@ -12,20 +12,21 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>apicurio-api-designer-common</artifactId>
-    <name>apicurio-api-designer-common</name>
+    <artifactId>apicurio-api-designer-spi</artifactId>
+    <name>apicurio-api-designer-spi</name>
     <packaging>jar</packaging>
 
     <dependencies>
 
         <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-api-designer-common</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.jboss.spec.javax.ws.rs</groupId>
-            <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
