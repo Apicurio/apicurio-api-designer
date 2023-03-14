@@ -45,14 +45,17 @@ module.exports = (env, argv) => {
         },
         plugins: [
             new HtmlWebpackPlugin({
-                template: path.resolve(__dirname, "src", "index.html"),
+                template: path.resolve(__dirname, "src/public", "index.html")
             }),
             new Dotenv({
                 systemvars: true,
                 silent: true,
             }),
             new CopyPlugin({
-                patterns: [{from: "./src/favicon.png", to: "images"}],
+                patterns: [
+                    {from: "./src/public/favicon.ico", to: "images"},
+                    {from: "./src/public/logo.png", to: "images"}
+                ]
             }),
             new MiniCssExtractPlugin({
                 filename: "[name].[contenthash:8].css",
