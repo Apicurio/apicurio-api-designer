@@ -1,6 +1,6 @@
 import { Configuration, RegistriesApi, Registry, RegistryList } from "@rhoas/registry-management-sdk";
-import { Auth, Config, useAuth, useConfig } from "@rhoas/app-services-ui-shared";
 import { LocalStorageService, useLocalStorageService } from "./LocalStorageService";
+import { ServiceConfig, useServiceConfig } from "./ServiceConfigContext";
 
 const RHOSR_MOCK_DATA: Registry[] = [
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -63,13 +63,13 @@ const RHOSR_MOCK_DATA_OF: Registry[] = [
  * @param auth the application auth
  * @param basePath base path of the fleet manager API
  */
-async function getRegistries(auth: Auth, basePath: string): Promise<Registry[]> {
-    console.debug("[RhosrService] Getting a list of registries from: ", basePath);
-    const token: string | undefined = auth?.srs ? await auth?.srs.getToken() : "";
+async function getRegistries(svcConfig: ServiceConfig): Promise<Registry[]> {
+    console.debug("[RhosrService] Getting a list of registries from: ", svcConfig.registry.api);
+    const token: string | undefined = await svcConfig.auth.getToken();
     const api: RegistriesApi = new RegistriesApi(
         new Configuration({
             accessToken: token,
-            basePath,
+            basePath: svcConfig.registry.api,
         })
     );
     return api.getRegistries(1, 50).then(res => {
@@ -83,10 +83,9 @@ async function getRegistries(auth: Auth, basePath: string): Promise<Registry[]> 
  * @param auth the application auth
  * @param local the local storage service
  * @param id the registry instance ID
- * @param basePath base path of the fleet manager API
  */
-async function getRegistry(auth: Auth, local: LocalStorageService, id: string, basePath: string): Promise<Registry> {
-    console.debug("[RhosrService] Getting a single registry from: ", basePath);
+async function getRegistry(svcConfig: ServiceConfig, local: LocalStorageService, id: string): Promise<Registry> {
+    console.debug("[RhosrService] Getting a single registry from: ", svcConfig.registry.api);
     const cacheKey: string = `services.rhosr.getRegistry.${id}`;
     const cachedRegistry: Registry | undefined = local.getConfigProperty(cacheKey, undefined) as Registry | undefined;
 
@@ -96,11 +95,11 @@ async function getRegistry(auth: Auth, local: LocalStorageService, id: string, b
         return Promise.resolve(cachedRegistry);
     }
 
-    const token: string | undefined = auth?.srs ? await auth?.srs.getToken() : "";
+    const token: string | undefined = await svcConfig.auth.getToken();
     const api: RegistriesApi = new RegistriesApi(
         new Configuration({
             accessToken: token,
-            basePath,
+            basePath: svcConfig.registry.api,
         })
     );
     return api.getRegistry(id).then(res => {
@@ -161,22 +160,22 @@ const mockWarning = (message: string): void => {
  * React hook to get the RHOSR service.
  */
 export const useRhosrService: () => RhosrService = (): RhosrService => {
-    const auth: Auth = useAuth();
-    const cfg: Config = useConfig();
+    const svcConfig: ServiceConfig = useServiceConfig();
     const local: LocalStorageService = useLocalStorageService();
+    const apiUrl: string = svcConfig.registry.api;
 
-    if (cfg.srs.apiBasePath && cfg.srs.apiBasePath.startsWith("local-mock")) {
+    if (apiUrl && apiUrl.startsWith("local-mock")) {
         mockWarning("RHOSR mocking enabled.");
         return createMockService(RHOSR_MOCK_DATA);
     }
 
-    if (cfg.srs.apiBasePath && cfg.srs.apiBasePath.startsWith("operate-first-mock")) {
+    if (apiUrl && apiUrl.startsWith("operate-first-mock")) {
         mockWarning("RHOSR mocking enabled (Operate First).");
         return createMockService(RHOSR_MOCK_DATA_OF);
     }
 
     return {
-        getRegistries: () => getRegistries(auth, cfg.srs.apiBasePath),
-        getRegistry: (id) => getRegistry(auth, local, id, cfg.srs.apiBasePath),
+        getRegistries: () => getRegistries(svcConfig),
+        getRegistry: (id) => getRegistry(svcConfig, local, id),
     };
 };
