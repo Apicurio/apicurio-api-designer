@@ -53,7 +53,7 @@ export const DesignDetailsPanel: FunctionComponent<DesignDetailsPanelProps> = ({
 
                         <GridLabel>Type</GridLabel>
                         <GridValue>
-                            <ArtifactTypeIcon type={design?.type as string} isShowLabel={true} isShowIcon={false} />
+                            <ArtifactTypeIcon type={design?.type as string} isShowLabel={true} isShowIcon={true} />
                         </GridValue>
 
                         <GridLabel>Time created</GridLabel>
