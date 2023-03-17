@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { CSSProperties, FunctionComponent } from "react";
 import { Truncate } from "@patternfly/react-core";
 import styled from "styled-components";
 
@@ -9,13 +9,14 @@ export type DesignDescriptionProps = {
     description: string | undefined;
     truncate?: boolean;
     className?: string;
+    style?: CSSProperties | undefined;
 }
 
 const StyledTruncate = styled(Truncate)`
     color: ${props => props.className?.indexOf("no-description") != -1 ? "var(--pf-global--Color--200)" : "inherit"};
 `;
 
-export const DesignDescription: FunctionComponent<DesignDescriptionProps> = ({ description, truncate, className }: DesignDescriptionProps) => {
+export const DesignDescription: FunctionComponent<DesignDescriptionProps> = ({ description, truncate, className, style }: DesignDescriptionProps) => {
     let classes: string = "";
     if (className) {
         classes = className;
@@ -25,9 +26,9 @@ export const DesignDescription: FunctionComponent<DesignDescriptionProps> = ({ d
     }
     return truncate ? (
         <div>
-            <StyledTruncate className={classes} content={description || "No description."} tooltipPosition="top" />
+            <StyledTruncate style={style} className={classes} content={description || "No description."} tooltipPosition="top" />
         </div>
     ) : (
-        <div className={classes}>{description || "No description."}</div>
+        <div className={classes} style={style}>{description || "No description."}</div>
     );
 };

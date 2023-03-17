@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { ServiceConfig, useServiceConfig } from "./ServiceConfigContext";
 
 export const navigateTo: (path: string, svcConfig: ServiceConfig, history: History) => void = (path: string, svcConfig: ServiceConfig, history: History) => {
-    const to: string = `${svcConfig.getBasename()}${path}`;
+    const to: string = `${svcConfig.navigation.basename}${path}`;
     setTimeout(() => {
         history.push(to);
     }, 50);
@@ -11,6 +11,7 @@ export const navigateTo: (path: string, svcConfig: ServiceConfig, history: Histo
 
 export type NavigationService = {
     navigateTo: (path: string) => void;
+    createLink: (path: string) => string;
 };
 
 export const useNavigation: () => NavigationService = (): NavigationService => {
@@ -20,6 +21,9 @@ export const useNavigation: () => NavigationService = (): NavigationService => {
     return {
         navigateTo: (path: string) => {
             return navigateTo(path, svcConfig, history);
-        }
+        },
+        createLink: (path: string) => {
+            return `${svcConfig.navigation.basename}${path}`;
+        },
     };
 };

@@ -20,11 +20,12 @@ import { CreateDesign, CreateDesignContent, Design, Template } from "@apicurio/a
 import { DesignsService, useDesignsService } from "@apicurio/apicurio-api-designer-services";
 import { NavigationService, useNavigation } from "@apicurio/apicurio-api-designer-services/src/NavigationService";
 import { cloneObject, propertyReplace } from "@apicurio/apicurio-api-designer-utils";
-import { ArtifactTypeIcon } from "@apicurio/apicurio-api-designer-components";
 import { CreateDesignModal } from "./components/home/CreateDesignModal";
 import { DesignDetailsPanel } from "./components/home/DesignDetailsPanel";
 import { ImportDesignModal } from "./components/home/ImportDesignModal";
 import { ImportFrom } from "./components/home/ImportDropdown";
+import { DesignsPanel } from "./components/home/DesignsPanel";
+import { ImportFromRegistryModal } from "./components/home/ImportFromRegistryModal";
 
 export type HomePageProps = Record<string, never>;
 
@@ -32,7 +33,7 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
     const [ isDrawerExpanded, setDrawerExpanded ] = useState(true);
     const [ isCreateModalOpen, setCreateModalOpen ] = useState(false);
     const [ isImportModalOpen, setImportModalOpen ] = useState(false);
-    const [ isImportFromRhosrModalOpen, setImportFromRhosrModalOpen ] = useState(false);
+    const [ isImportFromRegistryModalOpen, setImportFromRegistryModalOpen ] = useState(false);
     const [ importType, setImportType ] = useState<ImportFrom>(ImportFrom.FILE);
     const [ selectedDesign, setSelectedDesign ] = useState<Design>();
 
@@ -63,7 +64,7 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
         if (from !== ImportFrom.RHOSR) {
             setImportModalOpen(true);
         } else {
-            setImportFromRhosrModalOpen(true);
+            setImportFromRegistryModalOpen(true);
         }
     };
 
@@ -98,7 +99,7 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
     };
 
     // The content of the side panel.  This should be a details panel with metadata and history (for example).
-    const panelContent: React.ReactNode = (
+    const panelContent: any = (
         <DrawerPanelContent>
             <DrawerHead>
                 <TextContent>
@@ -111,7 +112,6 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
                         className="pf-u-mt-0"
                     >
                         <div className="design-details-header">
-                            <div className="design-icon"><ArtifactTypeIcon type={selectedDesign?.type||"AVRO"} /></div>
                             <div className="design-name">{selectedDesign?.name}</div>
                         </div>
                     </Title>
@@ -144,14 +144,13 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
                             <CreateDesignModal isOpen={isCreateModalOpen} onCreate={createDesign} onCancel={() => {setCreateModalOpen(false);}} />
                             <ImportDesignModal isOpen={isImportModalOpen} onImport={importDesign} onCancel={() => {setImportModalOpen(false);}}
                                 importType={importType} />
-                            {/*<ImportFromRhosrModal isOpen={isImportFromRhosrModalOpen} onImport={importDesign} onCancel={() => {setImportFromRhosrModalOpen(false);}} />*/}
+                            <ImportFromRegistryModal isOpen={isImportFromRegistryModalOpen} onImport={importDesign} onCancel={() => {setImportFromRegistryModalOpen(false);}} />
                         </PageSection>
                         <PageSection variant={PageSectionVariants.default} isFilled={true}>
-                            <h1>DESIGNS GO HERE</h1>
-                            {/*<DesignsPanel onCreate={() => {setCreateModalOpen(true);}}*/}
-                            {/*    onDesignSelected={onDesignSelected}*/}
-                            {/*    selectedDesign={selectedDesign}*/}
-                            {/*    onImport={onImport} />*/}
+                            <DesignsPanel onCreate={() => {setCreateModalOpen(true);}}
+                                onDesignSelected={onDesignSelected}
+                                selectedDesign={selectedDesign}
+                                onImport={onImport} />
                         </PageSection>
                     </DrawerContentBody>
                 </DrawerContent>

@@ -7,4 +7,5 @@ export * from "./DesignEvent";
 export * from "./DesignsSearchCriteria";
 export * from "./DesignsSearchResults";
 export * from "./DesignsSort";
+export * from "./RenameDesign";
 

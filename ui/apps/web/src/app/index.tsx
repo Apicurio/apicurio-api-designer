@@ -55,6 +55,9 @@ const App: React.FunctionComponent = () => {
 
     const pageConfig: PageConfig = {
         serviceConfig: {
+            navigation: {
+                basename: ""
+            },
             registry: {
                 api: apiDesignerConfig.apis.registry
             },
