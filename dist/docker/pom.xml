@@ -17,30 +17,34 @@
     <packaging>pom</packaging>
 
     <properties>
-        <docker.app.file>app-files/apicurio-api-designer-app-${project.version}-all.tar.gz</docker.app.file>
+        <docker.app.files>app-files/apicurio-api-designer-app-${project.version}-all.tar.gz</docker.app.files>
+        <docker.postgresql.files>
+            postgresql-files/apicurio-api-designer-storage-postgresql-${project.version}-all.tar.gz
+        </docker.postgresql.files>
     </properties>
 
     <dependencies>
 
+        <!-- This Project -->
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-api-designer-app</artifactId>
-            <type>pom</type>
-            <!-- This is because when using uber-jar packaging, Quarkus will rename the original jar, so it's
-            not included in the maven repository and cannot be referenced here as a dependency.
-            TODO: Find a solution if we want to keep the original jar.
-            This will be needed for building storage options if they will depend on app module. -->
-            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-api-designer-storage-postgres</artifactId>
             <scope>provided</scope>
         </dependency>
 
     </dependencies>
 
     <build>
-
         <plugins>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
@@ -56,8 +60,26 @@
                                     <directory>${basedir}/../../app/target</directory>
                                     <filtering>false</filtering>
                                     <includes>
-                                        <include>apicurio-*.tar.gz</include>
-                                        <!--                                        <include>apicurio-*runner</include>-->
+                                        <include>apicurio-*-all.tar.gz</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-target-postgresql</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/docker/postgresql-files</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/../../storage/postgresql/target</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>apicurio-*-all.tar.gz</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -83,7 +105,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>

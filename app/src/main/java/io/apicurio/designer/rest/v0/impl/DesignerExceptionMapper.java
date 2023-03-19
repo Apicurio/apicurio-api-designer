@@ -1,11 +1,13 @@
 package io.apicurio.designer.rest.v0.impl;
 
-import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
-import static java.net.HttpURLConnection.HTTP_INTERNAL_ERROR;
-import static java.net.HttpURLConnection.HTTP_NOT_FOUND;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
-import static java.util.UUID.randomUUID;
+import com.fasterxml.jackson.core.JsonParseException;
+import io.apicurio.designer.rest.v0.beans.Error;
+import io.apicurio.designer.spi.storage.DesignerStorageException;
+import io.apicurio.designer.spi.storage.ResourceAlreadyExistsStorageException;
+import io.apicurio.designer.spi.storage.ResourceNotFoundStorageException;
+import io.quarkus.runtime.configuration.ConfigUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -15,8 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.ValidationException;
 import javax.ws.rs.WebApplicationException;
@@ -25,18 +25,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.core.JsonParseException;
-
-import io.apicurio.designer.rest.v0.beans.Error;
-import io.apicurio.designer.spi.storage.DesignNotFoundException;
-import io.apicurio.designer.spi.storage.StorageException;
-import io.quarkus.runtime.configuration.ConfigUtils;
+import static java.net.HttpURLConnection.*;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
+import static java.util.UUID.randomUUID;
 
 /**
- * @author Jakub Senko "m@jsenko.net"
+ * @author Jakub Senko <em>m@jsenko.net</em>
  * TODO: CAC candidate
  * TODO: User error codes
  */
@@ -49,6 +44,7 @@ public class DesignerExceptionMapper implements ExceptionMapper<Throwable> {
     private static final Map<Class<? extends Exception>, Integer> CODE_MAP;
 
     private final Set<String> quarkusProfiles;
+
     {
         quarkusProfiles = new HashSet<>();
         quarkusProfiles.addAll(ConfigUtils.getProfiles());
@@ -63,15 +59,13 @@ public class DesignerExceptionMapper implements ExceptionMapper<Throwable> {
         map.put(JsonParseException.class, HTTP_BAD_REQUEST);
         map.put(ValidationException.class, HTTP_BAD_REQUEST);
 
-        map.put(DesignNotFoundException.class, HTTP_NOT_FOUND);
-        map.put(StorageException.class, HTTP_INTERNAL_ERROR);
+        map.put(ResourceNotFoundStorageException.class, HTTP_NOT_FOUND);
+
+        map.put(ResourceAlreadyExistsStorageException.class, HTTP_CONFLICT);
+
+        map.put(DesignerStorageException.class, HTTP_INTERNAL_ERROR);
 
         CODE_MAP = Collections.unmodifiableMap(map);
-    }
-
-    @PostConstruct
-    public void init() {
-        log.warn("foo");
     }
 
     @Override

@@ -8,6 +8,9 @@ import lombok.ToString;
 
 import java.time.Instant;
 
+/**
+ * @author Jakub Senko <em>m@jsenko.net</em>
+ */
 @Builder
 @Getter
 @Setter

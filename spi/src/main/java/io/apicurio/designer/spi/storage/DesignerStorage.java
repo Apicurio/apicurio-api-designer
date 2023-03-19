@@ -1,12 +1,12 @@
 package io.apicurio.designer.spi.storage;
 
-import io.apicurio.designer.common.io.content.ContentHandle;
+import io.apicurio.common.apps.content.handle.ContentHandle;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 
 import java.util.List;
 
 /**
- * @author Jakub Senko "m@jsenko.net"
+ * @author Jakub Senko <em>m@jsenko.net</em>
  */
 public interface DesignerStorage {
 

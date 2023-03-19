@@ -1,7 +1,7 @@
 package io.apicurio.designer.rest.v0.impl;
 
+import io.apicurio.common.apps.content.handle.ContentHandle;
 import io.apicurio.designer.common.MediaTypes;
-import io.apicurio.designer.common.io.content.ContentHandle;
 import io.apicurio.designer.rest.v0.DesignsResource;
 import io.apicurio.designer.rest.v0.beans.DesignMetaData;
 import io.apicurio.designer.rest.v0.beans.DesignMetaDataList;
@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
 /**
- * @author Jakub Senko "m@jsenko.net"
+ * @author Jakub Senko <em>m@jsenko.net</em>
  */
 @ApplicationScoped
 public class DesignsResourceImpl implements DesignsResource {
