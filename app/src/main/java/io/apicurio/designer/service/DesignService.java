@@ -1,6 +1,6 @@
 package io.apicurio.designer.service;
 
-import io.apicurio.designer.common.io.content.ContentHandle;
+import io.apicurio.common.apps.content.handle.ContentHandle;
 import io.apicurio.designer.spi.storage.DesignerStorage;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 
@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * @author Jakub Senko "m@jsenko.net"
+ * @author Jakub Senko <em>m@jsenko.net</em>
  */
 @ApplicationScoped
 public class DesignService {

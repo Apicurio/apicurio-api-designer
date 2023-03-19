@@ -598,6 +598,9 @@
                     "builtOn": {
                         "format": "date-time",
                         "type": "string"
+                    },
+                    "gitCommitId": {
+                        "type": "string"
                     }
                 }
             }

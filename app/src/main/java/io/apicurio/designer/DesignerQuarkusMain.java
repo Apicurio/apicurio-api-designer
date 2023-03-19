@@ -5,7 +5,7 @@ import io.quarkus.runtime.annotations.QuarkusMain;
 
 /**
  * @author eric.wittmann@gmail.com
- * @author Jakub Senko "m@jsenko.net"
+ * @author Jakub Senko <em>m@jsenko.net</em>
  */
 @QuarkusMain(name = "DesignerQuarkusMain")
 public class DesignerQuarkusMain {

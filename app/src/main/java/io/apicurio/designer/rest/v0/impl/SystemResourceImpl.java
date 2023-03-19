@@ -3,19 +3,24 @@ package io.apicurio.designer.rest.v0.impl;
 import io.apicurio.designer.rest.v0.SystemResource;
 import io.apicurio.designer.rest.v0.beans.SystemInfo;
 import io.apicurio.designer.service.SystemService;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
- * @author Jakub Senko "m@jsenko.net"
+ * @author Jakub Senko <em>m@jsenko.net</em>
  */
 @ApplicationScoped
 public class SystemResourceImpl implements SystemResource {
 
     @Inject
     SystemService systemService;
+
+    @ConfigProperty(name = "app.git.commit-id")
+    Optional<String> commitIdFull;
 
     @Override
     public SystemInfo getSystemInfo() {
@@ -27,6 +32,7 @@ public class SystemResourceImpl implements SystemResource {
                 .version(from.getVersion())
                 .apiVersion(from.getApiVersion())
                 .builtOn(Date.from(from.getBuiltOn()))
+                .gitCommitId(commitIdFull.orElse(null))
                 .build();
     }
 }

@@ -18,10 +18,19 @@
 
     <dependencies>
 
+        <!-- Apicurio -->
+
         <dependency>
             <groupId>io.apicurio</groupId>
-            <artifactId>apicurio-api-designer-common</artifactId>
+            <artifactId>apicurio-common-app-components-content</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-storage-spi</artifactId>
+        </dependency>
+
+        <!-- Third-party -->
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -30,8 +39,5 @@
         </dependency>
 
     </dependencies>
-
-    <build>
-    </build>
 
 </project>

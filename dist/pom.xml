@@ -16,10 +16,4 @@
     <name>apicurio-api-designer-dist</name>
     <packaging>pom</packaging>
 
-    <dependencies>
-    </dependencies>
-
-    <build>
-    </build>
-
 </project>

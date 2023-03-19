@@ -82,69 +82,55 @@
 
     <modules>
         <module>common</module>
-        <module>app</module>
         <module>spi</module>
-        <!-- <module>storage</module> -->
+        <module>app</module>
+        <module>storage</module>
+        <module>storage/postgresql</module>
         <module>dist</module>
         <module>dist/docker</module>
-        <!-- <module>docs</module> -->
     </modules>
 
     <properties>
+
+        <!-- Build -->
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
         <timestamp>${maven.build.timestamp}</timestamp>
-
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-
         <tar.long.file.mode>gnu</tar.long.file.mode>
+        <skipCommitIdPlugin>false</skipCommitIdPlugin>
 
-        <!-- UI Build Tools -->
+        <!-- UI -->
+
         <node.version>16.17.0</node.version>
-
-        <!-- Quarkus Version -->
-        <quarkus.version>2.16.4.Final</quarkus.version>
-
-        <!-- Jandex -->
-        <jandex.version>1.1.1</jandex.version>
-
-        <!-- Default Quarkus configuration profile -->
-        <quarkus.profile>dev</quarkus.profile>
-
-        <!-- Default Skip App build value -->
-        <skipAppTests>false</skipAppTests>
-
-        <!-- Default Skip UI value -->
         <skipUiBuild>false</skipUiBuild>
 
-        <!-- Skip commit id plugin -->
-        <skipCommitIdPlugin>true</skipCommitIdPlugin>
+        <!-- Quarkus -->
 
-        <!-- Apicurio Tenant Manager -->
-        <apicurio-tenant-manager.version>0.1.2.Final</apicurio-tenant-manager.version>
+        <version.quarkus>2.16.4.Final</version.quarkus>
+        <quarkus.profile>dev</quarkus.profile>
 
-        <!-- Dependency versions -->
+        <!-- Dependency Versions -->
+
         <lombok.version>1.18.26</lombok.version>
-        <h2.version>1.4.199</h2.version>
-        <jackson-dataformat-yaml.version>2.13.4</jackson-dataformat-yaml.version>
         <commons-codec.version>1.15</commons-codec.version>
         <httpclient.version>4.5.14</httpclient.version>
-        <apicurio-common-rest-client.version>0.1.14.Final</apicurio-common-rest-client.version>
-        <apicurio-common-app-components.version>0.1.17.Final</apicurio-common-app-components.version>
-        <sentry.version>1.7.30</sentry.version>
-
-        <!-- Specifications -->
+        <apicurio-common-app-components.version>0.1.18.Final</apicurio-common-app-components.version>
         <annotation-api.version>1.3.5</annotation-api.version>
+        <version.puppycrawl>8.45.1</version.puppycrawl>
+        <version.apicurio-data-models>1.1.26</version.apicurio-data-models>
 
-        <!-- Scala -->
-        <version.scala-maven.plugin>4.4.0</version.scala-maven.plugin>
+        <!-- Test Dependency Versions -->
+
+        <version.org.testcontainers.postgresql>1.17.6</version.org.testcontainers.postgresql>
 
         <!-- Plugin Versions -->
+
         <version.compiler.plugin>3.10.1</version.compiler.plugin>
         <version.deploy.plugin>3.1.0</version.deploy.plugin>
-        <version.failsafe.plugin>2.22.2</version.failsafe.plugin>
         <version.javadoc.plugin>3.5.0</version.javadoc.plugin>
         <version.source.plugin>3.2.1</version.source.plugin>
         <version.surefire.plugin>2.22.2</version.surefire.plugin>
@@ -156,151 +142,144 @@
         <version.resources.plugin>3.3.0</version.resources.plugin>
         <version.clean.plugin>3.2.0</version.clean.plugin>
         <version.frontend-maven.plugin>1.12.1</version.frontend-maven.plugin>
-        <version.maven-antrun.plugin>3.1.0</version.maven-antrun.plugin>
-        <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
+        <version.git-commit-id-maven-plugin>5.0.0</version.git-commit-id-maven-plugin>
+        <version.apicurio-codegen-maven-plugin>1.0.12.Final</version.apicurio-codegen-maven-plugin>
+        <version.maven-gpg-plugin>1.6</version.maven-gpg-plugin>
 
-        <!-- Plugin Deps -->
-        <version.puppycrawl>8.45.1</version.puppycrawl>
-
-        <!-- Test containers version, should be aligned with version used in Quarkus -->
-        <test-containers.version>1.17.5</test-containers.version>
-        <keycloak.testcontainers.version>1.9.0</keycloak.testcontainers.version>
-        <keycloak-admin-client.version>20.0.5</keycloak-admin-client.version>
-        <embedded-postgres.version>2.0.3</embedded-postgres.version>
-        <wiremock-jre8.version>2.35.0</wiremock-jre8.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!-- This project -->
+
+            <!-- This Project -->
+
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-api-designer-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-api-designer-app</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-api-designer-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.apicurio</groupId>
+                <artifactId>apicurio-api-designer-app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-api-designer-ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-api-designer-ui-editors</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.apicurio</groupId>
+                <artifactId>apicurio-api-designer-storage-postgres</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-common-rest-client-vertx</artifactId>
-                <version>${apicurio-common-rest-client.version}</version>
+                <artifactId>apicurio-api-designer-app</artifactId>
+                <classifier>tests</classifier>
+                <type>test-jar</type>
+                <version>${project.version}</version>
+                <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-common-rest-client-jdk</artifactId>
-                <version>${apicurio-common-rest-client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-common-rest-client-common</artifactId>
-                <version>${apicurio-common-rest-client.version}</version>
-            </dependency>
+
+            <!-- Apicurio -->
 
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-common-app-components-core</artifactId>
                 <version>${apicurio-common-app-components.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-common-app-components-logging</artifactId>
                 <version>${apicurio-common-app-components.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-common-app-components-config</artifactId>
+                <artifactId>apicurio-common-app-components-content</artifactId>
                 <version>${apicurio-common-app-components.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-common-app-components-config-index</artifactId>
+                <artifactId>apicurio-common-app-components-storage</artifactId>
                 <version>${apicurio-common-app-components.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.apicurio</groupId>
+                <artifactId>apicurio-common-app-components-storage-spi</artifactId>
+                <version>${apicurio-common-app-components.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-common-app-components-web</artifactId>
                 <version>${apicurio-common-app-components.version}</version>
             </dependency>
 
-            <!-- Quarkus Dependencies -->
+            <dependency>
+                <groupId>io.apicurio</groupId>
+                <artifactId>apicurio-data-models</artifactId>
+                <version>${version.apicurio-data-models}</version>
+                <scope>compile</scope>
+            </dependency>
+
+            <!-- Quarkus -->
+
             <dependency>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-bom</artifactId>
-                <version>${quarkus.version}</version>
+                <version>${version.quarkus}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
 
-            <!-- Third Party Libraries -->
+            <!-- Third-party -->
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>${commons-codec.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
             </dependency>
-            <dependency>
-                <groupId>io.sentry</groupId>
-                <artifactId>sentry</artifactId>
-                <version>${sentry.version}</version><!--$NO-MVN-MAN-VER$-->
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-yaml</artifactId>
-                <version>${jackson-dataformat-yaml.version}</version>
-            </dependency>
 
             <!-- Tests -->
+
             <dependency>
-                <groupId>io.quarkus</groupId>
-                <artifactId>quarkus-test-common</artifactId>
-                <version>${quarkus.version}</version>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${version.org.testcontainers.postgresql}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.github.dasniko</groupId>
-                <artifactId>testcontainers-keycloak</artifactId>
-                <version>${keycloak.testcontainers.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-admin-client</artifactId>
-                <version>${keycloak-admin-client.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.github.tomakehurst</groupId>
-                <artifactId>wiremock-jre8</artifactId>
-                <version>${wiremock-jre8.version}</version>
             </dependency>
 
         </dependencies>
@@ -309,97 +288,130 @@
     <build>
         <pluginManagement>
             <plugins>
+
+                <!-- Maven -->
+
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>properties-maven-plugin</artifactId>
                     <version>${version.properties.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${version.compiler.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>${version.source.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${version.javadoc.plugin}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${version.failsafe.plugin}</version>
-                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${version.surefire.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>${version.deploy.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>${version.jar.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${version.checkstyle.plugin}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.jboss.jandex</groupId>
-                    <artifactId>jandex-maven-plugin</artifactId>
-                    <version>${jandex.version}</version>
-                    <executions>
-                        <execution>
-                            <id>make-index</id>
-                            <goals>
-                                <goal>jandex</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-maven-plugin</artifactId>
-                    <version>${quarkus.version}</version>
-                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
                     <version>${version.dependency.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>${version.assembly.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${version.resources.plugin}</version>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>${version.clean.plugin}</version>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${version.maven-gpg-plugin}</version>
+                </plugin>
+
+                <!-- Apicurio -->
+
+                <plugin>
+                    <groupId>io.apicurio</groupId>
+                    <artifactId>apicurio-common-app-components-maven-plugin</artifactId>
+                    <version>${apicurio-common-app-components.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>io.apicurio</groupId>
+                    <artifactId>apicurio-codegen-maven-plugin</artifactId>
+                    <version>${version.apicurio-codegen-maven-plugin}</version>
+                </plugin>
+
+                <!-- Quarkus -->
+
+                <plugin>
+                    <groupId>io.quarkus</groupId>
+                    <artifactId>quarkus-maven-plugin</artifactId>
+                    <version>${version.quarkus}</version>
+                </plugin>
+
+                <!-- Third-party -->
+
+                <plugin>
+                    <groupId>io.github.git-commit-id</groupId>
+                    <artifactId>git-commit-id-maven-plugin</artifactId>
+                    <version>${version.git-commit-id-maven-plugin}</version>
+                </plugin>
+
                 <plugin>
                     <groupId>com.github.eirslett</groupId>
                     <artifactId>frontend-maven-plugin</artifactId>
                     <version>${version.frontend-maven.plugin}</version>
                 </plugin>
+
             </plugins>
         </pluginManagement>
+
         <plugins>
+
+            <!-- Maven -->
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
@@ -418,17 +430,13 @@
                                     <name>skipUiBuild</name>
                                     <value>${skipUiBuild}</value>
                                 </property>
-                                <property>
-                                    <name>skipAppTests</name>
-                                    <value>${skipAppTests}</value>
-                                </property>
                             </properties>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>${maven.compiler.source}</source>
@@ -437,8 +445,8 @@
                     <showWarnings>false</showWarnings>
                 </configuration>
             </plugin>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
                     <execution>
@@ -449,8 +457,8 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <executions>
                     <execution>
@@ -473,8 +481,8 @@
                     <source>${maven.compiler.source}</source>
                 </configuration>
             </plugin>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <dependencies>
                     <dependency>
@@ -502,10 +510,12 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Third-party -->
+
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>5.0.0</version>
                 <executions>
                     <execution>
                         <id>get-the-git-infos</id>
@@ -527,10 +537,12 @@
                     </includeOnlyProperties>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
     <profiles>
+
         <profile>
             <id>ui</id>
             <activation>
@@ -543,12 +555,7 @@
                 <module>ui-editors</module>
             </modules>
         </profile>
-        <profile>
-            <id>sql</id>
-            <modules>
-                <module>storage/sql</module>
-            </modules>
-        </profile>
+
         <profile>
             <id>prod</id>
             <activation>
@@ -558,6 +565,7 @@
                 <quarkus.profile>prod</quarkus.profile>
             </properties>
         </profile>
+
         <profile>
             <id>release</id>
             <distributionManagement>
@@ -581,7 +589,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -602,23 +609,7 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>java8</id>
-            <activation>
-                <jdk>[1.8,)</jdk>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <additionalJOption>-Xdoclint:none</additionalJOption>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
+
     </profiles>
 
 </project>

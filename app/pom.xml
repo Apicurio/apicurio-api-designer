@@ -18,36 +18,88 @@
 
     <dependencies>
 
-        <!-- This project & Apicurio -->
+        <!-- This Project -->
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-api-designer-common</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-api-designer-spi</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-api-designer-ui</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-api-designer-ui-editors</artifactId>
         </dependency>
 
+        <!-- Apicurio -->
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-core</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-logging</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-storage</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-logging</artifactId>
+        </dependency>
+
+        <!-- Quarkus -->
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-undertow</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-agroal</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy-jackson</artifactId>
+        </dependency>
+
+        <!-- Third-party -->
 
         <dependency>
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
@@ -65,56 +117,26 @@
             <artifactId>jackson-annotations</artifactId>
         </dependency>
 
-        <!-- Quakus -->
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-undertow</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-resteasy-jackson</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.microprofile.config</groupId>
-            <artifactId>microprofile-config-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!-- Test -->
+
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
@@ -125,16 +147,16 @@
 
     <dependencyManagement>
         <dependencies>
+
             <!-- Needed for the codegen plugin -->
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-data-models</artifactId>
-                <version>1.1.26</version>
                 <scope>compile</scope>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
-
 
     <build>
 
@@ -149,19 +171,11 @@
             </resource>
         </resources>
 
-        <extensions>
-            <extension>
-                <groupId>kr.motd.maven</groupId>
-                <artifactId>os-maven-plugin</artifactId>
-                <version>${os-maven-plugin.version}</version>
-            </extension>
-        </extensions>
-
         <plugins>
+
             <plugin>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-codegen-maven-plugin</artifactId>
-                <version>1.0.12.Final</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -181,10 +195,19 @@
             </plugin>
 
             <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
-                <!--                <version></version>-->
-                <extensions>true</extensions>
                 <executions>
                     <execution>
                         <goals>
@@ -195,36 +218,15 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <!--                <version>${surefire-plugin.version}</version>-->
                 <configuration>
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                         <maven.home>${maven.home}</maven.home>
                     </systemPropertyVariables>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <native.image.path>${project.build.directory}/${project.build.finalName}-runner
-                                </native.image.path>
-                                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                <maven.home>${maven.home}</maven.home>
-                            </systemPropertyVariables>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>

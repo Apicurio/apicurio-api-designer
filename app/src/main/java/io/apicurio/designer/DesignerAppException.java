@@ -1,7 +1,7 @@
 package io.apicurio.designer;
 
 /**
- * @author Jakub Senko "m@jsenko.net"
+ * @author Jakub Senko <em>m@jsenko.net</em>
  */
 public class DesignerAppException extends RuntimeException {
 
