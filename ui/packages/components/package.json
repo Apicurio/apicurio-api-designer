@@ -7,9 +7,8 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "build": "echo tsc --noEmit",
-    "lint": "eslint --ext=.ts,.tsx ./src",
-    "explain": "tsc --explainFiles"
+    "build": "tsc --noEmit",
+    "lint": "eslint --ext=.ts,.tsx ./src"
   },
   "devDependencies": {
     "@apicurio/apicurio-api-designer-models": "*",
