@@ -19,10 +19,10 @@ export const DesignEventType: FunctionComponent<DesignEventTypeProps> = ({ event
                 return importTypeLabel();
             case "register":
                 // eslint-disable-next-line no-case-declarations
-                const context: DesignContext = {
-                    type: "rhosr",
-                    rhosr: event.data
-                };
+                // const context: DesignContext = {
+                //     type: "rhosr",
+                //     rhosr: event.data
+                // };
                 return variant === "short" ? <span>Service Registry</span> : (
                     <React.Fragment>
                         <span>Exported to Service Registry </span>

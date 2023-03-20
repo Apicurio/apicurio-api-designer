@@ -8,7 +8,7 @@
   "types": "./src/index.ts",
   "scripts": {
     "postinstall": "node ../../.fix_yaml.js",
-    "build": "tsc --noEmit --skipLibCheck",
+    "build": "tsc --noEmit",
     "lint": "eslint --ext=.ts,.tsx ./src"
   },
   "devDependencies": {

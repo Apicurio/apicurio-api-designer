@@ -1,4 +1,3 @@
-import React from "react";
 import { getKeycloakToken, getParsedKeycloakToken, } from "@app/auth/keycloak/keycloakAuth";
 import { ApiDesignerConfig, useApiDesignerConfig } from "@app/contexts/config";
 import { AuthConfig } from "@apicurio/apicurio-api-designer-services";

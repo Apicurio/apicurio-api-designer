@@ -23,7 +23,7 @@ import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author Jakub Senko <m@jsenko.net>
+ * @author Jakub Senko "m@jsenko.net"
  */
 @QuarkusTest
 class DesignsResourceTest {

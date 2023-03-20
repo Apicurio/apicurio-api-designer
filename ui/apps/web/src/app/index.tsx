@@ -5,7 +5,7 @@ import { AppLayout } from "./app-layout";
 import { AppRoutes } from "./routes";
 import { PageConfig, PageContextProvider } from "@apicurio/apicurio-api-designer-pages";
 import { getKeycloakInstance, useKeycloakAuth } from "@app/auth";
-import { AuthConfig } from "@apicurio/apicurio-api-designer-services";
+import { AlertProps, AuthConfig } from "@apicurio/apicurio-api-designer-services";
 import { ApiDesignerConfigContext } from "@app/contexts/config";
 
 import "./app.css";
@@ -55,6 +55,9 @@ const App: React.FunctionComponent = () => {
 
     const pageConfig: PageConfig = {
         serviceConfig: {
+            alerts: {
+                addAlert: (props: AlertProps) => { return; }
+            },
             navigation: {
                 basename: ""
             },

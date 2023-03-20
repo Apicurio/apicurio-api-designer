@@ -13,6 +13,7 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noImplicitAny": false,
+    "resolveJsonModule": true,
     "allowJs": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -30,5 +31,5 @@
     "**/*.jsx",
     "**/*.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["build", "dist", "node_modules"]
 }

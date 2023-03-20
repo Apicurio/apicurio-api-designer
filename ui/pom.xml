@@ -20,11 +20,13 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>packages/models</directory>
+                            <directory>.</directory>
                             <includes>
+                                <include>packages/components/node_modules/**</include>
                                 <include>packages/models/node_modules/**</include>
-                                <include>packages/registry/node_modules/**</include>
+                                <include>packages/pages/node_modules/**</include>
                                 <include>packages/services/node_modules/**</include>
+                                <include>packages/utils/node_modules/**</include>
                                 <include>node/**</include>
                                 <include>node_modules/**</include>
                             </includes>
