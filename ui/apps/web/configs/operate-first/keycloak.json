@@ -1,0 +1,10 @@
+{
+  "realm": "operate-first-apicurio",
+  "auth-server-url": "https://auth.apicur.io/auth",
+  "resource": "ad-ui",
+  "public-client": true,
+  "enable-cors": true,
+  "cors-max-age" : 1000,
+  "cors-allowed-methods" : "POST, PUT, DELETE, GET",
+  "cors-exposed-headers" : "WWW-Authenticate"
+}

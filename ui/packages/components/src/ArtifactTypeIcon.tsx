@@ -136,7 +136,7 @@ export const ArtifactTypeIcon = styled(UnstyledArtifactTypeIcon)`
     width: ${props => props.isShowLabel ? "auto" : "24px"};
     height: 24px;
     line-height: 24px;
-    text-indent: ${props => props.isShowIcon ? "32px" : "0px"};
+    text-indent: ${props => (props.isShowIcon == undefined || props.isShowIcon == true) ? "32px" : "0px"};
     background-repeat: no-repeat;
     background-image: url(${props => icon(props.type)});
 `;

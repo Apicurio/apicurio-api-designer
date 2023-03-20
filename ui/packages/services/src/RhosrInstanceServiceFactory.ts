@@ -1,4 +1,3 @@
-import { Auth, useAuth } from "@rhoas/app-services-ui-shared";
 import {
     ArtifactMetaData,
     ArtifactSearchResults,
@@ -13,6 +12,7 @@ import {
 } from "@apicurio/apicurio-api-designer-models";
 import { Registry } from "@rhoas/registry-management-sdk";
 import { createEndpoint, createHref, createOptions, httpGet, httpPut, httpPostWithReturn, isJson, isXml, isYaml } from "@apicurio/apicurio-api-designer-utils";
+import { ServiceConfig, useServiceConfig } from "./ServiceConfigContext";
 
 
 /**
@@ -48,8 +48,8 @@ function normalizeGroupId(groupId: string | undefined): string {
 }
 
 
-async function createArtifact(auth: Auth, basePath: string, data: CreateArtifactData): Promise<ArtifactMetaData> {
-    const token: string | undefined = auth?.apicurio_registry ? await auth?.apicurio_registry.getToken() : "";
+async function createArtifact(svcConfig: ServiceConfig, basePath: string, data: CreateArtifactData): Promise<ArtifactMetaData> {
+    const token: string | undefined = await svcConfig.auth.getToken();
 
     const endpoint: string = createEndpoint(basePath, "/groups/:groupId/artifacts", { groupId: data.groupId });
     const headers: any = {
@@ -66,8 +66,8 @@ async function createArtifact(auth: Auth, basePath: string, data: CreateArtifact
 }
 
 
-async function createOrUpdateArtifact(auth: Auth, basePath: string, data: CreateOrUpdateArtifactData): Promise<ArtifactMetaData> {
-    const token: string | undefined = auth?.apicurio_registry ? await auth?.apicurio_registry.getToken() : "";
+async function createOrUpdateArtifact(svcConfig: ServiceConfig, basePath: string, data: CreateOrUpdateArtifactData): Promise<ArtifactMetaData> {
+    const token: string | undefined = await svcConfig.auth.getToken();
 
     const endpoint: string = createEndpoint(basePath,
         "/groups/:groupId/artifacts",
@@ -91,8 +91,8 @@ async function createOrUpdateArtifact(auth: Auth, basePath: string, data: Create
 }
 
 
-async function createArtifactVersion(auth: Auth, basePath: string, groupId: string | undefined, artifactId: string, data: CreateVersionData): Promise<VersionMetaData> {
-    const token: string | undefined = auth?.apicurio_registry ? await auth?.apicurio_registry.getToken() : "";
+async function createArtifactVersion(svcConfig: ServiceConfig, basePath: string, groupId: string | undefined, artifactId: string, data: CreateVersionData): Promise<VersionMetaData> {
+    const token: string | undefined = await svcConfig.auth.getToken();
 
     groupId = normalizeGroupId(groupId);
 
@@ -111,9 +111,9 @@ async function createArtifactVersion(auth: Auth, basePath: string, groupId: stri
 }
 
 
-async function getArtifacts(auth: Auth, basePath: string, criteria: GetArtifactsCriteria, paging: Paging): Promise<ArtifactSearchResults> {
+async function getArtifacts(svcConfig: ServiceConfig, basePath: string, criteria: GetArtifactsCriteria, paging: Paging): Promise<ArtifactSearchResults> {
     console.debug("[RhosrInstanceService] Getting artifacts: ", criteria, paging);
-    const token: string | undefined = auth?.apicurio_registry ? await auth?.apicurio_registry.getToken() : "";
+    const token: string | undefined = await svcConfig.auth.getToken();
 
     const start: number = (paging.page - 1) * paging.pageSize;
     const end: number = start + paging.pageSize;
@@ -148,8 +148,8 @@ async function getArtifacts(auth: Auth, basePath: string, criteria: GetArtifacts
 }
 
 
-async function getArtifactContent(auth: Auth, basePath: string, groupId: string | undefined, artifactId: string, version: string): Promise<string> {
-    const token: string | undefined = auth?.apicurio_registry ? await auth?.apicurio_registry.getToken() : "";
+async function getArtifactContent(svcConfig: ServiceConfig, basePath: string, groupId: string | undefined, artifactId: string, version: string): Promise<string> {
+    const token: string | undefined = await svcConfig.auth.getToken();
 
     groupId = normalizeGroupId(groupId);
 
@@ -174,8 +174,8 @@ async function getArtifactContent(auth: Auth, basePath: string, groupId: string 
 }
 
 
-async function getArtifactVersions(auth: Auth, basePath: string, groupId: string | undefined, artifactId: string): Promise<SearchedVersion[]> {
-    const token: string | undefined = auth?.apicurio_registry ? await auth?.apicurio_registry.getToken() : "";
+async function getArtifactVersions(svcConfig: ServiceConfig, basePath: string, groupId: string | undefined, artifactId: string): Promise<SearchedVersion[]> {
+    const token: string | undefined = await svcConfig.auth.getToken();
 
     groupId = normalizeGroupId(groupId);
 
@@ -195,8 +195,8 @@ async function getArtifactVersions(auth: Auth, basePath: string, groupId: string
     });
 }
 
-async function testUpdateArtifactContent(auth: Auth, basePath: string, groupId: string | undefined, artifactId: string, content: string): Promise<void> {
-    const token: string | undefined = auth?.apicurio_registry ? await auth?.apicurio_registry.getToken() : "";
+async function testUpdateArtifactContent(svcConfig: ServiceConfig, basePath: string, groupId: string | undefined, artifactId: string, content: string): Promise<void> {
+    const token: string | undefined = await svcConfig.auth.getToken();
 
     groupId = normalizeGroupId(groupId);
 
@@ -211,9 +211,9 @@ async function testUpdateArtifactContent(auth: Auth, basePath: string, groupId: 
     return httpPut<any>(endpoint, content, createOptions(headers));
 }
 
-async function getCurrentUser(auth: Auth, basePath: string): Promise<UserInfo> {
+async function getCurrentUser(svcConfig: ServiceConfig, basePath: string): Promise<UserInfo> {
     // TODO cache this information for some period of time... perhaps 5 minutes or so?
-    const token: string | undefined = auth?.apicurio_registry ? await auth?.apicurio_registry.getToken() : "";
+    const token: string | undefined = await svcConfig.auth.getToken();
 
     console.info("[RhosrInstanceService] Getting information for the current user.");
     const endpoint: string = createEndpoint(basePath, "/users/me");
@@ -251,20 +251,20 @@ export interface RhosrInstanceServiceFactory {
  * React hook to get the RHOSR instance service.
  */
 export const useRhosrInstanceServiceFactory: () => RhosrInstanceServiceFactory = (): RhosrInstanceServiceFactory => {
-    const auth: Auth = useAuth();
+    const svcConfig: ServiceConfig = useServiceConfig();
 
     return {
         createFor: (registry) => {
             const instanceUrl: string = createHref(registry.registryUrl as string, "/apis/registry/v2");
             return {
-                createArtifact: (data) => createArtifact(auth, instanceUrl, data),
-                createArtifactVersion: (groupId, artifactId, data) => createArtifactVersion(auth, instanceUrl, groupId, artifactId, data),
-                createOrUpdateArtifact: (data: CreateOrUpdateArtifactData) => createOrUpdateArtifact(auth, instanceUrl, data),
-                getArtifacts: (criteria, paging) => getArtifacts(auth, instanceUrl, criteria, paging),
-                getArtifactContent: (groupId, artifactId, version) => getArtifactContent(auth, instanceUrl, groupId, artifactId, version),
-                getArtifactVersions: (groupId, artifactId) => getArtifactVersions(auth, instanceUrl, groupId, artifactId),
-                testUpdateArtifactContent: (groupId, artifactId, content) => testUpdateArtifactContent(auth, instanceUrl, groupId, artifactId, content),
-                getCurrentUser: () => getCurrentUser(auth, instanceUrl)
+                createArtifact: (data) => createArtifact(svcConfig, instanceUrl, data),
+                createArtifactVersion: (groupId, artifactId, data) => createArtifactVersion(svcConfig, instanceUrl, groupId, artifactId, data),
+                createOrUpdateArtifact: (data: CreateOrUpdateArtifactData) => createOrUpdateArtifact(svcConfig, instanceUrl, data),
+                getArtifacts: (criteria, paging) => getArtifacts(svcConfig, instanceUrl, criteria, paging),
+                getArtifactContent: (groupId, artifactId, version) => getArtifactContent(svcConfig, instanceUrl, groupId, artifactId, version),
+                getArtifactVersions: (groupId, artifactId) => getArtifactVersions(svcConfig, instanceUrl, groupId, artifactId),
+                testUpdateArtifactContent: (groupId, artifactId, content) => testUpdateArtifactContent(svcConfig, instanceUrl, groupId, artifactId, content),
+                getCurrentUser: () => getCurrentUser(svcConfig, instanceUrl)
             };
         }
     };
