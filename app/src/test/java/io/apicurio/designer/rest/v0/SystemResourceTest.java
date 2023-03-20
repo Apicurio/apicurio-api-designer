@@ -3,8 +3,6 @@ package io.apicurio.designer.rest.v0;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.Response;
 
@@ -17,7 +15,7 @@ import static org.hamcrest.Matchers.is;
 @QuarkusTest
 class SystemResourceTest {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    //private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Test
     void basic() {

@@ -5,6 +5,8 @@ package io.apicurio.designer;
  */
 public class DesignerAppException extends RuntimeException {
 
+    private static final long serialVersionUID = -7260750324268131408L;
+
     public DesignerAppException(String message) {
         super(message);
     }
