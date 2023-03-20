@@ -22,6 +22,7 @@
                         <fileset>
                             <directory>.</directory>
                             <includes>
+                                <include>apps/web/node_modules/**</include>
                                 <include>packages/components/node_modules/**</include>
                                 <include>packages/models/node_modules/**</include>
                                 <include>packages/pages/node_modules/**</include>
