@@ -187,6 +187,11 @@
                 <artifactId>apicurio-api-designer-spi</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.apicurio</groupId>
+                <artifactId>apicurio-api-designer-ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
 
             <dependency>
@@ -510,6 +515,17 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>ui</id>
+            <activation>
+                <property>
+                    <name>!skipUiBuild</name>
+                </property>
+            </activation>
+            <modules>
+                <module>ui</module>
+            </modules>
+        </profile>
         <profile>
             <id>sql</id>
             <modules>
