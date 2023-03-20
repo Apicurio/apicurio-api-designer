@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
 /**
- * @author Jakub Senko <m@jsenko.net>
+ * @author Jakub Senko "m@jsenko.net"
  */
 @QuarkusTest
 class SystemResourceTest {

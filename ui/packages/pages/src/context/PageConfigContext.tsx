@@ -1,17 +1,35 @@
 import React, { FunctionComponent, useContext } from "react";
-import { ServiceConfig, ServiceConfigContext } from "@apicurio/apicurio-api-designer-services";
+import { AlertProps, ServiceConfig, ServiceConfigContext } from "@apicurio/apicurio-api-designer-services";
 
 export type PageConfig = {
     serviceConfig: ServiceConfig;
 };
 
-const PageConfigContext: React.Context<PageConfig> = React.createContext({
+const defaultPageConfig: PageConfig = {
     serviceConfig: {
-        getBasename: () => {
-            return "";
+        alerts: {
+            addAlert: (props: AlertProps) => {
+                return;
+            }
+        },
+        auth: {
+            getToken: () => {
+                return undefined;
+            },
+            getUsername: () => {
+                return undefined;
+            }
+        },
+        navigation: {
+            basename: ""
+        },
+        registry: {
+            api: ""
         }
     }
-});
+};
+
+const PageConfigContext: React.Context<PageConfig> = React.createContext(defaultPageConfig);
 
 export const usePageConfig: () => PageConfig = (): PageConfig => {
     return useContext(PageConfigContext);

@@ -8,7 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
- * @author Jakub Senko <m@jsenko.net>
+ * @author Jakub Senko "m@jsenko.net"
  */
 @ApplicationScoped
 public class SystemService {

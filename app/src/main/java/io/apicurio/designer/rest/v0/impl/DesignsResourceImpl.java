@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
 /**
- * @author Jakub Senko <m@jsenko.net>
+ * @author Jakub Senko "m@jsenko.net"
  */
 @ApplicationScoped
 public class DesignsResourceImpl implements DesignsResource {

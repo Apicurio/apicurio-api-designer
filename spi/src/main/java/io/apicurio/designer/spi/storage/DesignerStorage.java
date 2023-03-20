@@ -6,7 +6,7 @@ import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 import java.util.List;
 
 /**
- * @author Jakub Senko <m@jsenko.net>
+ * @author Jakub Senko "m@jsenko.net"
  */
 public interface DesignerStorage {
 

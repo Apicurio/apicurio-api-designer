@@ -26,7 +26,7 @@ export const AlertProvider: React.FunctionComponent<AlertProviderProps> = ({ chi
             });
         setTimers([...timers, ...timeOuts]);
         return () => timers.forEach((timer) => timer?.timeOut && clearTimeout(timer.timeOut));
-    }, [alerts]);
+    }, [alerts, timers]);
 
     const createId = () => new Date().getTime();
 

@@ -36,7 +36,7 @@ import io.apicurio.designer.spi.storage.StorageException;
 import io.quarkus.runtime.configuration.ConfigUtils;
 
 /**
- * @author Jakub Senko <m@jsenko.net>
+ * @author Jakub Senko "m@jsenko.net"
  * TODO: CAC candidate
  * TODO: User error codes
  */

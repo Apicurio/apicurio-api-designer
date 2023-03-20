@@ -15,7 +15,7 @@ import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 
 /**
- * @author Jakub Senko <m@jsenko.net>
+ * @author Jakub Senko "m@jsenko.net"
  */
 @ApplicationScoped
 @Lock
