@@ -16,6 +16,7 @@
 
 package io.apicurio.designer.ui.config;
 
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Builder;
 import lombok.Data;
 
@@ -24,6 +25,7 @@ import lombok.Data;
  */
 @Data
 @Builder
+@RegisterForReflection
 public class ApiDesignerConfig {
     
     private ApisType apis;

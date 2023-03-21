@@ -2,6 +2,9 @@ const ApiDesignerConfig = {
     "apis": {
         "registry": "https://fleet-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud"
     },
+    "ui": {
+        "basename": "/"
+    },
     "components": {
         "editors": {
             "url": "http://localhost:9011"
@@ -12,6 +15,18 @@ const ApiDesignerConfig = {
         }
     },
     "auth": {
-        "enabled": true
+        "type": "keycloakjs",
+        "options": {
+            "realm": "operate-first-apicurio",
+            "url": "https://auth.apicur.io/auth",
+            "clientId": "ad-ui",
+            "public-client": true,
+            "enable-cors": true,
+            "cors-max-age" : 1000,
+            "cors-allowed-methods" : "POST, PUT, DELETE, GET",
+            "cors-exposed-headers" : "WWW-Authenticate",
+            "onLoad": "login-required",
+            "checkLoginIframe": false
+        }
     }
 }

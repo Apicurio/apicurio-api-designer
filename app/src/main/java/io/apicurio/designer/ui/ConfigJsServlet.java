@@ -16,12 +16,16 @@
 
 package io.apicurio.designer.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import io.apicurio.designer.ui.config.ApiDesignerConfig;
 import io.apicurio.designer.ui.config.ApisType;
 import io.apicurio.designer.ui.config.AuthType;
+import io.apicurio.designer.ui.config.AuthType.AuthTypeBuilder;
 import io.apicurio.designer.ui.config.ComponentsType;
 import io.apicurio.designer.ui.config.EditorsType;
 import io.apicurio.designer.ui.config.NavType;
@@ -56,27 +60,33 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
                 .build();
     }
 
-    /**
-     * @return
-     */
     private ApisType generateApiConfig() {
+        // FIXME implement this!
         return ApisType.builder()
                 .registry(getRegistryApiUrl())
                 .build();
     }
 
-    /**
-     * @return
-     */
     private ComponentsType generateComponentConfig() {
+        // FIXME implement this!
         return ComponentsType.builder()
-                .editors(EditorsType.builder()
-                        .url(getEditorsUrl())
-                        .build())
-                .nav(NavType.builder()
-                        .show(false)
-                        .registry("")
-                        .build())
+                .editors(generateEditorsConfig())
+                .nav(generateNavConfig())
+                .build();
+    }
+
+    private NavType generateNavConfig() {
+        // FIXME implement this!
+        return NavType.builder()
+                .show(false)
+                .registry("")
+                .build();
+    }
+
+    private EditorsType generateEditorsConfig() {
+        // FIXME implement this!
+        return EditorsType.builder()
+                .url(getEditorsUrl())
                 .build();
     }
 
@@ -91,10 +101,25 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
     }
 
     private AuthType generateAuthConfig() {
-        // FIXME implement this!
-        return AuthType.builder()
-                .enabled(false)
-                .build();
+        if (uiConfig.isAuthenticationEnabled()) {
+            AuthTypeBuilder auth = AuthType.builder();
+            
+            // When auth is enabled but the type is not set, default to keycloak
+            if (uiConfig.getUiAuthType().equals("keycloakjs") || uiConfig.getUiAuthType().equals("none")) {
+                auth.type("keycloakjs");
+                auth.options(uiConfig.getKeycloakProperties());
+            } else if (uiConfig.getUiAuthType().equals("oidc")) {
+                auth.type("oidc");
+                Map<String, Object> options = new HashMap<>();
+                options.put("clientId", uiConfig.getOidcClientId());
+                options.put("url", uiConfig.getOidcUrl());
+                options.put("redirectUri", uiConfig.getOidcRedirectUrl());
+                auth.options(options);
+            }
+            return auth.build();
+        } else {
+            return AuthType.builder().type("none").build();
+        }
     }
 
     /**

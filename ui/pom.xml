@@ -120,7 +120,6 @@
                                     <excludes>
                                         <exclude>config.js</exclude>
                                         <exclude>keycloak.js</exclude>
-                                        <exclude>keycloak.json</exclude>
                                         <exclude>version.js</exclude>
                                     </excludes>
                                 </resource>

@@ -1,9 +1,0 @@
-{
-  "realm": "redhat-external",
-  "auth-server-url": "https://sso.redhat.com/auth/",
-  "ssl-required": "all",
-  "resource": "cloud-services",
-  "client": "apicurio-studio",
-  "public-client": true,
-  "confidential-port": 0
-}

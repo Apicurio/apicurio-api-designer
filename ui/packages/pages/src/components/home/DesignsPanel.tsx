@@ -26,6 +26,9 @@ import { DesignsEmptyState } from "./DesignsEmptyState";
 import { DesignsEmptyStateFiltered } from "./DesignsEmptyStateFiltered";
 import { DesignsToolbar } from "./DesignsToolbar";
 import { DesignList } from "./DesignList";
+import { DeleteDesignModal } from "./DeleteDesignModal";
+import { RenameModal } from "../common/RenameModal";
+import { ExportToRegistryModal } from "../common/ExportToRegistryModal";
 
 
 export type DesignsPanelProps = {
@@ -226,19 +229,19 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
                     </CardBody>
                 </Card>
             </ListWithToolbar>
-            {/*<DeleteDesignModal design={designToDelete}*/}
-            {/*    isOpen={isDeleteModalOpen}*/}
-            {/*    onDelete={onDeleteDesignConfirmed}*/}
-            {/*    onDownload={onDownloadDesign}*/}
-            {/*    onCancel={() => setDeleteModalOpen(false)} />*/}
-            {/*<ExportToRhosrModal design={designToRegister as Design}*/}
-            {/*    isOpen={isRegisterModalOpen}*/}
-            {/*    onExported={onRegisterDesignConfirmed}*/}
-            {/*    onCancel={() => setRegisterModalOpen(false)} />*/}
-            {/*<RenameModal design={designToRename}*/}
-            {/*    isOpen={isRenameModalOpen}*/}
-            {/*    onRename={doRenameDesign}*/}
-            {/*    onCancel={() => setRenameModalOpen(false)} />*/}
+            <DeleteDesignModal design={designToDelete}
+                isOpen={isDeleteModalOpen}
+                onDelete={onDeleteDesignConfirmed}
+                onDownload={onDownloadDesign}
+                onCancel={() => setDeleteModalOpen(false)} />
+            <ExportToRegistryModal design={designToRegister as Design}
+                isOpen={isRegisterModalOpen}
+                onExported={onRegisterDesignConfirmed}
+                onCancel={() => setRegisterModalOpen(false)} />
+            <RenameModal design={designToRename}
+                isOpen={isRenameModalOpen}
+                onRename={doRenameDesign}
+                onCancel={() => setRenameModalOpen(false)} />
         </div>
     );
 };

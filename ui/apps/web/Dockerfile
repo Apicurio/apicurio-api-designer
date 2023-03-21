@@ -15,7 +15,6 @@ RUN chmod -R g+w /opt/app-root/src /usr/local/bin/
 
 # Copy configuration scripts
 COPY --chown=1001:0 build-scripts/create-config.sh /usr/local/bin/create-config.sh
-COPY --chown=1001:0 build-scripts/configure-keycloak.sh /usr/local/bin/configure-keycloak.sh
 COPY --chown=1001:0 build-scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY --chown=1001:0 build-scripts/notify-gchat.sh /usr/local/bin/notify-gchat.sh
 
@@ -25,7 +24,6 @@ COPY --chown=1001:0 build-scripts/nginx.conf /etc/nginx/nginx.conf
 # To avoid build-scripts failure in windows, convert text files from DOS line
 # endings (carriage return + line feed) to Unix line endings (line feed).
 RUN dos2unix /usr/local/bin/create-config.sh && \
-    dos2unix /usr/local/bin/configure-keycloak.sh && \
     dos2unix /usr/local/bin/entrypoint.sh && \
     dos2unix /etc/nginx/nginx.conf
 
