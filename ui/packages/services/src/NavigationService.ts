@@ -4,6 +4,7 @@ import { ServiceConfig, useServiceConfig } from "./ServiceConfigContext";
 
 export const navigateTo: (path: string, svcConfig: ServiceConfig, history: History) => void = (path: string, svcConfig: ServiceConfig, history: History) => {
     const to: string = `${svcConfig.navigation.basename}${path}`;
+    console.debug("[NavigationService] Navigating to: ", to);
     setTimeout(() => {
         history.push(to);
     }, 50);

@@ -16,6 +16,9 @@
 
 package io.apicurio.designer.ui.config;
 
+import java.util.Map;
+
+import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Builder;
 import lombok.Data;
 
@@ -24,8 +27,10 @@ import lombok.Data;
  */
 @Data
 @Builder
+@RegisterForReflection
 public class AuthType {
     
-    private boolean enabled;
+    public String type;
+    public Map<String, Object> options;
 
 }

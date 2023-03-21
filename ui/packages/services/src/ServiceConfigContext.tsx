@@ -50,7 +50,8 @@ const defaultGetUsername: (() => (Promise<string> | undefined)) = () => {
 
 export const ServiceConfigContext: React.Context<ServiceConfig> = React.createContext({
     alerts: {
-        addAlert: (props: AlertProps) => {return;}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        addAlert: (_: AlertProps) => {return;}
     },
     navigation: {
         basename: ""

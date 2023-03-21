@@ -8,7 +8,8 @@ export type PageConfig = {
 const defaultPageConfig: PageConfig = {
     serviceConfig: {
         alerts: {
-            addAlert: (props: AlertProps) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            addAlert: (_: AlertProps) => {
                 return;
             }
         },

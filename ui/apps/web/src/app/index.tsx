@@ -4,9 +4,9 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { AppLayout } from "./app-layout";
 import { AppRoutes } from "./routes";
 import { PageConfig, PageContextProvider } from "@apicurio/apicurio-api-designer-pages";
-import { getKeycloakInstance, useKeycloakAuth } from "@app/auth";
+import { getKeycloak, useKeycloakAuth } from "@app/auth";
 import { AlertProps, AuthConfig } from "@apicurio/apicurio-api-designer-services";
-import { ApiDesignerConfigContext } from "@app/contexts/config";
+import { ApiDesignerConfigContext, ApiDesignerConfigType } from "@app/contexts/config";
 
 import "./app.css";
 
@@ -20,11 +20,13 @@ import "@patternfly/patternfly/utilities/Flex/flex.css";
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const apiDesignerConfig: ApiDesignerConfig = ApiDesignerConfig || window["ApiDesignerConfig"];
+const apiDesignerConfig: ApiDesignerConfigType = ApiDesignerConfig || window["ApiDesignerConfig"];
 
 
 const App: React.FunctionComponent = () => {
     const [initialized, setInitialized] = useState(false);
+    // TODO support non-keycloak auth - probably should create "useOidcAuth", "useNoAuth", and "useKeycloakAuth" maybe?
+    //      or else maybe just "useApplicationAuth" that will hide the details
     const auth: AuthConfig = useKeycloakAuth();
 
     const loadingState: React.ReactNode = (
@@ -36,11 +38,12 @@ const App: React.FunctionComponent = () => {
         </EmptyState>
     );
 
-    // Initialize Keycloak
+    // Initialize Auth
+    // TODO add support for non-keycloak auth
     useEffect(() => {
-        if (apiDesignerConfig.auth.enabled) {
+        if (apiDesignerConfig.auth.type === "keycloakjs") {
             const init = async () => {
-                await getKeycloakInstance();
+                await getKeycloak();
                 setInitialized(true);
             };
             init();
@@ -56,10 +59,11 @@ const App: React.FunctionComponent = () => {
     const pageConfig: PageConfig = {
         serviceConfig: {
             alerts: {
-                addAlert: (props: AlertProps) => { return; }
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                addAlert: (_: AlertProps) => { return; }
             },
             navigation: {
-                basename: "/ui"
+                basename: ""
             },
             registry: {
                 api: apiDesignerConfig.apis.registry

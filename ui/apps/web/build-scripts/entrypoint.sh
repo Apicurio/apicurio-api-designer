@@ -4,7 +4,6 @@ echo "---------------------------------------------"
 echo "Performing the Initial Setup..."
 echo "---------------------------------------------"
 source /usr/local/bin/create-config.sh
-source /usr/local/bin/configure-keycloak.sh
 
 echo "---------------------------------------------"
 echo "Setup Complete. Nginx Server Started....."

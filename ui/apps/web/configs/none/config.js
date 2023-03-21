@@ -2,6 +2,9 @@ const ApiDesignerConfig = {
     "apis": {
         "registry": "local-mock"
     },
+    "ui": {
+        "basename": "/"
+    },
     "components": {
         "editors": {
             "url": "http://localhost:9011"
@@ -11,6 +14,6 @@ const ApiDesignerConfig = {
         }
     },
     "auth": {
-        "enabled": false
+        "type": "none"
     }
 }

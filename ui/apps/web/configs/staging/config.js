@@ -2,6 +2,9 @@ const ApiDesignerConfig = {
     "apis": {
         "registry": "https://api.stage.openshift.com"
     },
+    "ui": {
+        "basename": "/"
+    },
     "components": {
         "editors": {
             "url": "http://localhost:9011"
@@ -11,6 +14,15 @@ const ApiDesignerConfig = {
         }
     },
     "auth": {
-        "enabled": true
+        "type": "keycloakjs",
+        "options": {
+            "realm": "redhat-external",
+            "auth-server-url": "https://sso.redhat.com/auth/",
+            "ssl-required": "all",
+            "resource": "cloud-services",
+            "client": "apicurio-studio",
+            "public-client": true,
+            "confidential-port": 0
+        }
     }
 }

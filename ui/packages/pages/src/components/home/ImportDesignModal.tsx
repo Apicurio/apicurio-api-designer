@@ -32,6 +32,7 @@ import {
 } from "@apicurio/apicurio-api-designer-utils";
 import { ServicePreviewWarning } from "../common/ServicePreviewWarning";
 import { If } from "@apicurio/apicurio-api-designer-components";
+import { UrlUpload } from "./UrlUpload";
 
 
 export type ImportDesignModalProps = {
@@ -362,11 +363,11 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                 </If>
                 <If condition={importType === ImportFrom.URL}>
                     <FormGroup label="URL" isRequired={true} fieldId="import-design-url">
-                        {/*<UrlUpload*/}
-                        {/*    id="design-text-url"*/}
-                        {/*    urlPlaceholder="Enter a valid and accessible URL"*/}
-                        {/*    onChange={onUrlChange}*/}
-                        {/*/>*/}
+                        <UrlUpload
+                            id="design-text-url"
+                            urlPlaceholder="Enter a valid and accessible URL"
+                            onChange={onUrlChange}
+                        />
                     </FormGroup>
                 </If>
                 <If condition={hasDesignContent}>

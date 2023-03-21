@@ -1,18 +1,18 @@
 #!/bin/sh
 
-if [ "x$ADS_UI_URL" = "x" ]
+if [ "x$BASENAME" = "x" ]
 then
-  ADS_UI_URL="http://localhost:9009"
+  BASENAME="/"
 fi
 
-if [ "x$SRS_API_URL" = "x" ]
+if [ "x$REGISTRY_API_URL" = "x" ]
 then
-  SRS_API_URL="http://localhost:8000"
+  REGISTRY_API_URL="http://localhost:8090"
 fi
 
-if [ "x$AUTH_ENABLED" = "x" ]
+if [ "x$AUTH_TYPE" = "x" ]
 then
-  AUTH_ENABLED="false"
+  AUTH_TYPE="none"
 fi
 
 if [ "x$EDITORS_URL" = "x" ]
@@ -30,25 +30,56 @@ then
   NAV_REGISTRY_URL=""
 fi
 
+if [ "x$KEYCLOAK_REALM" = "x" ]
+then
+  KEYCLOAK_REALM="operate-first-apicurio"
+fi
+if [ "x$KEYCLOAK_URL" = "x" ]
+then
+  KEYCLOAK_URL="https://auth.apicur.io/auth/"
+fi
+if [ "x$KEYCLOAK_SSL_REQUIRED" = "x" ]
+then
+  KEYCLOAK_SSL_REQUIRED="external"
+fi
+if [ "x$KEYCLOAK_RESOURCE" = "x" ]
+then
+  KEYCLOAK_RESOURCE="ad-ui"
+fi
 
 
 echo "Generating config.js"
+
 echo "const ApiDesignerConfig = {
-  \"apis\": {
-    \"srs\": \"$SRS_API_URL\"
-  },
-  \"federatedModules\": {
-    \"ads\": \"$ADS_UI_URL\",
-    \"editors\": \"$EDITORS_URL\"
-  },
-  \"auth\": {
-    \"enabled\": $AUTH_ENABLED
-  },
-  \"apps\": {
-    \"showNav\": $NAV_ENABLED,
-    \"registry\": \"$NAV_REGISTRY_URL\"
-  }
-}" > /opt/app-root/src/config.js
+    \"apis\": {
+        \"registry\": \"$REGISTRY_API_URL\"
+    },
+    \"ui\": {
+        \"basename\": \"$BASENAME\"
+    },
+    \"components\": {
+        \"editors\": {
+            \"url\": \"$EDITORS_URL\"
+        },
+        \"nav\": {
+            \"show\": $NAV_ENABLED,
+            \"registry\": \"$NAV_REGISTRY_URL\"
+        }
+    },
+    \"auth\": {
+        \"type\": \"$AUTH_TYPE\",
+        \"options\": {
+          \"realm\": \"$KEYCLOAK_REALM\",
+          \"auth-server-url\": \"$KEYCLOAK_URL\",
+          \"ssl-required\": \"$KEYCLOAK_SSL_REQUIRED\",
+          \"resource\": \"$KEYCLOAK_RESOURCE\",
+          \"public-client\": true,
+          \"confidential-port\": 0
+        }
+    }
+}
+" > /opt/app-root/src/config.js
+
 
 echo "Generated config.js successfully."
 cat /opt/app-root/src/config.js
