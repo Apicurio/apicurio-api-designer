@@ -115,7 +115,7 @@
                             <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/dist</directory>
+                                    <directory>${project.basedir}/apps/web/dist</directory>
                                     <filtering>false</filtering>
                                     <excludes>
                                         <exclude>config.js</exclude>

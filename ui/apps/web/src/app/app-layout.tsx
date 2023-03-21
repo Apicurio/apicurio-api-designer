@@ -13,7 +13,7 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
 
     const logo: React.ReactNode = (
         <div className="app-logo">
-            <img className="pf-c-brand logo-make" src="/images/logo.png" alt="apicurio-logo"/>
+            <img className="pf-c-brand logo-make" src="images/logo.png" alt="apicurio-logo"/>
             <span className="logo-model">Applications</span>
         </div>
     );

@@ -59,7 +59,7 @@ const App: React.FunctionComponent = () => {
                 addAlert: (props: AlertProps) => { return; }
             },
             navigation: {
-                basename: ""
+                basename: "/ui"
             },
             registry: {
                 api: apiDesignerConfig.apis.registry
@@ -71,7 +71,7 @@ const App: React.FunctionComponent = () => {
     return (
         <ApiDesignerConfigContext.Provider value={apiDesignerConfig}>
             <PageContextProvider value={pageConfig}>
-                <Router>
+                <Router basename={pageConfig.serviceConfig.navigation.basename}>
                     <React.Suspense fallback={loadingState}>
                         <AppLayout>
                             <AppRoutes/>

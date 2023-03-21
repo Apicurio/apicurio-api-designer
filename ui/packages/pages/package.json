@@ -24,6 +24,7 @@
     "@patternfly/react-styles": "4.92.6",
     "@patternfly/react-table": "4.112.39",
     "@rhoas/app-services-ui-components": "2.20.6",
+    "@types/lodash": "4.14.191",
     "@types/react": "17.0.53",
     "@types/react-dom": "17.0.19",
     "@types/styled-components": "5.1.26",

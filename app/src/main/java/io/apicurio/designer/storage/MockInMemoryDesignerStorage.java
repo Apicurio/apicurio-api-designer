@@ -1,18 +1,20 @@
 package io.apicurio.designer.storage;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.UUID;
+
+import javax.enterprise.context.ApplicationScoped;
+
 import io.apicurio.designer.common.io.content.ContentHandle;
 import io.apicurio.designer.spi.storage.DesignNotFoundException;
 import io.apicurio.designer.spi.storage.DesignerStorage;
 import io.apicurio.designer.spi.storage.StorageException;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 import io.quarkus.arc.Lock;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.UUID;
-import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author Jakub Senko "m@jsenko.net"
@@ -21,7 +23,7 @@ import javax.enterprise.context.ApplicationScoped;
 @Lock
 public class MockInMemoryDesignerStorage implements DesignerStorage {
 
-    private final HashMap<String, ContentHandle> contentMap = new HashMap<>();
+    private final Map<String, ContentHandle> contentMap = new HashMap<>();
     private final SortedMap<String, DesignMetadataDto> metadataMap = new TreeMap<>();
 
     private String getFreshId() {
@@ -38,7 +40,8 @@ public class MockInMemoryDesignerStorage implements DesignerStorage {
             throw new StorageException("Design ID must be empty");
         }
         metadata.setId(getFreshId());
-        contentMap.put(metadata.getId(), content);
+        var storedContent = ContentHandle.create(content.string());
+        contentMap.put(metadata.getId(), storedContent);
         metadataMap.put(metadata.getId(), metadata);
         return copy(metadata);
     }

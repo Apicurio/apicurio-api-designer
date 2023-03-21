@@ -13,8 +13,8 @@ const EditorPage: React.FunctionComponent = () => {
 export const AppRoutes = (): ReactElement => {
     return (
         <Switch>
-            <Route path='/' exact={true} component={HomePage}/>
-            <Route path='/designs/:designId/editor' exact={true} component={EditorPage}/>
+            <Route path="/" exact={true} component={HomePage}/>
+            <Route path="/designs/:designId/editor" exact={true} component={EditorPage}/>
         </Switch>
     );
 };

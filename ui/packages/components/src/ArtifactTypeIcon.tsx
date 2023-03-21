@@ -126,7 +126,7 @@ const UnstyledArtifactTypeIcon: FunctionComponent<ArtifactTypeIconProps> = ({ cl
     };
 
     return (
-        <div className={className} title={getTitle()} children={renderLabel()}  />
+        <div className={className} title={getTitle()} children={renderLabel() as any}  />
     );
 };
 
