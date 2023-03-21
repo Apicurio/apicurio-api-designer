@@ -23,15 +23,26 @@
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-api-designer-common</artifactId>
         </dependency>
-
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-api-designer-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-api-designer-ui</artifactId>
         </dependency>
 
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-web</artifactId>
         </dependency>
 
         <dependency>
@@ -54,9 +65,15 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-core</artifactId>
-            <!--            <scope>provided</scope>-->
         </dependency>
-
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-undertow</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-security</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-jackson</artifactId>
@@ -67,7 +84,6 @@
             <artifactId>microprofile-config-api</artifactId>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-micrometer-registry-prometheus</artifactId>
@@ -85,19 +101,16 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
@@ -192,7 +205,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <!--                <version>${surefire-plugin.version}</version>-->
                 <executions>
                     <execution>
                         <goals>
@@ -206,6 +218,35 @@
                                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                                 <maven.home>${maven.home}</maven.home>
                             </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-ui</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${skipUiBuild}</skip>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>apicurio-api-designer-ui</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF/resources/ui</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>true</overWriteSnapshots>
                         </configuration>
                     </execution>
                 </executions>
@@ -237,5 +278,22 @@
 
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>add-ui-dep</id>
+            <activation>
+                <property>
+                    <name>!skipUiBuild</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>io.apicurio</groupId>
+                    <artifactId>apicurio-api-designer-ui</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
 </project>
