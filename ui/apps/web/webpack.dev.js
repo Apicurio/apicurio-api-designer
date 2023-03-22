@@ -24,7 +24,7 @@ const devServerConfigFile = `./configs/${CONFIG}/devServer.json`;
 const devServerConfig = require(devServerConfigFile);
 
 let filesToCopy = [
-    { from: `./configs/${CONFIG}/config.js`, to: "config.js"}
+    {from: `./configs/${CONFIG}/config.js`, to: "config.js"}
 ];
 
 if (devServerConfig.warning) {

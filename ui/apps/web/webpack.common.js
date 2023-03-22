@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Dotenv = require("dotenv-webpack");
-const ASSET_PATH = process.env.ASSET_PATH || "/";
-
-const isPatternflyStyles = (stylesheet) => stylesheet.includes("patternfly");
 
 module.exports = (env, argv) => {
-    const isProduction = argv && argv.mode === "production";
     return {
         module: {
             rules: [

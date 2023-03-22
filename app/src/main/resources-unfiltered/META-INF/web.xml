@@ -28,6 +28,10 @@
         <filter-name>ResourceCacheControlFilter</filter-name>
         <filter-class>io.apicurio.common.apps.web.filters.ResourceCacheControlFilter</filter-class>
         <async-supported>true</async-supported>
+        <init-param>
+            <param-name>disabledFor</param-name>
+            <param-value>index.html</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
         <filter-name>ResourceCacheControlFilter</filter-name>
