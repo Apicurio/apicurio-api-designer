@@ -57,6 +57,10 @@ const App: React.FunctionComponent = () => {
     }
 
     const pageConfig: PageConfig = {
+        editorConfig: {
+            openApiEditorUrl: apiDesignerConfig.components.editors.url,
+            asyncApiEditorUrl: apiDesignerConfig.components.editors.url
+        },
         serviceConfig: {
             alerts: {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
