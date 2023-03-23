@@ -5,7 +5,13 @@ export type EditorsType = {
 };
 
 export type UiType = {
-    basename: string;
+    contextPath: string;
+    navPrefixPath: string;
+};
+
+export type MastheadType = {
+    show: boolean;
+    label: string;
 };
 
 export type NavType = {
@@ -14,6 +20,7 @@ export type NavType = {
 };
 
 export type ComponentsType = {
+    masthead: MastheadType;
     editors: EditorsType;
     nav: NavType;
 };

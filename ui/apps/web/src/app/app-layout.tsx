@@ -1,11 +1,14 @@
 import React from "react";
 import { Nav, NavItem, NavList, Page, PageHeader, PageSidebar } from "@patternfly/react-core";
+import { ApiDesignerConfigType, useApiDesignerConfig } from "@app/contexts/config";
 
 export type AppLayoutProps = {
     children?: React.ReactNode;
 };
 
 export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children }) => {
+
+    const apiDesignerConfigType: ApiDesignerConfigType = useApiDesignerConfig();
 
     const logoProps = {
         href: "/"
@@ -14,19 +17,19 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
     const logo: React.ReactNode = (
         <div className="app-logo">
             <img className="pf-c-brand logo-make" src="images/logo.png" alt="apicurio-logo"/>
-            <span className="logo-model">Applications</span>
+            <span className="logo-model">{ apiDesignerConfigType.components.masthead.label }</span>
         </div>
     );
 
     const headerActions: React.ReactNode = <React.Fragment/>;
 
-    const header = (
+    const header: React.ReactNode | undefined = apiDesignerConfigType.components.masthead.show ? (
         <PageHeader
             logo={logo}
             logoProps={logoProps}
             headerTools={headerActions}
         />
-    );
+    ) : undefined;
 
     const rightNav: React.ReactNode = (
         <Nav>
@@ -37,7 +40,7 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
             </NavList>
         </Nav>
     );
-    const sidebar: React.ReactNode | undefined = <PageSidebar nav={rightNav} isNavOpen={true}/>;
+    const sidebar: React.ReactNode | undefined = apiDesignerConfigType.components.nav.show ? <PageSidebar nav={rightNav} isNavOpen={true}/> : undefined;
 
     return (
         <Page header={header} sidebar={sidebar}>

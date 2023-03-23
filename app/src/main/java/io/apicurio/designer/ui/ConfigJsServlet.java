@@ -22,13 +22,15 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
-import io.apicurio.designer.ui.config.ApiDesignerConfig;
-import io.apicurio.designer.ui.config.ApisType;
-import io.apicurio.designer.ui.config.AuthType;
-import io.apicurio.designer.ui.config.AuthType.AuthTypeBuilder;
-import io.apicurio.designer.ui.config.ComponentsType;
-import io.apicurio.designer.ui.config.EditorsType;
-import io.apicurio.designer.ui.config.NavType;
+import io.apicurio.designer.config.ApiDesignerConfig;
+import io.apicurio.designer.ui.beans.ApiDesignerConfigType;
+import io.apicurio.designer.ui.beans.ApisType;
+import io.apicurio.designer.ui.beans.AuthType;
+import io.apicurio.designer.ui.beans.ComponentsType;
+import io.apicurio.designer.ui.beans.EditorsType;
+import io.apicurio.designer.ui.beans.MastheadType;
+import io.apicurio.designer.ui.beans.NavType;
+import io.apicurio.designer.ui.beans.UiType;
 
 /**
  * @author eric.wittmann@gmail.com
@@ -38,7 +40,7 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
     private static final long serialVersionUID = 4295566125954142924L;
 
     @Inject
-    UiConfigProperties uiConfig;
+    ApiDesignerConfig appConfig;
 
     /**
      * @see io.apicurio.common.apps.web.servlets.ConfigJsServlet#getVarName()
@@ -53,25 +55,39 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
      */
     @Override
     protected Object generateConfig(HttpServletRequest request) {
-        return ApiDesignerConfig.builder()
+        return ApiDesignerConfigType.builder()
+                .ui(generateUiConfig())
                 .apis(generateApiConfig())
                 .auth(generateAuthConfig())
                 .components(generateComponentConfig())
                 .build();
     }
 
+    private UiType generateUiConfig() {
+        return UiType.builder()
+                .contextPath("/ui/")
+                .navPrefixPath("")
+                .build();
+    }
+
     private ApisType generateApiConfig() {
-        // FIXME implement this!
         return ApisType.builder()
                 .registry(getRegistryApiUrl())
                 .build();
     }
 
     private ComponentsType generateComponentConfig() {
-        // FIXME implement this!
         return ComponentsType.builder()
+                .masthead(generateMastheadConfig())
                 .editors(generateEditorsConfig())
                 .nav(generateNavConfig())
+                .build();
+    }
+
+    private MastheadType generateMastheadConfig() {
+        return MastheadType.builder()
+                .show(true)
+                .label("API Designer")
                 .build();
     }
 
@@ -84,7 +100,6 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
     }
 
     private EditorsType generateEditorsConfig() {
-        // FIXME implement this!
         return EditorsType.builder()
                 .url(getEditorsUrl())
                 .build();
@@ -101,25 +116,26 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
     }
 
     private AuthType generateAuthConfig() {
-        if (uiConfig.isAuthenticationEnabled()) {
-            AuthTypeBuilder auth = AuthType.builder();
-            
+        if (appConfig.authenticationEnabled) {
             // When auth is enabled but the type is not set, default to keycloak
-            if (uiConfig.getUiAuthType().equals("keycloakjs") || uiConfig.getUiAuthType().equals("none")) {
-                auth.type("keycloakjs");
-                auth.options(uiConfig.getKeycloakProperties());
-            } else if (uiConfig.getUiAuthType().equals("oidc")) {
-                auth.type("oidc");
+            if (appConfig.uiAuthType.equals("keycloakjs") || appConfig.uiAuthType.equals("none")) {
+                return AuthType.builder()
+                    .type("keycloakjs")
+                    .options(appConfig.keycloakConfig)
+                    .build();
+            } else if (appConfig.uiAuthType.equals("oidc")) {
                 Map<String, Object> options = new HashMap<>();
-                options.put("clientId", uiConfig.getOidcClientId());
-                options.put("url", uiConfig.getOidcUrl());
-                options.put("redirectUri", uiConfig.getOidcRedirectUrl());
-                auth.options(options);
+                options.put("clientId", appConfig.oidcClientId);
+                options.put("url", appConfig.oidcUrl);
+                options.put("redirectUri", appConfig.oidcRedirectUri);
+
+                return AuthType.builder()
+                    .type("oidc")
+                    .options(options)
+                    .build();
             }
-            return auth.build();
-        } else {
-            return AuthType.builder().type("none").build();
         }
+        return AuthType.builder().type("none").build();
     }
 
     /**

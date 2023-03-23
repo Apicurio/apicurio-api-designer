@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.apicurio.designer.ui;
+package io.apicurio.designer.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,11 +30,10 @@ import org.slf4j.Logger;
 import io.apicurio.designer.common.config.DesignerProperties;
 
 /**
- * Holds/accesses all configuration settings for the UI.
  * @author eric.wittmann@gmail.com
  */
 @ApplicationScoped
-public class UiConfigProperties {
+public class ApiDesignerConfig {
 
     @Inject
     Logger log;
@@ -42,45 +41,45 @@ public class UiConfigProperties {
     @Inject
     @ConfigProperty(name = "designer.ui.config.uiContextPath", defaultValue = "/ui/")
     //@Info(category = "ui", description = "UI context path", availableSince = "2.1.0.Final")
-    String uiContextPath;
+    public String uiContextPath;
 
     @Inject
     @ConfigProperty(name = "designer.ui.config.apiUrl", defaultValue = "_")
     //@Info(category = "ui", description = "UI APIs URL", availableSince = "1.3.0.Final")
-    String apiUrl;
+    public String apiUrl;
 
     @Inject
     @ConfigProperty(name = "quarkus.oidc.tenant-enabled", defaultValue = "false")
     //@Info(category = "ui", description = "UI OIDC tenant enabled", availableSince = "2.0.0.Final")
-    boolean tenantEnabled;
+    public boolean authenticationEnabled;
 
     @Inject
     @ConfigProperty(name = "designer.ui.config.auth.type", defaultValue = "none")
     //@Info(category = "ui", description = "UI auth type", availableSince = "2.2.6.Final")
-    String uiAuthType;
+    public String uiAuthType;
 
     @Inject
     @ConfigProperty(name = "designer.ui.config.auth.oidc.url", defaultValue = "none")
     //@Info(category = "ui", description = "UI auth OIDC URL", availableSince = "2.2.6.Final")
-    String oidcUrl;
+    public String oidcUrl;
 
     @Inject
     @ConfigProperty(name = "designer.ui.config.auth.oidc.client-id", defaultValue = "none")
     //@Info(category = "ui", description = "UI auth OIDC client ID", availableSince = "2.2.6.Final")
-    String oidcClientId;
+    public String oidcClientId;
 
     @Inject
     @ConfigProperty(name = "designer.ui.config.auth.oidc.redirect-url", defaultValue = "none")
     //@Info(category = "ui", description = "UI auth OIDC redirect URL", availableSince = "2.2.6.Final")
-    String oidcRedirectUri;
+    public String oidcRedirectUri;
 
-    private final Map<String, Object> keycloakConfig;
+    public final Map<String, Object> keycloakConfig;
 
     /**
      * Constructor.
      * @param kcProperties
      */
-    public UiConfigProperties(@DesignerProperties(value = {"designer.ui.config.auth.keycloak"}) Properties kcProperties) {
+    public ApiDesignerConfig(@DesignerProperties(value = {"designer.ui.config.auth.keycloak"}) Properties kcProperties) {
         this.keycloakConfig = new HashMap<>();
         kcProperties.stringPropertyNames().forEach(key -> keycloakConfig.put(key, kcProperties.get(key)));
     }
@@ -88,40 +87,9 @@ public class UiConfigProperties {
     @PostConstruct
     void onConstruct() {
         log.debug("============> kcProperties  " + keycloakConfig);
-        log.debug("============> tenantEnabled  " + tenantEnabled);
+        log.debug("============> authenticationEnabled  " + authenticationEnabled);
         log.debug("============> uiContextPath  " + uiContextPath);
         log.debug("============> apiUrl  " + apiUrl);
     }
 
-    public Map<String, Object> getKeycloakProperties() {
-        return keycloakConfig;
-    }
-
-    public String getUiContextPath() {
-        return uiContextPath;
-    }
-
-    public String getApiUrl() {
-        return apiUrl;
-    }
-
-    public boolean isAuthenticationEnabled() {
-        return tenantEnabled;
-    }
-
-    public String getUiAuthType() {
-        return uiAuthType;
-    }
-
-    public String getOidcUrl() {
-        return oidcUrl;
-    }
-
-    public String getOidcClientId() {
-        return oidcClientId;
-    }
-
-    public String getOidcRedirectUrl() {
-        return oidcRedirectUri;
-    }
 }
