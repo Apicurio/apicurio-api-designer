@@ -381,9 +381,7 @@ export const EditorPage: FunctionComponent<EditorPageProps> = ({ params }: Edito
             <PageSection variant={PageSectionVariants.light} id="section-editor" style={sectionEditorStyle}>
                 <Drawer isExpanded={isTestRegistryIssuesDrawerOpen} isInline={true} position="right">
                     <DrawerContent panelContent={renderPanelContent(testRegistryError)}>
-                        <div className="editor-parent" style={editorParentStyle}>
-                            {editor()}
-                        </div>
+                        <div className="editor-parent" style={editorParentStyle} children={editor() as any} />
                     </DrawerContent>
                 </Drawer>
             </PageSection>

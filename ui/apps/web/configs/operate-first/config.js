@@ -3,9 +3,14 @@ const ApiDesignerConfig = {
         "registry": "https://fleet-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud"
     },
     "ui": {
-        "basename": "/"
+        "contextPath": "/",
+        "navPrefixPath": ""
     },
     "components": {
+        "masthead": {
+            "show": true,
+            "label": "APPLICATIONS"
+        },
         "editors": {
             "url": "http://localhost:9011"
         },

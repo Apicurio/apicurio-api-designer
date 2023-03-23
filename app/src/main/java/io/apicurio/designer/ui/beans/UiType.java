@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.apicurio.designer.ui.config;
+package io.apicurio.designer.ui.beans;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Builder;
@@ -26,8 +26,9 @@ import lombok.Data;
 @Data
 @Builder
 @RegisterForReflection
-public class EditorsType {
+public class UiType {
     
-    private String url;
+    private String contextPath;
+    private String navPrefixPath;
 
 }

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package io.apicurio.designer.ui.config;
-
-import java.util.Map;
+package io.apicurio.designer.ui.beans;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import lombok.Builder;
@@ -28,9 +26,11 @@ import lombok.Data;
 @Data
 @Builder
 @RegisterForReflection
-public class AuthType {
+public class ApiDesignerConfigType {
     
-    public String type;
-    public Map<String, Object> options;
+    private UiType ui;
+    private ApisType apis;
+    private ComponentsType components;
+    private AuthType auth;
 
 }

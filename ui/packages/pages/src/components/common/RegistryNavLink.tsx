@@ -42,6 +42,6 @@ export const RegistryNavLink: FunctionComponent<RegistryNavLinkProps> = ({ regis
     }, [context]);
 
     return (
-        href ? <a href={href} children={children} /> : <span children={children} />
+        href ? <a href={href} children={children as any} /> : <span children={children as any} />
     );
 };
