@@ -30,7 +30,7 @@
         <async-supported>true</async-supported>
         <init-param>
             <param-name>disabledFor</param-name>
-            <param-value>\/ui\/,\/apis\/.+,\/ui\/config\.js</param-value>
+            <param-value>\/ui\/,\/apis\/.+,\/ui\/config\.js,\/editors\/</param-value>
         </init-param>
     </filter>
     <filter-mapping>

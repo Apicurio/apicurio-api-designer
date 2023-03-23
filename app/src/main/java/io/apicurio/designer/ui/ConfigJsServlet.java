@@ -16,6 +16,8 @@
 
 package io.apicurio.designer.ui;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,42 +58,42 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
     @Override
     protected Object generateConfig(HttpServletRequest request) {
         return ApiDesignerConfigType.builder()
-                .ui(generateUiConfig())
-                .apis(generateApiConfig())
-                .auth(generateAuthConfig())
-                .components(generateComponentConfig())
+                .ui(generateUiConfig(request))
+                .apis(generateApiConfig(request))
+                .auth(generateAuthConfig(request))
+                .components(generateComponentConfig(request))
                 .build();
     }
 
-    private UiType generateUiConfig() {
+    private UiType generateUiConfig(HttpServletRequest request) {
         return UiType.builder()
                 .contextPath("/ui/")
                 .navPrefixPath("")
                 .build();
     }
 
-    private ApisType generateApiConfig() {
+    private ApisType generateApiConfig(HttpServletRequest request) {
         return ApisType.builder()
-                .registry(getRegistryApiUrl())
+                .registry(getRegistryApiUrl(request))
                 .build();
     }
 
-    private ComponentsType generateComponentConfig() {
+    private ComponentsType generateComponentConfig(HttpServletRequest request) {
         return ComponentsType.builder()
-                .masthead(generateMastheadConfig())
-                .editors(generateEditorsConfig())
-                .nav(generateNavConfig())
+                .masthead(generateMastheadConfig(request))
+                .editors(generateEditorsConfig(request))
+                .nav(generateNavConfig(request))
                 .build();
     }
 
-    private MastheadType generateMastheadConfig() {
+    private MastheadType generateMastheadConfig(HttpServletRequest request) {
         return MastheadType.builder()
                 .show(true)
                 .label("API Designer")
                 .build();
     }
 
-    private NavType generateNavConfig() {
+    private NavType generateNavConfig(HttpServletRequest request) {
         // FIXME implement this!
         return NavType.builder()
                 .show(false)
@@ -99,23 +101,41 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
                 .build();
     }
 
-    private EditorsType generateEditorsConfig() {
+    private EditorsType generateEditorsConfig(HttpServletRequest request) {
         return EditorsType.builder()
-                .url(getEditorsUrl())
+                .url(getEditorsUrl(request))
                 .build();
     }
 
-    private String getEditorsUrl() {
-        // FIXME implement this!
-        return "editors-url";
+    private String getEditorsUrl(HttpServletRequest request) {
+        String relativePath = "/editors";
+        
+        // FIXME the following logic (resolving a relative path using XForward and request URL should be available
+        //       in the base class (some base class refactoring needed).
+        
+        String url = resolveUrlFromXForwarded(request, relativePath);
+        if (url != null) {
+            return url;
+        }
+
+        try {
+            url = request.getRequestURL().toString();
+            url = new URI(url).resolve(relativePath).toString();
+            if (url.startsWith("http:") && request.isSecure()) {
+                url = url.replaceFirst("http", "https");
+            }
+            return url;
+        } catch (URISyntaxException e) {
+            return relativePath;
+        }
     }
 
-    private String getRegistryApiUrl() {
+    private String getRegistryApiUrl(HttpServletRequest request) {
         // FIXME implement this!
         return "registry-api-url";
     }
 
-    private AuthType generateAuthConfig() {
+    private AuthType generateAuthConfig(HttpServletRequest request) {
         if (appConfig.authenticationEnabled) {
             // When auth is enabled but the type is not set, default to keycloak
             if (appConfig.uiAuthType.equals("keycloakjs") || appConfig.uiAuthType.equals("none")) {
