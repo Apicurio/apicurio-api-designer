@@ -1,6 +1,7 @@
 package io.apicurio.designer.spi.storage;
 
 import io.apicurio.common.apps.content.handle.ContentHandle;
+import io.apicurio.common.apps.config.DynamicConfigStorage;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
-public interface DesignerStorage {
+public interface DesignerStorage extends DynamicConfigStorage {
 
     DesignMetadataDto createDesign(DesignMetadataDto metadata, ContentHandle content);
 

@@ -38,6 +38,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-config-definitions</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
