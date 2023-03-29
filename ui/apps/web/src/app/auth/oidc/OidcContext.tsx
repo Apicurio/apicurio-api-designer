@@ -1,20 +1,16 @@
-import { getKeycloakToken, getParsedKeycloakToken, } from "@app/auth/keycloak/keycloakAuth";
+import {getOidcToken, getUsername,} from "@app/auth/oidc/oidcAuth";
 import { ApiDesignerConfigType, useApiDesignerConfig } from "@app/contexts/config";
 import { AuthConfig } from "@apicurio/apicurio-api-designer-services";
 
 /**
  * React hook to get the URL service.
  */
-export const useKeycloakAuth: () => AuthConfig = (): AuthConfig => {
+export const useOidcAuth: () => AuthConfig = (): AuthConfig => {
     const apiDesignerConfig: ApiDesignerConfigType | undefined = useApiDesignerConfig();
-    if (apiDesignerConfig?.auth.type === "keycloakjs") {
+    if (apiDesignerConfig?.auth.type === "oidc") {
         return {
-            getToken: getKeycloakToken,
-            getUsername: () => {
-                return getParsedKeycloakToken().then(
-                        (token) => (token as Record<string, string>)["username"]
-                );
-            }
+            getToken: getOidcToken,
+            getUsername: getUsername
         };
     } else {
         return {

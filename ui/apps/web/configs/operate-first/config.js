@@ -21,18 +21,11 @@ const ApiDesignerConfig = {
         }
     },
     "auth": {
-        "type": "keycloakjs",
+        "type": "oidc",
         "options": {
-            "realm": "operate-first-apicurio",
-            "url": "https://auth.apicur.io/auth",
+            "url": "https://auth.apicur.io/auth/realms/operate-first-apicurio",
             "clientId": "ad-ui",
-            "public-client": true,
-            "enable-cors": true,
-            "cors-max-age" : 1000,
-            "cors-allowed-methods" : "POST, PUT, DELETE, GET",
-            "cors-exposed-headers" : "WWW-Authenticate",
-            "onLoad": "login-required",
-            "checkLoginIframe": false
+            "redirectUri": "http://localhost:8080",
         }
     }
 }

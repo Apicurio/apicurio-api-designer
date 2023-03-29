@@ -22,13 +22,9 @@ const ApiDesignerConfig = {
     "auth": {
         "type": "keycloakjs",
         "options": {
-            "realm": "redhat-external",
-            "auth-server-url": "https://sso.redhat.com/auth/",
-            "ssl-required": "all",
-            "resource": "cloud-services",
-            "client": "apicurio-studio",
-            "public-client": true,
-            "confidential-port": 0
+            "auth-server-url": "https://sso.redhat.com/auth/realms/redhat-external",
+            "clientId": "apicurio-studio",
+            "redirectUri": "http://localhost:8080"
         }
     }
 }
