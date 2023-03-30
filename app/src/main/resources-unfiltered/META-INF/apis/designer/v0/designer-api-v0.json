@@ -73,31 +73,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/DesignMetaDataList"
+                                    "$ref": "#/components/schemas/DesignSearchResults"
                                 }
                             }
                         },
                         "description": "TODO"
                     },
                     "409": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/Conflict"
                     },
                     "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/ServerError"
                     }
                 },
                 "operationId": "getDesigns"
@@ -144,7 +130,7 @@
                         "required": true
                     },
                     {
-                        "name": "X-Designer-Source",
+                        "name": "X-Designer-Origin",
                         "description": "",
                         "schema": {
                             "type": "string"
@@ -158,21 +144,14 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/DesignMetaData"
+                                    "$ref": "#/components/schemas/Design"
                                 }
                             }
                         },
                         "description": "TODO"
                     },
                     "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/ServerError"
                     }
                 },
                 "operationId": "createDesign"
@@ -195,24 +174,10 @@
                         "description": "TODO"
                     },
                     "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/NotFound"
                     },
                     "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/ServerError"
                     }
                 },
                 "operationId": "getDesign"
@@ -236,31 +201,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/DesignMetaData"
+                                    "$ref": "#/components/schemas/Design"
                                 }
                             }
                         },
                         "description": "TODO"
                     },
                     "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/NotFound"
                     },
                     "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/ServerError"
                     }
                 },
                 "operationId": "updateDesign"
@@ -274,24 +225,10 @@
                         "description": "TODO"
                     },
                     "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/NotFound"
                     },
                     "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/ServerError"
                     }
                 },
                 "operationId": "deleteDesign"
@@ -317,31 +254,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/DesignMetaData"
+                                    "$ref": "#/components/schemas/Design"
                                 }
                             }
                         },
                         "description": "TODO"
                     },
                     "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/NotFound"
                     },
                     "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/ServerError"
                     }
                 },
                 "operationId": "getDesignMetadata"
@@ -365,31 +288,17 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/DesignMetaData"
+                                    "$ref": "#/components/schemas/Design"
                                 }
                             }
                         },
                         "description": "TODO"
                     },
                     "404": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/NotFound"
                     },
                     "500": {
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Error"
-                                }
-                            }
-                        },
-                        "description": "TODO"
+                        "$ref": "#/components/responses/ServerError"
                     }
                 },
                 "operationId": "updateDesignMetadata"
@@ -405,6 +314,166 @@
                 }
             ]
         },
+        "/designs/{designId}/events": {
+            "get": {
+                "tags": [
+                    "Design"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignEventList"
+                                }
+                            }
+                        },
+                        "description": "Successful response."
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                },
+                "operationId": "getAllDesignEvents",
+                "summary": "Gets all events for the design"
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateDesignEvent"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "Design"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignEvent"
+                                }
+                            }
+                        },
+                        "description": "The event was created successfully."
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                },
+                "operationId": "createDesignEvent",
+                "summary": "Create a new design event"
+            },
+            "parameters": [
+                {
+                    "name": "designId",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/search/designs": {
+            "summary": "Search for artifacts in the registry.",
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "description": "Filter by artifact name.",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "offset",
+                        "description": "The number of artifacts to skip before starting to collect the result set.  Defaults to 0.",
+                        "schema": {
+                            "default": 0,
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "name": "limit",
+                        "description": "The number of artifacts to return.  Defaults to 20.",
+                        "schema": {
+                            "default": 20,
+                            "type": "integer"
+                        },
+                        "in": "query",
+                        "required": false
+                    },
+                    {
+                        "name": "order",
+                        "description": "Sort order, ascending (`asc`) or descending (`desc`).",
+                        "schema": {
+                            "$ref": "#/components/schemas/SortOrder"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "orderby",
+                        "description": "The field to sort by.  Can be one of:\n\n* `name`\n* `createdOn`\n",
+                        "schema": {
+                            "$ref": "#/components/schemas/SortBy"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "description",
+                        "description": "Filter by description.",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    },
+                    {
+                        "name": "type",
+                        "description": "Filter by design type.",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignSearchResults"
+                                }
+                            }
+                        },
+                        "description": "On a successful response, returns a result set of designs - one for each design\nthat matches the criteria."
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                },
+                "operationId": "searchDesigns",
+                "summary": "Search for designs",
+                "description": "Returns a paginated list of all designs that match the provided filter criteria.\n"
+            }
+        },
         "x-codegen-contextRoot": "/apis/designer/v0"
     },
     "components": {
@@ -414,50 +483,6 @@
                 "type": "string",
                 "x-codegen-inline": true
             },
-            "AbstractList": {
-                "required": [
-                    "kind",
-                    "page",
-                    "size",
-                    "total"
-                ],
-                "type": "object",
-                "properties": {
-                    "kind": {
-                        "type": "string"
-                    },
-                    "page": {
-                        "type": "integer"
-                    },
-                    "size": {
-                        "type": "integer"
-                    },
-                    "total": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "DesignMetaDataList": {
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/AbstractList"
-                    },
-                    {
-                        "required": [
-                            "items"
-                        ],
-                        "type": "object",
-                        "properties": {
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/DesignMetaData"
-                                }
-                            }
-                        }
-                    }
-                ]
-            },
             "EditableDesignMetadata": {
                 "title": "EditableDesignMetaData",
                 "description": "",
@@ -466,22 +491,12 @@
                         "$ref": "#/components/schemas/ObjectReference"
                     },
                     {
-                        "required": [
-                            "type",
-                            "source"
-                        ],
                         "type": "object",
                         "properties": {
                             "name": {
                                 "type": "string"
                             },
                             "description": {
-                                "type": "string"
-                            },
-                            "type": {
-                                "type": "string"
-                            },
-                            "source": {
                                 "type": "string"
                             }
                         }
@@ -506,56 +521,8 @@
                     }
                 }
             },
-            "DesignMetaData": {
-                "title": "DesignMetaData",
-                "description": "",
-                "allOf": [
-                    {
-                        "$ref": "#/components/schemas/EditableDesignMetadata"
-                    },
-                    {
-                        "required": [
-                            "createdBy",
-                            "createdOn",
-                            "modifiedBy",
-                            "modifiedOn",
-                            "type",
-                            "source"
-                        ],
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string"
-                            },
-                            "description": {
-                                "type": "string"
-                            },
-                            "createdBy": {
-                                "type": "string"
-                            },
-                            "createdOn": {
-                                "format": "date-time",
-                                "type": "string"
-                            },
-                            "modifiedBy": {
-                                "type": "string"
-                            },
-                            "modifiedOn": {
-                                "format": "date-time",
-                                "type": "string"
-                            },
-                            "type": {
-                                "type": "string"
-                            },
-                            "source": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                ]
-            },
             "Error": {
-                "title": "EditableDesignMetaData",
+                "title": "Error",
                 "description": "",
                 "allOf": [
                     {
@@ -603,6 +570,260 @@
                         "type": "string"
                     }
                 }
+            },
+            "Design": {
+                "title": "DesignMetaData",
+                "description": "",
+                "allOf": [
+                    {
+                        "required": [
+                            "createdBy",
+                            "createdOn",
+                            "modifiedBy",
+                            "modifiedOn",
+                            "type",
+                            "name"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "createdBy": {
+                                "type": "string"
+                            },
+                            "createdOn": {
+                                "format": "date-time",
+                                "type": "string"
+                            },
+                            "modifiedBy": {
+                                "type": "string"
+                            },
+                            "modifiedOn": {
+                                "format": "date-time",
+                                "type": "string"
+                            },
+                            "type": {
+                                "type": "string"
+                            },
+                            "origin": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "$ref": "#/components/schemas/ObjectReference"
+                    }
+                ]
+            },
+            "DesignSearchResults": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/AbstractSearchResults"
+                    },
+                    {
+                        "required": [
+                            "designs"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "designs": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Design"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "AbstractSearchResults": {
+                "required": [
+                    "kind",
+                    "count",
+                    "page",
+                    "pageSize"
+                ],
+                "type": "object",
+                "properties": {
+                    "kind": {
+                        "type": "string"
+                    },
+                    "count": {
+                        "type": "integer"
+                    },
+                    "page": {
+                        "description": "",
+                        "type": "integer"
+                    },
+                    "pageSize": {
+                        "description": "",
+                        "type": "integer"
+                    }
+                }
+            },
+            "DesignEventType": {
+                "description": "",
+                "enum": [
+                    "create",
+                    "import",
+                    "update",
+                    "download",
+                    "register"
+                ],
+                "type": "string"
+            },
+            "CreateDesignEvent": {
+                "description": "",
+                "required": [
+                    "on",
+                    "id",
+                    "data",
+                    "type"
+                ],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "$ref": "#/components/schemas/DesignEventType",
+                        "description": ""
+                    },
+                    "on": {
+                        "format": "date-time",
+                        "description": "",
+                        "type": "string"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/DesignEventData",
+                        "description": ""
+                    },
+                    "id": {
+                        "description": "",
+                        "type": "string"
+                    }
+                }
+            },
+            "DesignEventData": {
+                "description": "",
+                "type": "object",
+                "additionalProperties": true
+            },
+            "DesignEvent": {
+                "description": "",
+                "type": "object",
+                "allOf": [
+                    {
+                        "required": [
+                            "on",
+                            "eventId",
+                            "data",
+                            "type"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "eventId": {
+                                "description": "",
+                                "type": "string"
+                            },
+                            "type": {
+                                "$ref": "#/components/schemas/DesignEventType",
+                                "description": ""
+                            },
+                            "on": {
+                                "format": "date-time",
+                                "description": "",
+                                "type": "string"
+                            },
+                            "data": {
+                                "$ref": "#/components/schemas/DesignEventData"
+                            }
+                        }
+                    },
+                    {
+                        "$ref": "#/components/schemas/ObjectReference"
+                    }
+                ]
+            },
+            "DesignEventList": {
+                "description": "",
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/DesignEvent"
+                }
+            },
+            "SortOrder": {
+                "description": "",
+                "enum": [
+                    "asc",
+                    "desc"
+                ],
+                "type": "string"
+            },
+            "SortBy": {
+                "description": "",
+                "enum": [
+                    "name",
+                    "createdOn"
+                ],
+                "type": "string"
+            }
+        },
+        "responses": {
+            "NotFound": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "NotFoundExample": {
+                                "value": {
+                                    "error_code": 404,
+                                    "message": "No design with id 'Inbound API' could be found."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Common response for all operations that can return a `404` error."
+            },
+            "ServerError": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "ErrorExample": {
+                                "value": {
+                                    "error_code": 500,
+                                    "message": "Lost connection to the database."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Common response for all operations that can fail with an unexpected server error."
+            },
+            "Conflict": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Error"
+                        },
+                        "examples": {
+                            "ConflictExample": {
+                                "value": {
+                                    "error_code": 409,
+                                    "message": "The design content was invalid."
+                                }
+                            }
+                        }
+                    }
+                },
+                "description": "Common response used when an input conflicts with existing data."
             }
         }
     },
@@ -612,6 +833,10 @@
         },
         {
             "name": "System"
+        },
+        {
+            "name": "Search",
+            "description": ""
         }
     ],
     "x-codegen": {
