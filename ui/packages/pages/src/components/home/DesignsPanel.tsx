@@ -212,10 +212,10 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
                                 actionClose={<AlertActionCloseButton onClose={onCloseDataWarning} />}
                                 style={{ marginBottom: "15px" }}>
                                 <p>
-                                    In the Service Preview release of OpenShift API Designer, all designs are stored
+                                    In this configuration of API Designer, all designs are stored
                                     locally in your browser. Clearing your browser cache or switching to a new browser
                                     might result in loss of data. Make sure you save your work by downloading your
-                                    designs locally or by exporting them to a Red Hat OpenShift Service Registry instance.
+                                    designs locally or by exporting them to a Registry instance.
                                 </p>
                             </Alert>
                         </If>

@@ -190,7 +190,7 @@ async function getEvents(id: string): Promise<DesignEvent[]> {
 }
 
 
-async function createEvent(event: DesignEvent): Promise<void> {
+async function createEvent(event: DesignEvent): Promise<DesignEvent> {
     event.eventId = uuidv4();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

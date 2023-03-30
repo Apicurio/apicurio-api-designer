@@ -154,9 +154,9 @@ async function getEvents(svcConfig: ServiceConfig, id: string): Promise<DesignEv
     return Promise.resolve([]);
 }
 
-async function createEvent(svcConfig: ServiceConfig, event: DesignEvent): Promise<void> {
+async function createEvent(svcConfig: ServiceConfig, event: DesignEvent): Promise<DesignEvent> {
     // FIXME implement this - REST API needs an /events endpoint for designs
-    return Promise.resolve();
+    return Promise.resolve({} as DesignEvent);
 }
 
 
@@ -172,7 +172,7 @@ export interface DesignsService {
     getDesignContent(id: string): Promise<DesignContent>;
     updateDesignContent(content: DesignContent): Promise<void>;
     getEvents(id: string): Promise<DesignEvent[]>;
-    createEvent(event: DesignEvent): Promise<void>;
+    createEvent(event: DesignEvent): Promise<DesignEvent>;
 }
 
 
