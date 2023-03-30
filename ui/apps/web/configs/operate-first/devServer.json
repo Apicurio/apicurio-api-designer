@@ -1,6 +1,6 @@
 {
   "host": "localhost",
-  "port": 7777,
+  "port": 7070,
   "protocol": "http",
   "keycloak": true
 }

@@ -62,6 +62,10 @@ const App: React.FunctionComponent = () => {
             asyncApiEditorUrl: apiDesignerConfig.components.editors.url
         },
         serviceConfig: {
+            designs: {
+                type: apiDesignerConfig.apis.designer === "browser" ? "browser" : "api",
+                api: apiDesignerConfig.apis.designer
+            },
             alerts: {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 addAlert: (_: AlertProps) => { return; }

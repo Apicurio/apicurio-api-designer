@@ -42,7 +42,6 @@ public class DesignsResourceImpl implements DesignsResource {
 
     @Override
     public DesignMetaData createDesign(String xDesignerName, String xDesignerDescription, String xDesignerType, String xDesignerSource, InputStream data) {
-//        throw new RuntimeException("foo");
         var metadata = DesignMetadataDto.builder()
                 .name(xDesignerName)
                 .description(xDesignerDescription)

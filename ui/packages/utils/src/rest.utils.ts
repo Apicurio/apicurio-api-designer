@@ -98,7 +98,7 @@ export function createOptions(headers: { [header: string]: string }): AxiosReque
  * Performs an HTTP GET operation to the given URL with the given options.  Returns
  * a Promise to the HTTP response data.
  */
-export function httpGet<T>(url: string, options?: AxiosRequestConfig, successCallback?: (value: any) => T): Promise<T> {
+export function httpGet<T>(url: string, options?: AxiosRequestConfig, successCallback?: (value: any, response?: any) => T): Promise<T> {
     console.info("[BaseService] Making a GET request to: ", url);
 
     if (!options) {
@@ -110,7 +110,7 @@ export function httpGet<T>(url: string, options?: AxiosRequestConfig, successCal
         .then(response => {
             const data: T = response.data;
             if (successCallback) {
-                return successCallback(data);
+                return successCallback(data, response);
             } else {
                 return data;
             }

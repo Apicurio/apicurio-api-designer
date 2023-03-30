@@ -1,7 +1,7 @@
 const ApiDesignerConfig = {
     "apis": {
         "registry": "local-mock",
-        "designer": "local"
+        "designer": "http://localhost:8080/apis/designer/v0"
     },
     "ui": {
         "contextPath": "/",

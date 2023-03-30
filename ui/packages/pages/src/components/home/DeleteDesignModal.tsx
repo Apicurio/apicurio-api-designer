@@ -61,7 +61,7 @@ export const DeleteDesignModal: FunctionComponent<DeleteDesignModalProps> = ({ d
                     <TextContent>{design?.name}</TextContent>
                 </FormGroup>
                 <FormGroup label="Description" fieldId="delete-design-description">
-                    <TextContent>{design?.summary}</TextContent>
+                    <TextContent>{design?.description}</TextContent>
                 </FormGroup>
                 <FormGroup fieldId="delete-design-warning">
                     <Alert isInline variant="info" title="To save your data for future use, download the design.">

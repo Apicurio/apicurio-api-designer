@@ -5,8 +5,10 @@ export interface Design {
     id: string;
     type: string;
     name: string;
-    summary: string|undefined;
+    description: string|undefined;
+    createdBy: string;
     createdOn: Date;
+    modifiedBy: string;
     modifiedOn: Date;
     origin: DesignContext;
 

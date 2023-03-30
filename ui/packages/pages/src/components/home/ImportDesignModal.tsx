@@ -30,7 +30,7 @@ import {
     parseJson,
     parseYaml
 } from "@apicurio/apicurio-api-designer-utils";
-import { ServicePreviewWarning } from "../common/ServicePreviewWarning";
+import { BrowserDataWarning } from "../common/BrowserDataWarning";
 import { If } from "@apicurio/apicurio-api-designer-components";
 import { UrlUpload } from "./UrlUpload";
 
@@ -95,7 +95,7 @@ type DetectionInfo = {
     contentType?: string;
     version?: string;
     name?: string;
-    summary?: string;
+    description?: string;
 }
 
 
@@ -107,7 +107,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
     const [url, setUrl] = useState<string>();
 
     const [name, setName] = useState("");
-    const [summary, setSummary] = useState("");
+    const [description, setDescription] = useState("");
 
     const [type, setType] = useState<string>();
     const [typeSelection, setTypeSelection] = useState<SelectOptionObject>();
@@ -156,7 +156,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
         const cd: CreateDesign = {
             type: type as string,
             name,
-            summary,
+            description,
             context
         };
         const cdc: CreateDesignContent = {
@@ -188,7 +188,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                 contentType: contentType,
                 version: "3.0.2",
                 name: contentObj.info?.title,
-                summary: contentObj.info?.description
+                description: contentObj.info?.description
             };
         }
         if (contentObj.swagger) {
@@ -197,7 +197,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                 contentType: contentType,
                 version: "2.0",
                 name: contentObj.info?.title,
-                summary: contentObj.info?.description
+                description: contentObj.info?.description
             };
         }
         if (contentObj.asyncapi) {
@@ -205,7 +205,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                 type: ArtifactTypes.ASYNCAPI,
                 contentType: contentType,
                 name: contentObj.info?.title,
-                summary: contentObj.info?.description
+                description: contentObj.info?.description
             };
         }
         if (contentObj.$schema) {
@@ -213,7 +213,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                 type: ArtifactTypes.JSON,
                 contentType: contentType,
                 name: contentObj.title,
-                summary: contentObj.description
+                description: contentObj.description
             };
         }
 
@@ -290,13 +290,13 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
             valid = false;
         }
         setValid(valid);
-    }, [name, summary, type, designContent]);
+    }, [name, description, type, designContent]);
 
     // Whenever the modal is opened, set default values for the form.
     useEffect(() => {
         setDesignContent(undefined);
         setName("");
-        setSummary("");
+        setDescription("");
         setFileName(undefined);
         setTheType(undefined);
     }, [isOpen]);
@@ -312,12 +312,12 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
             setTheType(info.type);
             setVersion(info.version || "");
             setName(info.name || "");
-            setSummary(info.summary || "");
+            setDescription(info.description || "");
             setContentType(info.contentType);
         } else {
             console.debug("[ImportDesignModal] Content empty, resetting form fields.");
             setName("");
-            setSummary("");
+            setDescription("");
             setTheType(undefined);
             setContentType(undefined);
         }
@@ -345,7 +345,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                 </Button>
             ]}
         >
-            <ServicePreviewWarning />
+            <BrowserDataWarning />
 
             <Form>
                 <If condition={importType === ImportFrom.FILE}>
@@ -422,8 +422,8 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                             id="import-design-description"
                             name="import-design-description"
                             aria-describedby="import-design-description-helper"
-                            value={summary}
-                            onChange={(value) => setSummary(value)}
+                            value={description}
+                            onChange={(value) => setDescription(value)}
                         />
                     </FormGroup>
                 </If>

@@ -1,6 +1,7 @@
 const ApiDesignerConfig = {
     "apis": {
-        "registry": "https://api.openshift.com"
+        "registry": "https://api.openshift.com",
+        "designer": "https://api.openshift.com/api/api_designer/v0"
     },
     "ui": {
         "contextPath": "/",

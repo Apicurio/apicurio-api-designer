@@ -237,7 +237,7 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
                 <div className="editor-context-details">
                     <TextContent>
                         <Text component="h1" className="title">{props.design?.name}</Text>
-                        <DesignDescription className="summary" description={props.design?.summary} />
+                        <DesignDescription className="description" description={props.design?.description} />
                     </TextContent>
                     <div className="metadata">
                         <DescriptionList isHorizontal={true} isCompact={true}>

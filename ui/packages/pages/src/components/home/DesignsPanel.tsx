@@ -29,6 +29,7 @@ import { DesignList } from "./DesignList";
 import { DeleteDesignModal } from "./DeleteDesignModal";
 import { RenameModal } from "../common/RenameModal";
 import { ExportToRegistryModal } from "../common/ExportToRegistryModal";
+import { PageConfig, usePageConfig } from "../../context/PageConfigContext";
 
 
 export type DesignsPanelProps = {
@@ -63,6 +64,7 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
     const [ designToRename, setDesignToRename ] = useState<Design>();
     const [ isRenameModalOpen, setRenameModalOpen ] = useState(false);
 
+    const pageConfig: PageConfig = usePageConfig();
     const designsSvc: DesignsService = useDesignsService();
     const downloadSvc: DownloadService = useDownloadService();
     const nav: NavigationService = useNavigation();
@@ -83,10 +85,10 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
     };
 
     const doRenameDesign = (event: RenameDesign): void => {
-        designsSvc.renameDesign(designToRename?.id as string, event.name, event.summary).then(() => {
+        designsSvc.renameDesign(designToRename?.id as string, event.name, event.description).then(() => {
             if (designToRename) {
                 designToRename.name = event.name;
-                designToRename.summary = event.summary;
+                designToRename.description = event.description;
             }
             setRenameModalOpen(false);
             alerts.designRenamed(event);
@@ -151,7 +153,8 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
     };
 
     useEffect(() => {
-        setShowDataWarning("true" === local.getConfigProperty("designs.panel.show-data-warning", "true"));
+        const defaultShowDataWarning: string = `${pageConfig.serviceConfig.designs.type === "browser"}`;
+        setShowDataWarning("true" === local.getConfigProperty("designs.panel.show-data-warning", defaultShowDataWarning));
     }, []);
 
     useEffect(() => {

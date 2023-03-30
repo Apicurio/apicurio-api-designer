@@ -63,7 +63,8 @@ public class MockInMemoryDesignerStorage implements DesignerStorage {
         if (getDesignContent(designId) == null) {
             throw new DesignNotFoundException("Design with ID %s not found".formatted(designId));
         }
-        contentMap.put(designId, content);
+        var storedContent = ContentHandle.create(content.string());
+        contentMap.put(designId, storedContent);
         return copy(metadataMap.get(designId));
     }
 
@@ -86,7 +87,7 @@ public class MockInMemoryDesignerStorage implements DesignerStorage {
 
     @Override
     public List<DesignMetadataDto> getDesignMetadataList(int page, int size) {
-        return metadataMap.values().stream().skip(page * size).limit(size).map(this::copy).toList();
+        return metadataMap.values().stream().toList();
     }
 
     @Override

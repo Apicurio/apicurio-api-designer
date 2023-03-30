@@ -17,7 +17,7 @@ import {
 import { ArtifactTypes, CreateDesign, Template } from "@apicurio/apicurio-api-designer-models";
 import { TemplatesService, useTemplatesService } from "@apicurio/apicurio-api-designer-services";
 import { If } from "@apicurio/apicurio-api-designer-components";
-import { ServicePreviewWarning } from "../common/ServicePreviewWarning";
+import { BrowserDataWarning } from "../common/BrowserDataWarning";
 import { TemplateItem } from "./TemplateItem";
 
 export type CreateDesignModalProps = {
@@ -62,7 +62,7 @@ const TYPE_OPTIONS: SelectOptionObject[] = [
 export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ isOpen, onCreate, onCancel }: CreateDesignModalProps) => {
     const [isValid, setValid] = useState(false);
     const [name, setName] = useState("");
-    const [summary, setSummary] = useState("");
+    const [description, setDescription] = useState("");
 
     const [type, setType] = useState(ArtifactTypes.OPENAPI);
     const [typeSelection, setTypeSelection] = useState<SelectOptionObject>();
@@ -95,7 +95,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
         const cd: CreateDesign = {
             type,
             name,
-            summary,
+            description,
             context: {
                 type: "create"
             }
@@ -116,12 +116,12 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
             valid = false;
         }
         setValid(valid);
-    }, [name, summary, type, template]);
+    }, [name, description, type, template]);
 
     // Whenever the modal is opened, set default values for the form.
     useEffect(() => {
         setName("");
-        setSummary("");
+        setDescription("");
         setType(ArtifactTypes.OPENAPI);
         if (templates) {
             setTemplate(templates[0]);
@@ -166,7 +166,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
                 </Button>
             ]}
         >
-            <ServicePreviewWarning />
+            <BrowserDataWarning />
 
             <Form>
                 <FormGroup label="Name" isRequired={true} fieldId="create-design-name">
@@ -186,8 +186,8 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
                         id="create-design-description"
                         name="create-design-description"
                         aria-describedby="create-design-description-helper"
-                        value={summary}
-                        onChange={(value) => {setSummary(value);}}
+                        value={description}
+                        onChange={(value) => {setDescription(value);}}
                     />
                 </FormGroup>
                 <FormGroup label="Type" isRequired={true} fieldId="create-design-type">

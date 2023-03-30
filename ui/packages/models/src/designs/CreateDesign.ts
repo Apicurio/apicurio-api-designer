@@ -4,7 +4,7 @@ export interface CreateDesign {
 
     type: string;
     name: string;
-    summary: string | undefined;
+    description: string | undefined;
     context: DesignContext;
 
 }

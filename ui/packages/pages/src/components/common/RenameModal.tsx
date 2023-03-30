@@ -4,7 +4,7 @@ import { Design } from "@apicurio/apicurio-api-designer-models";
 
 export type RenameData = {
     name: string;
-    summary: string;
+    description: string;
 };
 
 export type RenameModalProps = {
@@ -20,20 +20,20 @@ export const RenameModal: FunctionComponent<RenameModalProps> = (
 
     const [isValid, setValid] = useState(false);
     const [name, setName] = useState<string>();
-    const [summary, setSummary] = useState<string>();
+    const [description, setDescription] = useState<string>();
 
     // Called when the user clicks "edit"
     const doRename = () => {
         onRename({
             name: name as string,
-            summary: summary as string
+            description: description as string
         });
     };
 
     useEffect(() => {
         if (isOpen) {
             setName(design?.name);
-            setSummary(design?.summary);
+            setDescription(design?.description);
         }
     }, [isOpen]);
 
@@ -44,7 +44,7 @@ export const RenameModal: FunctionComponent<RenameModalProps> = (
             valid = false;
         }
         setValid(valid);
-    }, [name, summary]);
+    }, [name, description]);
 
     return (
         <Modal
@@ -76,8 +76,8 @@ export const RenameModal: FunctionComponent<RenameModalProps> = (
                         id="edit-description"
                         name="edit-description"
                         aria-describedby="edit-description-helper"
-                        value={summary}
-                        onChange={(value) => {setSummary(value);}}
+                        value={description}
+                        onChange={(value) => {setDescription(value);}}
                     />
                 </FormGroup>
             </Form>

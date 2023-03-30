@@ -46,8 +46,8 @@ export const DesignList: FunctionComponent<DesignListProps> = (
                         location={`/designs/${column.id}/editor`}>
                         <Truncate content={column.name} tooltipPosition="top" />
                     </NavLink>
-                    <DesignDescription className="design-summary" style={{ overflow: "hidden", textOverflow: "hidden", whiteSpace: "nowrap", fontSize: "14px" }}
-                        description={column.summary}
+                    <DesignDescription className="design-description" style={{ overflow: "hidden", textOverflow: "hidden", whiteSpace: "nowrap", fontSize: "14px" }}
+                        description={column.description}
                         truncate={true} />
                 </div>
             );

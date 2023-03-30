@@ -26,6 +26,7 @@ export type ComponentsType = {
 };
 
 export type ApisType = {
+    designer: string;
     registry: string;
 };
 

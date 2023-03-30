@@ -41,7 +41,7 @@ export const useAlertsService: () => AlertsService = (): AlertsService => {
         designRenamed(event: RenameDesign): void {
             serviceConfig.alerts.addAlert({
                 title: "Details successfully changed",
-                description: `Details (name, summary) of design '${event.name}' were successfully changed.`,
+                description: `Details (name, description) of design '${event.name}' were successfully changed.`,
                 variant: AlertVariant.success,
                 dataTestId: "toast-design-renamed"
             });

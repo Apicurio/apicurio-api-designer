@@ -19,6 +19,11 @@ export type RegistryServiceConfigType = {
     api: string;
 };
 
+export type DesignsServiceConfigType = {
+    type: string;
+    api: string;
+};
+
 export type NavigationServiceConfigType = {
     basename: string;
 };
@@ -33,6 +38,7 @@ export type AuthConfig = {
 };
 
 export type ServiceConfig = {
+    designs: DesignsServiceConfigType;
     alerts: AlertsServiceConfigType;
     navigation: NavigationServiceConfigType;
     registry: RegistryServiceConfigType;
@@ -52,6 +58,10 @@ export const ServiceConfigContext: React.Context<ServiceConfig> = React.createCo
     alerts: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         addAlert: (_: AlertProps) => {return;}
+    },
+    designs: {
+        type: "",
+        api: ""
     },
     navigation: {
         basename: ""

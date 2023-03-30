@@ -49,7 +49,7 @@ export const DesignDetailsPanel: FunctionComponent<DesignDetailsPanelProps> = ({
                 <Tab eventKey="details" title={<TabTitleText>Details</TabTitleText>}>
                     <Grid>
                         <GridLabel>Description</GridLabel>
-                        <DesignDescription className="design-details-value" description={design?.summary} />
+                        <DesignDescription className="design-details-value" description={design?.description} />
 
                         <GridLabel>Type</GridLabel>
                         <GridValue>

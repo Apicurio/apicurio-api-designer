@@ -19,6 +19,10 @@ const defaultPageConfig: PageConfig = {
                 return;
             }
         },
+        designs: {
+            type: "",
+            api: ""
+        },
         auth: {
             getToken: () => {
                 return undefined;

@@ -1,4 +1,5 @@
 import {
+    ContentTypes,
     CreateDesign,
     CreateDesignContent,
     Design,
@@ -6,192 +7,156 @@ import {
     DesignEvent,
     DesignsSearchCriteria,
     DesignsSearchResults,
-    DesignsSort,
-    Paging
+    DesignsSort, EditableMetaData,
+    Paging, RenameDesign,
 } from "@apicurio/apicurio-api-designer-models";
-import Dexie from "dexie";
-import { v4 as uuidv4 } from "uuid";
-import { cloneObject, limit } from "@apicurio/apicurio-api-designer-utils";
+import {
+    createEndpoint,
+    createOptions, httpDelete,
+    httpGet,
+    httpPostWithReturn, httpPut
+} from "@apicurio/apicurio-api-designer-utils";
+import { ServiceConfig, useServiceConfig } from "./ServiceConfigContext";
+import { useBrowserDesignsService } from "./BrowserDesignsService";
 
 
-const db = new Dexie("designsDB");
-db.version(4).stores({
-    designs: "++id, type, name, createdOn, modifiedOn", // Primary key and indexed props
-    content: "++id",
-    events: "++eventId, id, type, on"
-});
+async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: CreateDesignContent): Promise<Design> {
+    console.debug("[DesignsService] Creating a new design: ", cd, cdc);
+    const token: string | undefined = await svcConfig.auth.getToken();
 
-
-async function createDesign(cd: CreateDesign, cdc: CreateDesignContent): Promise<Design> {
-    const id: string = uuidv4();
-    const newDesign: Design = {
-        id,
-        name: limit(cd.name, 64) as string,
-        summary: limit(cd.summary, 256),
-        type: cd.type,
-        createdOn: new Date(),
-        modifiedOn: new Date(),
-        origin: cloneObject(cd.context)
+    // FIXME REST API is missing "origin"
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs");
+    const headers: any = {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": cdc.contentType,
+        "X-Designer-Name": cd.name,
+        "X-Designer-Description": cd.description,
+        "X-Designer-Type": cd.type,
     };
-    const newDesignContent: DesignContent = {
-        id,
-        contentType: cdc.contentType,
-        data: cdc.data
-    };
-    const newEvent: DesignEvent = {
-        id,
-        type: "create",
-        on: new Date(),
-        data: {}
-    };
-    if (cd.context) {
-        newEvent.data.context = cloneObject(cd.context);
-        if (cd.context.type !== "create") {
-            newEvent.type = "import";
-        }
-    }
-    // Make sure the ID is properly set always.
-    newEvent.id = id;
-
-    return Promise.all([
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        db.designs.add(newDesign),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        db.content.add(newDesignContent),
-        createEvent(newEvent)
-    ]).then(() => newDesign);
+    return httpPostWithReturn<any, Design>(endpoint, cdc.data, createOptions(headers));
 }
 
-async function getDesigns(): Promise<Design[]> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return db.designs.toArray();
-}
+async function searchDesigns(svcConfig: ServiceConfig, criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort): Promise<DesignsSearchResults> {
+    // FIXME Need a Search operation in the Designs API
+    console.debug("[DesignsService] Searching for designs: ", criteria, paging, sort);
+    const token: string | undefined = await svcConfig.auth.getToken();
 
-async function searchDesigns(criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort): Promise<DesignsSearchResults> {
-    console.debug("[DesignsService] Searching for designs: ", criteria, paging);
-    const accept = (design: Design): boolean => {
-        let matches: boolean = false;
-        if (!criteria.filterValue || criteria.filterValue.trim().length === 0) {
-            matches = true;
-        } else if (design.name.toLowerCase().indexOf(criteria.filterValue.toLowerCase()) >= 0) {
-            matches = true;
-        } else if (design.summary && design.summary.toLowerCase().indexOf(criteria.filterValue.toLowerCase()) >= 0) {
-            matches = true;
-        } else if (design.type.toLowerCase().indexOf(criteria.filterValue.toLowerCase()) >= 0) {
-            matches = true;
-        }
-        return matches;
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs", {}, {
+        page: paging.page,
+        size: paging.pageSize
+    });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`
     };
-
-    return getDesigns().then(designs => {
-        // TODO Explore whether we can use dexie to filter and page the results.
-
-        // filter and sort the results
-        const filteredDesigns: Design[] = designs.filter(accept).sort((design1, design2) => {
-            let rval: number = sort.by === "name" ? (
-                design1.name.localeCompare(design2.name)
-            ) : (
-                design1.modifiedOn.getTime() - design2.modifiedOn.getTime()
-            );
-            if (sort.direction !== "asc") {
-                rval *= -1;
-            }
-            return rval;
-        });
-        // get the total count
-        const totalCount: number = filteredDesigns.length;
-        // get the subset of results based on paging
-        const start: number = (paging.page - 1) * paging.pageSize;
-        const end: number = start + paging.pageSize;
-        const pagedDesigns: Design[] = filteredDesigns.slice(start, end);
+    return httpGet<DesignsSearchResults>(endpoint, createOptions(headers), (data) => {
+        console.debug("[DesignsService] Search results: ", data);
         return {
-            designs: pagedDesigns,
+            designs: data.items,
+            count: data.items.length,
             page: paging.page,
-            pageSize: paging.pageSize,
-            count: totalCount
+            pageSize: paging.pageSize
         };
     });
 }
 
 
-async function getDesign(id: string): Promise<Design> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return db.designs.where("id").equals(id).first();
-}
+async function getDesign(svcConfig: ServiceConfig, id: string): Promise<Design> {
+    // FIXME Designs API is missing "id" property from DesignMetaData
+    // FIXME Designs API should rename "description" property of DesignMetaData to "description"
+    // FIXME Designs API is missing "origin" property from DesignMetaData
+    // FIXME Designs API has extra property "source" in DesignMetaData
 
-async function deleteDesign(id: string): Promise<void> {
-    return Promise.all([
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        db.designs.where("id").equals(id).delete(),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        db.content.where("id").equals(id).delete(),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        db.events.where("id").equals(id).delete(),
-    ]).then(() => {
-        // This space intentionally left blank.
+    const token: string | undefined = await svcConfig.auth.getToken();
+
+    console.info("[DesignsService] Getting design with ID: ", id);
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/meta", {
+        designId: id
+    });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`
+    };
+    return httpGet<Design>(endpoint, createOptions(headers), (data) => {
+        return data;
     });
 }
 
-async function renameDesign(id: string, newName: string, newSummary?: string): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return db.designs.update(id, {
-        name: limit(newName, 64) as string,
-        summary: limit(newSummary, 256),
+async function deleteDesign(svcConfig: ServiceConfig, id: string): Promise<void> {
+    const token: string | undefined = await svcConfig.auth.getToken();
+
+    console.info("[DesignsService] Deleting design with ID: ", id);
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId", {
+        designId: id
     });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`
+    };
+    return httpDelete(endpoint, createOptions(headers));
 }
 
-async function getDesignContent(id: string): Promise<DesignContent> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return db.content.where("id").equals(id).first();
+async function renameDesign(svcConfig: ServiceConfig, id: string, newName: string, newDescription?: string): Promise<void> {
+    console.debug("[DesignsService] Renaming design with ID: ", id, newName);
+    const token: string | undefined = await svcConfig.auth.getToken();
+
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId", {
+        designId: id
+    });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`
+    };
+    return httpPut<RenameDesign>(endpoint, {
+        name: newName,
+        description: newDescription
+    }, createOptions(headers));
+
 }
 
-async function updateDesignContent(content: DesignContent): Promise<void> {
-    const newEvent: DesignEvent = {
-        id: content.id,
-        type: "update",
-        on: new Date(),
-        data: {}
+async function getDesignContent(svcConfig: ServiceConfig, id: string): Promise<DesignContent> {
+    const token: string | undefined = await svcConfig.auth.getToken();
+
+    console.info("[DesignsService] Getting design *content* with ID: ", id);
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId", {
+        designId: id
+    });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`
     };
 
-    return Promise.all([
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        db.content.update(content.id, {
-            data: content.data
-        }),
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        db.designs.update(content.id, {
-            modifiedOn: new Date()
-        }),
-        createEvent(newEvent)
-    ]).then(() => {
-        // This space intentionally left blank.
+    const options: any = createOptions(headers);
+    options.maxContentLength = "5242880"; // TODO 5MB hard-coded, make this configurable?
+    options.responseType = "text";
+    options.transformResponse = (data: any) => data;
+
+    return httpGet<DesignContent>(endpoint, options, (data, response) => {
+        return {
+            id,
+            contentType: response.headers["Content-Type"] || ContentTypes.APPLICATION_JSON,
+            data
+        };
     });
 }
 
+async function updateDesignContent(svcConfig: ServiceConfig, content: DesignContent): Promise<void> {
+    console.debug("[DesignsService] Updating the content of a design: ", content.id);
+    const token: string | undefined = await svcConfig.auth.getToken();
 
-async function getEvents(id: string): Promise<DesignEvent[]> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return db.events.where("id").equals(id).reverse().sortBy("on");
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId", {
+        designId: content.id
+    });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": content.contentType,
+    };
+    return httpPut<any>(endpoint, content.data, createOptions(headers));
 }
 
+async function getEvents(svcConfig: ServiceConfig, id: string): Promise<DesignEvent[]> {
+    // FIXME implement this - REST API needs an /events endpoint for designs
+    return Promise.resolve([]);
+}
 
-async function createEvent(event: DesignEvent): Promise<void> {
-    event.eventId = uuidv4();
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return db.events.add(event);
+async function createEvent(svcConfig: ServiceConfig, event: DesignEvent): Promise<void> {
+    // FIXME implement this - REST API needs an /events endpoint for designs
+    return Promise.resolve();
 }
 
 
@@ -200,11 +165,10 @@ async function createEvent(event: DesignEvent): Promise<void> {
  */
 export interface DesignsService {
     createDesign(cd: CreateDesign, cdc: CreateDesignContent): Promise<Design>;
-    getDesigns(): Promise<Design[]>;
     getDesign(id: string): Promise<Design>;
     searchDesigns(criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort): Promise<DesignsSearchResults>;
     deleteDesign(id: string): Promise<void>;
-    renameDesign(id: string, newName: string, newSummary?: string): Promise<void>;
+    renameDesign(id: string, newName: string, newDescription?: string): Promise<void>;
     getDesignContent(id: string): Promise<DesignContent>;
     updateDesignContent(content: DesignContent): Promise<void>;
     getEvents(id: string): Promise<DesignEvent[]>;
@@ -216,16 +180,20 @@ export interface DesignsService {
  * React hook to get the Designs service.
  */
 export const useDesignsService: () => DesignsService = (): DesignsService => {
+    const svcConfig: ServiceConfig = useServiceConfig();
+    if (svcConfig.designs.type === "browser") {
+        return useBrowserDesignsService();
+    }
+
     return {
-        createDesign,
-        getDesigns,
-        searchDesigns,
-        getDesign,
-        deleteDesign,
-        renameDesign,
-        getDesignContent,
-        updateDesignContent,
-        getEvents,
-        createEvent
+        createDesign: (cd: CreateDesign, cdc: CreateDesignContent) => createDesign(svcConfig, cd, cdc),
+        searchDesigns: (criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort) => searchDesigns(svcConfig, criteria, paging, sort),
+        getDesign: (id: string) => getDesign(svcConfig, id),
+        deleteDesign: (id: string) => deleteDesign(svcConfig, id),
+        renameDesign: (id: string, newName: string, newDescription?: string) => renameDesign(svcConfig, id, newName, newDescription),
+        getDesignContent: (id: string) => getDesignContent(svcConfig, id),
+        updateDesignContent: (content: DesignContent) => updateDesignContent(svcConfig, content),
+        getEvents: (id: string) => getEvents(svcConfig, id),
+        createEvent: (event: DesignEvent) => createEvent(svcConfig, event)
     };
 };

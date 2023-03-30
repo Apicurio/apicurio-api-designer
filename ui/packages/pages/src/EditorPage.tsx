@@ -222,10 +222,10 @@ export const EditorPage: FunctionComponent<EditorPageProps> = ({ params }: Edito
     };
 
     const doRenameDesign = (event: RenameData): void => {
-        designsService.renameDesign(design?.id as string, event.name, event.summary).then(() => {
+        designsService.renameDesign(design?.id as string, event.name, event.description).then(() => {
             if (design) {
                 design.name = event.name;
-                design.summary = event.summary;
+                design.description = event.description;
             }
             setRenameModalOpen(false);
             alerts.designRenamed(event);

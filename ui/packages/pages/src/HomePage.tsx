@@ -74,10 +74,10 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
             data: cloneObject(template.content.data)
         };
         if (typeof dc.data === "string") {
-            dc.data = dc.data.replace("$NAME", info.name).replace("$SUMMARY", info.summary||"");
+            dc.data = dc.data.replace("$NAME", info.name).replace("$SUMMARY", info.description||"");
         } else {
             propertyReplace(dc.data, "$NAME", info.name);
-            propertyReplace(dc.data, "$SUMMARY", info.summary||"");
+            propertyReplace(dc.data, "$SUMMARY", info.description||"");
         }
         return designsSvc.createDesign(info, dc).then((design: Design) => {
             setCreateModalOpen(false);
@@ -131,7 +131,7 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
             <Drawer isStatic={false} position="right" isInline={false} isExpanded={isDrawerExpanded} onExpand={onDrawerExpand}>
                 <DrawerContent panelContent={panelContent}>
                     <DrawerContentBody className="home-panel-body">
-                        <PageSection variant={PageSectionVariants.light} className="summary pf-m-padding-on-xl">
+                        <PageSection variant={PageSectionVariants.light} className="description pf-m-padding-on-xl">
                             <TextContent>
                                 <Text component="h1" className="title">API and Schema Designs</Text>
                                 <Text component="p" className="description">

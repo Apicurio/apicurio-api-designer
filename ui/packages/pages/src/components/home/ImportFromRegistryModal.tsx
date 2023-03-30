@@ -9,7 +9,7 @@ import {
     SearchedVersion
 } from "@apicurio/apicurio-api-designer-models";
 import { If, IsLoading } from "@apicurio/apicurio-api-designer-components";
-import { ServicePreviewWarning } from "../common/ServicePreviewWarning";
+import { BrowserDataWarning } from "../common/BrowserDataWarning";
 import { RhosrEmptyState } from "../common/RhosrEmptyState";
 import { ArtifactSelector } from "./ArtifactSelector";
 
@@ -39,7 +39,7 @@ export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalP
             const cd: CreateDesign = {
                 type: artifact.type,
                 name: artifact.name || artifact.id,
-                summary: artifact.description || "",
+                description: artifact.description || "",
                 context: {
                     type: "rhosr",
                     rhosr: {
@@ -109,7 +109,7 @@ export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalP
                     <RhosrEmptyState message="To import a design from Service Registry, you must create a Service Registry instance first." />
                 </If>
                 <If condition={registries.length > 0}>
-                    <ServicePreviewWarning />
+                    <BrowserDataWarning />
                     <ArtifactSelector registries={registries} onSelected={onArtifactSelected} />
                 </If>
             </IsLoading>

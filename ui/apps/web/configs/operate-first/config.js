@@ -1,6 +1,7 @@
 const ApiDesignerConfig = {
     "apis": {
-        "registry": "https://fleet-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud"
+        "registry": "https://fleet-manager-mt-apicurio-apicurio-registry.apps.smaug.na.operate-first.cloud",
+        "designer": "TBD"
     },
     "ui": {
         "contextPath": "/",
