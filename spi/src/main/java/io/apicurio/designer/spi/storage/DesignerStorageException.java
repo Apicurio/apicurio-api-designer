@@ -5,6 +5,8 @@ package io.apicurio.designer.spi.storage;
  */
 public class DesignerStorageException extends RuntimeException {
 
+    private static final long serialVersionUID = 5993756013495297077L;
+
     public DesignerStorageException(String message) {
         super(message);
     }
