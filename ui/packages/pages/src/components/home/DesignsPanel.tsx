@@ -41,6 +41,7 @@ export type DesignsPanelProps = {
 
 export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDesign, onDesignSelected, onCreate, onImport }: DesignsPanelProps) => {
     const [ isLoading, setLoading ] = useState(false);
+    const [ error, setError ] = useState<any>();
     const [ showDataWarning, setShowDataWarning ] = useState(true);
     const [ refresh, setRefresh ] = useState(1);
     const [ isFiltered, setFiltered ] = useState(false);
@@ -129,6 +130,9 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
             const contentType: string = contentTypeForDesign(design, content);
             const theContent: string = typeof content.data === "object" ? JSON.stringify(content.data, null, 4) : content.data as string;
             downloadSvc.downloadToFS(design, theContent, contentType, filename);
+        }).catch(error => {
+            // TODO error handling
+            console.error(error);
         });
     };
 
@@ -159,14 +163,17 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
 
     useEffect(() => {
         setLoading(true);
+        setError(undefined);
         onDesignSelected(undefined);
         designsSvc.searchDesigns(criteria, paging, sort).then(designs => {
             console.debug("[DesignsPanel] Designs loaded: ", designs);
             setDesigns(designs);
             setLoading(false);
         }).catch(error => {
-            // TODO need error handling
+            console.info("===> Error caught!");
             console.error(error);
+            setLoading(false);
+            setError(error);
         });
     }, [refresh]);
 
@@ -200,6 +207,7 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
                 emptyState={emptyState}
                 filteredEmptyState={emptyStateFiltered}
                 isLoading={isLoading}
+                isError={error !== undefined}
                 isFiltered={isFiltered}
                 isEmpty={!designs || designs.count === 0}>
                 <Card isSelectable={false}>

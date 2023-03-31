@@ -1,3 +1,7 @@
+import { Design } from "@apicurio/apicurio-api-designer-models";
+import { DesignsService, useDesignsService } from "./DesignsService";
+
+
 /**
  * Downloads the given content to the filesystem using the given content type and
  * file name.
@@ -5,10 +9,6 @@
  * @param contentType
  * @param filename
  */
-import { Design, DesignEvent } from "@apicurio/apicurio-api-designer-models";
-import { DesignsService, useDesignsService } from "./DesignsService";
-
-
 async function downloadToFS(designsSvc: DesignsService, design: Design, content: string, contentType: string, filename: string): Promise<void> {
     console.info("[DownloadService] Downloading a design.");
     const _w: any = window;
@@ -30,17 +30,7 @@ async function downloadToFS(designsSvc: DesignsService, design: Design, content:
         _w.open(URL.createObjectURL(file));
     }
 
-    // Create an event for this download
-    const event: DesignEvent = {
-        id: design.id,
-        type: "download",
-        on: new Date(),
-        data: {
-            filename
-        }
-    };
-
-    return designsSvc.createEvent(event);
+    return Promise.resolve();
 }
 
 

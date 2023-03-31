@@ -4,7 +4,7 @@ import { HomePage, EditorPage } from "@apicurio/apicurio-api-designer-pages";
 
 
 const EditorPageWithParams: React.FunctionComponent = () => {
-    const params: any = useParams();
+    const params = useParams();
     console.info("[EditorPage] Params: ", params);
     return (<EditorPage params={params}></EditorPage>);
 };

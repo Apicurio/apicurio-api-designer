@@ -153,6 +153,7 @@ export const ArtifactSelector: FunctionComponent<ArtifactSelectorProps> = ({ reg
                 filteredEmptyState={filteredEmptyState}
                 isFiltered={criteria.filterValue !== ""}
                 isLoading={querying}
+                isError={false}
                 loadingComponent={loadingComponent}
                 isEmpty={!artifacts || artifacts.count === 0}
             >

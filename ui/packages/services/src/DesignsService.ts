@@ -7,7 +7,7 @@ import {
     DesignEvent,
     DesignsSearchCriteria,
     DesignsSearchResults,
-    DesignsSort, EditableMetaData,
+    DesignsSort,
     Paging, RenameDesign,
 } from "@apicurio/apicurio-api-designer-models";
 import {
@@ -61,11 +61,6 @@ async function searchDesigns(svcConfig: ServiceConfig, criteria: DesignsSearchCr
 
 
 async function getDesign(svcConfig: ServiceConfig, id: string): Promise<Design> {
-    // FIXME Designs API is missing "id" property from DesignMetaData
-    // FIXME Designs API should rename "description" property of DesignMetaData to "description"
-    // FIXME Designs API is missing "origin" property from DesignMetaData
-    // FIXME Designs API has extra property "source" in DesignMetaData
-
     const token: string | undefined = await svcConfig.auth.getToken();
 
     console.info("[DesignsService] Getting design with ID: ", id);
