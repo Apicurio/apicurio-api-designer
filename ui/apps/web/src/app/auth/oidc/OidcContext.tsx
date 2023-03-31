@@ -7,7 +7,7 @@ import { AuthConfig } from "@apicurio/apicurio-api-designer-services";
  */
 export const useOidcAuth: () => AuthConfig = (): AuthConfig => {
     const apiDesignerConfig: ApiDesignerConfigType | undefined = useApiDesignerConfig();
-    if (apiDesignerConfig?.auth.type === "oidc") {
+    if (ApiDesignerConfig?.auth.type === "oidc") {
         return {
             getToken: getOidcToken,
             getUsername: getUsername

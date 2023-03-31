@@ -75,6 +75,7 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
     private ApisType generateApiConfig(HttpServletRequest request) {
         return ApisType.builder()
                 .registry(getRegistryApiUrl(request))
+                .designer(generateApiUrl(request))
                 .build();
     }
 
@@ -163,7 +164,11 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
      */
     @Override
     protected String getApiUrlOverride() {
-        throw new RuntimeException("Not yet implemented.");
+        if (appConfig.apiUrl != null && !appConfig.apiUrl.isEmpty()) {
+            return appConfig.apiUrl;
+        } else {
+            return null;
+        }
     }
 
     /**

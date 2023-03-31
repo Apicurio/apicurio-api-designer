@@ -29,5 +29,6 @@ import lombok.Data;
 public class ApisType {
     
     private String registry;
+    private String designer;
 
 }

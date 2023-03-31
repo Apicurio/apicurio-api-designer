@@ -18,6 +18,7 @@ package io.apicurio.designer.storage;
 
 import io.apicurio.common.apps.config.DynamicConfigStorage;
 import io.apicurio.common.apps.config.DynamicConfigStorageAccessor;
+import io.apicurio.designer.spi.storage.DesignerStorage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,14 +30,14 @@ import javax.inject.Inject;
 public class InMemoryDynamicConfigStorageAccessor implements DynamicConfigStorageAccessor {
 
     @Inject
-    MockInMemoryDesignerStorage storage;
+    DesignerStorage designerStorage;
 
     /**
      * @see DynamicConfigStorageAccessor#getConfigStorage()
      */
     @Override
     public DynamicConfigStorage getConfigStorage() {
-        return storage;
+        return designerStorage;
     }
 
 }

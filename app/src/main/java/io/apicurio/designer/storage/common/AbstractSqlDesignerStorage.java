@@ -1,5 +1,7 @@
 package io.apicurio.designer.storage.common;
 
+import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
+import io.apicurio.common.apps.config.impl.storage.DynamicConfigSqlStorageComponent;
 import io.apicurio.common.apps.content.handle.ContentHandle;
 import io.apicurio.common.apps.storage.exceptions.StorageException;
 import io.apicurio.common.apps.storage.exceptions.StorageExceptionMapper;
@@ -36,6 +38,9 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
 
     @Inject
     protected BaseSqlStorageComponent storageEngine;
+
+    @Inject
+    protected DynamicConfigSqlStorageComponent dynamicConfigSqlStorageComponent;
 
     @Inject
     protected StorageExceptionMapper exceptionMapper;
@@ -255,5 +260,25 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                         .mapTo(DesignDto.class)
                         .one()
         );
+    }
+
+    @Override
+    public DynamicConfigPropertyDto getConfigProperty(String name) {
+        return dynamicConfigSqlStorageComponent.getConfigProperty(name);
+    }
+
+    @Override
+    public void setConfigProperty(DynamicConfigPropertyDto dynamicConfigPropertyDto) {
+        dynamicConfigSqlStorageComponent.setConfigProperty(dynamicConfigPropertyDto);
+    }
+
+    @Override
+    public void deleteConfigProperty(String name) {
+        dynamicConfigSqlStorageComponent.deleteConfigProperty(name);
+    }
+
+    @Override
+    public List<DynamicConfigPropertyDto> getConfigProperties() {
+        return dynamicConfigSqlStorageComponent.getConfigProperties();
     }
 }

@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ import io.apicurio.designer.common.config.DesignerProperties;
 /**
  * @author eric.wittmann@gmail.com
  */
-@ApplicationScoped
+@Singleton
 public class ApiDesignerConfig {
 
     @Inject

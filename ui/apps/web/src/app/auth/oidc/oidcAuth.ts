@@ -33,7 +33,7 @@ export const getClientSettings: (() => UserManagerSettings) = () => {
     };
 };
 
-export let userManager: UserManager = new UserManager(getClientSettings());
+export const userManager: UserManager = new UserManager(getClientSettings());
 export let user: AuthenticatedUser | undefined;
 export let oidcUser: User | undefined;
 
@@ -66,7 +66,7 @@ export const getOidc = async (): Promise<UserManager | undefined> => {
 export const init = async (): Promise<void> => {
     try {
         const url = new URL(window.location.href);
-        let currentUser = await userManager.getUser();
+        const currentUser = await userManager.getUser();
         if (url.searchParams.get("state") || currentUser) {
             await userManager.signinRedirectCallback().then(user => {
                 oidcUser = user;

@@ -56,18 +56,33 @@
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-auth</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-config</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-config-index</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-config-definitions</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-config-impl</artifactId>
+        </dependency>
+
 
         <dependency>
             <groupId>io.apicurio</groupId>
@@ -104,12 +119,9 @@
 
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-oidc</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-agroal</artifactId>

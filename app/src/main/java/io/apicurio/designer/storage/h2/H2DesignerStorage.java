@@ -1,5 +1,6 @@
 package io.apicurio.designer.storage.h2;
 
+import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
 import io.apicurio.common.apps.logging.LoggerProducer;
 import io.apicurio.common.apps.storage.sql.BaseSqlStorageComponent;
 import io.apicurio.designer.spi.storage.DesignerStorage;
@@ -10,6 +11,9 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
@@ -17,6 +21,8 @@ import javax.transaction.Transactional;
 @ApplicationScoped
 @DefaultBean
 public class H2DesignerStorage extends AbstractSqlDesignerStorage implements DesignerStorage {
+
+    Map<String, String> properties = new HashMap<>();
 
     @Inject
     LoggerProducer loggerProducer;
@@ -30,5 +36,31 @@ public class H2DesignerStorage extends AbstractSqlDesignerStorage implements Des
                 .supportsAtomicSequenceIncrement(false)
                 .ddlDirRootPath("META-INF/storage/schema")
                 .build());
+    }
+
+    @Override
+    public boolean isReady() {
+        return true;
+    }
+
+    @Override
+    public DynamicConfigPropertyDto getConfigProperty(String propertyName) {
+        String value = properties.get(propertyName);
+        return new DynamicConfigPropertyDto(propertyName, value);
+    }
+
+    @Override
+    public void setConfigProperty(DynamicConfigPropertyDto propertyDto) {
+        properties.put(propertyDto.getName(), propertyDto.getValue());
+    }
+
+    @Override
+    public void deleteConfigProperty(String propertyName) {
+        properties.remove(propertyName);
+    }
+
+    @Override
+    public List<DynamicConfigPropertyDto> getConfigProperties() {
+        return null;
     }
 }
