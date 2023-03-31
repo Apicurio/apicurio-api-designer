@@ -1,6 +1,6 @@
 package io.apicurio.designer.test.shared.rest.v0;
 
-import io.apicurio.designer.rest.v0.beans.DesignMetaData;
+import io.apicurio.designer.rest.v0.beans.Design;
 import io.apicurio.designer.rest.v0.beans.EditableDesignMetadata;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
@@ -43,7 +43,7 @@ public class DesignsResourceTestShared {
                 .post("/apis/designer/v0/designs")
                 .then()
                 .statusCode(Status.OK.getStatusCode()) // TODO Codegen needs to be updated if we want to return 201
-                .extract().as(DesignMetaData.class);
+                .extract().as(Design.class);
 
         assertEquals("design1", metadata.getName());
 
@@ -55,7 +55,7 @@ public class DesignsResourceTestShared {
                 .get("/apis/designer/v0/designs/{designId}/meta", metadata.getId())
                 .then()
                 .statusCode(Status.OK.getStatusCode())
-                .extract().as(DesignMetaData.class);
+                .extract().as(Design.class);
 
         assertEquals(metadata.getId(), metadata2.getId());
         assertEquals(metadata.getKind(), metadata2.getKind());
@@ -79,7 +79,7 @@ public class DesignsResourceTestShared {
                 .put("/apis/designer/v0/designs/{designId}/meta", metadata.getId())
                 .then()
                 .statusCode(Status.OK.getStatusCode())
-                .extract().as(DesignMetaData.class);
+                .extract().as(Design.class);
 
         assertEquals(metadata.getId(), metadata3.getId());
         assertEquals(metadata.getKind(), metadata3.getKind());
