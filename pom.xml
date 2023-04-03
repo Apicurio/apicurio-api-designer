@@ -127,6 +127,7 @@
         <!-- Test Dependency Versions -->
 
         <version.org.testcontainers.postgresql>1.17.6</version.org.testcontainers.postgresql>
+        <version.wiremock>2.35.0</version.wiremock>
 
         <!-- Plugin Versions -->
 
@@ -310,6 +311,13 @@
                 <groupId>org.testcontainers</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${version.org.testcontainers.postgresql}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock-jre8</artifactId>
+                <version>${version.wiremock}</version>
                 <scope>test</scope>
             </dependency>
 

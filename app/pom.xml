@@ -77,7 +77,6 @@
             <artifactId>apicurio-common-app-components-config-definitions</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-app-components-config-impl</artifactId>
@@ -173,6 +172,12 @@
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8</artifactId>
             <scope>test</scope>
         </dependency>
 
