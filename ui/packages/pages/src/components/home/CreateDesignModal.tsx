@@ -10,7 +10,7 @@ import {
     Select,
     SelectOption,
     SelectOptionObject,
-    SelectVariant,
+    SelectVariant, Spinner,
     TextArea,
     TextInput
 } from "@patternfly/react-core";
@@ -22,6 +22,7 @@ import { TemplateItem } from "./TemplateItem";
 
 export type CreateDesignModalProps = {
     isOpen: boolean|undefined;
+    isCreating: boolean|undefined;
     onCreate: (event: CreateDesign, template: Template) => void;
     onCancel: () => void;
 }
@@ -59,7 +60,7 @@ const TYPE_OPTIONS: SelectOptionObject[] = [
 });
 
 
-export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ isOpen, onCreate, onCancel }: CreateDesignModalProps) => {
+export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ isOpen, isCreating, onCreate, onCancel }: CreateDesignModalProps) => {
     const [isValid, setValid] = useState(false);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -158,8 +159,14 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
             isOpen={isOpen}
             onClose={onCancel}
             actions={[
-                <Button key="create" variant="primary" isDisabled={!isValid} onClick={doCreate}>
-                    Create
+                <Button key="create" variant="primary" isDisabled={!isValid || isCreating} onClick={doCreate}>
+                    <If condition={isCreating}>
+                        <Spinner size="sm" style={{ marginRight: "5px" }} />
+                        Creating
+                    </If>
+                    <If condition={!isCreating}>
+                        Create
+                    </If>
                 </Button>,
                 <Button key="cancel" variant="link" onClick={onCancel}>
                     Cancel

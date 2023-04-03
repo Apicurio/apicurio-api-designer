@@ -55,6 +55,14 @@ public class DesignsResourceImpl implements DesignsResource {
         if (xDesignerOrigin == null) {
             xDesignerOrigin = DesignOriginType.create;
         }
+        
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
         // FIXME handle "origin" rather than "source"
         var metadata = DesignMetadataDto.builder().name(xDesignerName).description(xDesignerDescription)
                 .type(xDesignerType).source(xDesignerOrigin.name()).build();

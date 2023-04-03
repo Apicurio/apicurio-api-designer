@@ -229,7 +229,7 @@ export const EditorPage: FunctionComponent<EditorPageProps> = ({ params }: Edito
             }
             setRenameModalOpen(false);
             alerts.designRenamed(event);
-        }).catch(() => {
+        }).catch(error => {
             // TODO error handling
         });
     };

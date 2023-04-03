@@ -38,7 +38,7 @@ export const DesignHistory: FunctionComponent<DesignHistoryProps> = ({ design }:
             designsService.getEvents(design.id).then(events => {
                 setEvents(events);
                 setLoading(false);
-            }).catch(() => {
+            }).catch(error => {
                 // TODO error handling!
             });
         }

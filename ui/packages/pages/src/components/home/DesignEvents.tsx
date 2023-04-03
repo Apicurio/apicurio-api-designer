@@ -86,7 +86,7 @@ export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design }: D
             designsService.getEvents(design.id).then(events => {
                 setExports(events?.filter(event => event.type === "download" || event.type === "register"));
                 setLoading(false);
-            }).catch(() => {
+            }).catch(error => {
                 // TODO error handling!
             });
         }

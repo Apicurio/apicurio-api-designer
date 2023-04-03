@@ -4,7 +4,7 @@ import { KebabToggle, Truncate } from "@patternfly/react-core";
 import { IAction } from "@patternfly/react-table";
 import { ThProps } from "@patternfly/react-table/src/components/TableComposable/Th";
 import { CustomActionsToggleProps } from "@patternfly/react-table/src/components/Table/ActionsColumn";
-import { Design, DesignsSearchResults, DesignsSort } from "@apicurio/apicurio-api-designer-models";
+import { Design, DesignsSearchResults, DesignsSort, SortBy } from "@apicurio/apicurio-api-designer-models";
 import { DesignDescription } from "../common/DesignDescription";
 import { NavLink } from "../common/NavLink";
 import { ArtifactTypeIcon } from "@apicurio/apicurio-api-designer-components";
@@ -32,8 +32,8 @@ export const DesignList: FunctionComponent<DesignListProps> = (
 
     const columns: any[] = [
         { index: 0, id: "name", label: "Name", width: 40, sortable: true },
-        { index: 1, id: "type", label: "Type", width: 15, sortable: false },
-        { index: 2, id: "modified-on", label: "Time updated", width: 15, sortable: true },
+        { index: 1, id: "type", label: "Type", width: 15, sortable: true },
+        { index: 2, id: "modifiedOn", label: "Time updated", width: 15, sortable: true },
         { index: 3, id: "context", label: "Origin", width: 25, sortable: false },
     ];
 
@@ -103,8 +103,9 @@ export const DesignList: FunctionComponent<DesignListProps> = (
                 direction: sort.direction
             },
             onSort: (_event, index, direction) => {
+                const byn: SortBy[] = ["name", "type", "modifiedOn"];
                 const sort: DesignsSort = {
-                    by: index === 0 ? "name" : "modified-on",
+                    by: byn[index],
                     direction
                 };
                 onSort(sort);

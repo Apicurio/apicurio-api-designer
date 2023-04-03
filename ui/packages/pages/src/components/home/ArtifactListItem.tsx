@@ -68,7 +68,7 @@ export const ArtifactListItem: FunctionComponent<ArtifactListItemProps> = (
             setVersions(versions);
             setLoading(false);
             onVersionSelect(undefined);
-        }).catch(() => {
+        }).catch(error => {
             // TODO handle errors
         });
     };
@@ -101,7 +101,7 @@ export const ArtifactListItem: FunctionComponent<ArtifactListItemProps> = (
             setContent(content);
             setLoading(false);
             setContentLoaded(true);
-        }).catch(() => {
+        }).catch(error => {
             // TODO handle errors loading the artifact content
         });
     };

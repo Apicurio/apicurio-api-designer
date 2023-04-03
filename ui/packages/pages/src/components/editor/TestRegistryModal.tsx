@@ -146,6 +146,7 @@ export const TestRegistryModal: React.FunctionComponent<TestRegistryModalProps> 
                     setLoadingRegistries(false);
                 });
             }).catch(error => {
+                // TODO handle this error case
                 console.error("[ExportToRhosrModal] Error getting events for design: ", error);
                 setRegistries([]);
                 setFormValues(undefined);

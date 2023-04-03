@@ -18,6 +18,7 @@ import {
 } from "@apicurio/apicurio-api-designer-utils";
 import { ServiceConfig, useServiceConfig } from "./ServiceConfigContext";
 import { useBrowserDesignsService } from "./BrowserDesignsService";
+import { CreateDesignEvent } from "@apicurio/apicurio-api-designer-models/src/designs/CreateDesignEvent";
 
 
 async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: CreateDesignContent): Promise<Design> {
@@ -37,13 +38,14 @@ async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: Cre
 }
 
 async function searchDesigns(svcConfig: ServiceConfig, criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort): Promise<DesignsSearchResults> {
-    // FIXME Need a Search operation in the Designs API
     console.debug("[DesignsService] Searching for designs: ", criteria, paging, sort);
     const token: string | undefined = await svcConfig.auth.getToken();
 
     const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs", {}, {
         page: paging.page,
-        pageSize: paging.pageSize
+        pageSize: paging.pageSize,
+        order: sort.direction,
+        orderby: sort.by
     });
     const headers: any = {
         "Authorization": `Bearer ${token}`
@@ -62,9 +64,7 @@ async function getDesign(svcConfig: ServiceConfig, id: string): Promise<Design> 
     const headers: any = {
         "Authorization": `Bearer ${token}`
     };
-    return httpGet<Design>(endpoint, createOptions(headers), (data) => {
-        return data;
-    });
+    return httpGet<Design>(endpoint, createOptions(headers));
 }
 
 async function deleteDesign(svcConfig: ServiceConfig, id: string): Promise<void> {
@@ -137,13 +137,33 @@ async function updateDesignContent(svcConfig: ServiceConfig, content: DesignCont
 }
 
 async function getEvents(svcConfig: ServiceConfig, id: string): Promise<DesignEvent[]> {
-    // FIXME implement this - REST API needs an /events endpoint for designs
-    return Promise.resolve([]);
+    const token: string | undefined = await svcConfig.auth.getToken();
+
+    console.info("[DesignsService] Getting events for design with ID: ", id);
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/events", {
+        designId: id
+    });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`
+    };
+    return httpGet<DesignEvent[]>(endpoint, createOptions(headers));
 }
 
 async function createEvent(svcConfig: ServiceConfig, event: DesignEvent): Promise<DesignEvent> {
-    // FIXME implement this - REST API needs an /events endpoint for designs
-    return Promise.resolve({} as DesignEvent);
+    console.debug("[DesignsService] Creating an event for design with ID: ", event.id);
+    const token: string | undefined = await svcConfig.auth.getToken();
+
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/events", {
+        designId: event.id
+    });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`
+    };
+    const body: CreateDesignEvent = {
+        type: event.type,
+        data: event.data
+    };
+    return httpPostWithReturn<CreateDesignEvent, DesignEvent>(endpoint, body, createOptions(headers));
 }
 
 

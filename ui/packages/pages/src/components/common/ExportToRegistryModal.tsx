@@ -91,7 +91,7 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
                 designs.createEvent(event).then(() => {
                     setExporting(false);
                     onExported(data);
-                }).catch(() => {
+                }).catch(error => {
                     console.warn("[ExportToRegistryModal] Failed to create a history event (not fatal).");
                     setExporting(false);
                     onExported(data);
