@@ -15,7 +15,7 @@ export type RegistryNavLinkProps = {
 
 /**
  * A navigation link to an artifact in a service registry instance.  The context passed to this
- * component must be of type "rhosr".
+ * component must be of type "registry".
  */
 export const RegistryNavLink: FunctionComponent<RegistryNavLinkProps> = ({ registry, context, children }: RegistryNavLinkProps) => {
     const [href, setHref] = useState<string>();
@@ -23,18 +23,18 @@ export const RegistryNavLink: FunctionComponent<RegistryNavLinkProps> = ({ regis
     const rhosr: RhosrService | undefined = registry === undefined ? useRhosrService() : undefined;
 
     const setHrefFrom = (registry: Registry, context: DesignContext): void => {
-        const group: string = context.rhosr?.groupId || "default";
-        const id: string = context.rhosr?.artifactId as string;
+        const group: string = context.registry?.groupId || "default";
+        const id: string = context.registry?.artifactId as string;
         setHref(`${stripTrailingSlash(registry.browserUrl)}/artifacts/${group}/${id}`);
     };
 
     useEffect(() => {
         setHref(undefined);
-        if (context?.type === "rhosr") {
+        if (context?.type === "registry") {
             if (registry) {
                 setHrefFrom(registry, context);
             } else {
-                (rhosr as RhosrService).getRegistry(context.rhosr?.instanceId as string).then(registry => {
+                (rhosr as RhosrService).getRegistry(context.registry?.instanceId as string).then(registry => {
                     setHrefFrom(registry, context);
                 });
             }

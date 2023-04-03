@@ -24,13 +24,13 @@ async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: Cre
     console.debug("[DesignsService] Creating a new design: ", cd, cdc);
     const token: string | undefined = await svcConfig.auth.getToken();
 
-    // FIXME REST API is missing "origin"
     const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs");
     const headers: any = {
         "Authorization": `Bearer ${token}`,
         "Content-Type": cdc.contentType,
         "X-Designer-Name": cd.name,
         "X-Designer-Description": cd.description,
+        "X-Designer-Origin": cd.context?.type || "create",
         "X-Designer-Type": cd.type,
     };
     return httpPostWithReturn<any, Design>(endpoint, cdc.data, createOptions(headers));
@@ -43,20 +43,12 @@ async function searchDesigns(svcConfig: ServiceConfig, criteria: DesignsSearchCr
 
     const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs", {}, {
         page: paging.page,
-        size: paging.pageSize
+        pageSize: paging.pageSize
     });
     const headers: any = {
         "Authorization": `Bearer ${token}`
     };
-    return httpGet<DesignsSearchResults>(endpoint, createOptions(headers), (data) => {
-        console.debug("[DesignsService] Search results: ", data);
-        return {
-            designs: data.items,
-            count: data.items.length,
-            page: paging.page,
-            pageSize: paging.pageSize
-        };
-    });
+    return httpGet<DesignsSearchResults>(endpoint, createOptions(headers));
 }
 
 

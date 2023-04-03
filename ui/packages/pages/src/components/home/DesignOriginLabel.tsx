@@ -15,7 +15,7 @@ export const DesignOriginLabel: FunctionComponent<DesignOriginLabelProps> = ({ d
         if (design) {
             if (hasOrigin(design, "file")) {
                 return "File";
-            } else if (hasOrigin(design, "rhosr")) {
+            } else if (hasOrigin(design, "registry")) {
                 return "Service Registry";
             } else if (hasOrigin(design, "url")) {
                 return "URL";
@@ -30,7 +30,7 @@ export const DesignOriginLabel: FunctionComponent<DesignOriginLabelProps> = ({ d
         if (design) {
             if (hasOrigin(design, "file")) {
                 return "purple";
-            } else if (hasOrigin(design, "rhosr")) {
+            } else if (hasOrigin(design, "registry")) {
                 return "blue";
             } else if (hasOrigin(design, "url")) {
                 return "green";

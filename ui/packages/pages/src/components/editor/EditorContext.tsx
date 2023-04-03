@@ -161,7 +161,7 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
     };
 
     const hasRhosrContext = (): boolean => {
-        return designContext !== undefined && designContext.type && designContext.type === "rhosr";
+        return designContext !== undefined && designContext.type && designContext.type === "registry";
     };
 
     const hasFileContext = (): boolean => {
@@ -251,13 +251,13 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
                                 <DescriptionListGroup>
                                     <DescriptionListTerm>Artifact</DescriptionListTerm>
                                     <DescriptionListDescription>
-                                        <span className="group">{designContext?.rhosr?.groupId || "default"}</span>
+                                        <span className="group">{designContext?.registry?.groupId || "default"}</span>
                                         <span> / </span>
                                         <RegistryNavLink context={designContext}>
-                                            <span className="group">{designContext?.rhosr?.artifactId}</span>
+                                            <span className="group">{designContext?.registry?.artifactId}</span>
                                             <span> </span>
                                             <span>(</span>
-                                            <span className="group">{designContext?.rhosr?.version || "latest"}</span>
+                                            <span className="group">{designContext?.registry?.version || "latest"}</span>
                                             <span>)</span>
                                         </RegistryNavLink>
                                     </DescriptionListDescription>

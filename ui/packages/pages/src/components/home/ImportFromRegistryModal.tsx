@@ -41,8 +41,8 @@ export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalP
                 name: artifact.name || artifact.id,
                 description: artifact.description || "",
                 context: {
-                    type: "rhosr",
-                    rhosr: {
+                    type: "registry",
+                    registry: {
                         instanceId: registry?.id as string,
                         groupId: artifact.groupId as string,
                         artifactId: artifact.id,
