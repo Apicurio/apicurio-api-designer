@@ -1,5 +1,5 @@
-import { User, UserManager, UserManagerSettings } from "oidc-client-ts";
-import { ApiDesignerConfigType } from "@app/contexts/config";
+import { UserManager } from "oidc-client-ts";
+import { ApiDesignerConfigType, useApiDesignerConfig } from "@app/contexts/config";
 
 const OIDC_CONFIG_OPTIONS: string[] = ["url", "clientId", "redirectUri"];
 
@@ -16,26 +16,25 @@ function only(items: string[], allOptions: any): any {
     return rval;
 }
 
-/**
- * get client configuration settings
- */
-export const getClientSettings: (() => UserManagerSettings) = () => {
-    const configOptions: any = only(OIDC_CONFIG_OPTIONS, apiDesignerConfig.auth.options);
+export const initUserManager: (() => UserManager) = () => {
+    if (apiDesignerConfig?.auth.type === "oidc") {
+        const configOptions: any = only(OIDC_CONFIG_OPTIONS, apiDesignerConfig.auth.options);
 
-    return {
-        authority: configOptions.url,
-        client_id: configOptions.clientId,
-        redirect_uri: configOptions.redirectUri,
-        response_type: "code",
-        scope: "openid profile email",
-        filterProtocolClaims: true,
-        loadUserInfo: true
-    };
+        return new UserManager({
+            authority: configOptions.url,
+            client_id: configOptions.clientId,
+            redirect_uri: configOptions.redirectUri,
+            response_type: "code",
+            scope: "openid profile email",
+            filterProtocolClaims: true,
+            loadUserInfo: true
+        });
+    } else {
+        return undefined;
+    }
 };
 
-export const userManager: UserManager = new UserManager(getClientSettings());
-export let user: AuthenticatedUser | undefined;
-export let oidcUser: User | undefined;
+export const userManager: UserManager = initUserManager()
 
 export interface AuthenticatedUser {
     username: string;
@@ -68,10 +67,7 @@ export const init = async (): Promise<void> => {
         const url = new URL(window.location.href);
         const currentUser = await userManager.getUser();
         if (url.searchParams.get("state") || currentUser) {
-            await userManager.signinRedirectCallback().then(user => {
-                oidcUser = user;
-                userManager.startSilentRenew();
-            });
+            await userManager.signinRedirectCallback();
         } else {
             await doLogin();
         }
@@ -91,7 +87,8 @@ export const init = async (): Promise<void> => {
  *
  */
 export const getOidcToken = async (): Promise<string> => {
-    return oidcUser.id_token;
+    const user = await userManager.getUser();
+    return user.id_token;
 };
 
 /**
@@ -104,7 +101,8 @@ export const getOidcToken = async (): Promise<string> => {
  */
 export const getUsername =
     async (): Promise<string> => {
-        return user.username;
+    const user = await userManager.getUser();
+        return user.profile.preferred_username
     };
 
 /**
@@ -115,9 +113,7 @@ export const getUsername =
  * @param client offix client
  *
  */
-export const logout = async (
-    userManager: UserManager | undefined
-): Promise<void> => {
+export const getLogout = async (): Promise<void> => {
     if (userManager) {
         await userManager.removeUser()
         await userManager.signoutRedirect({ post_logout_redirect_uri: window.location.href });
@@ -133,14 +129,16 @@ export const fakeUser: (() => AuthenticatedUser) = () => {
     };
 }
 
+export const isAuthenticated = async (): Promise<boolean> => {
+    return await userManager.getUser() != null;
+}
+
 export const doLogin = async () => {
     await userManager.signinRedirect()
         .then(() => {
+            userManager.startSilentRenew();
             userManager.signinRedirectCallback()
-                .then(user => {
-                oidcUser = user;
-            });
         }).catch(reason => {
-        console.log(reason);
-    });
+            console.log(reason);
+        });
 }

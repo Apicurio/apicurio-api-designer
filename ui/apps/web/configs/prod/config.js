@@ -16,7 +16,8 @@ const ApiDesignerConfig = {
             "url": "http://localhost:9011"
         },
         "nav": {
-            "show": false
+            "show": false,
+            "registry" : "registry-nav"
         }
     },
     "auth": {
