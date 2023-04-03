@@ -635,8 +635,6 @@
             "CreateDesignEvent": {
                 "description": "",
                 "required": [
-                    "on",
-                    "id",
                     "data",
                     "type"
                 ],
@@ -646,18 +644,9 @@
                         "$ref": "#/components/schemas/DesignEventType",
                         "description": ""
                     },
-                    "on": {
-                        "format": "date-time",
-                        "description": "",
-                        "type": "string"
-                    },
                     "data": {
                         "$ref": "#/components/schemas/DesignEventData",
                         "description": ""
-                    },
-                    "id": {
-                        "description": "",
-                        "type": "string"
                     }
                 }
             },
@@ -732,7 +721,9 @@
                 "description": "",
                 "enum": [
                     "name",
-                    "createdOn"
+                    "modifiedOn",
+                    "createdOn",
+                    "type"
                 ],
                 "type": "string"
             },

@@ -26,10 +26,14 @@ import { ImportDesignModal } from "./components/home/ImportDesignModal";
 import { ImportFrom } from "./components/home/ImportDropdown";
 import { DesignsPanel } from "./components/home/DesignsPanel";
 import { ImportFromRegistryModal } from "./components/home/ImportFromRegistryModal";
+import { ErrorModal } from "./components/common/ErrorModal";
 
 export type HomePageProps = Record<string, never>;
 
 export const HomePage: FunctionComponent<HomePageProps> = () => {
+    const [ error, setError ] = useState<any>();
+    const [ isCreating, setCreating ] = useState<boolean>(false);
+    const [ isImporting, setImporting ] = useState<boolean>(false);
     const [ isDrawerExpanded, setDrawerExpanded ] = useState(true);
     const [ isCreateModalOpen, setCreateModalOpen ] = useState(false);
     const [ isImportModalOpen, setImportModalOpen ] = useState(false);
@@ -79,22 +83,30 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
             propertyReplace(dc.data, "$NAME", info.name);
             propertyReplace(dc.data, "$SUMMARY", info.description||"");
         }
+        setCreating(true);
         return designsSvc.createDesign(info, dc).then((design: Design) => {
+            setCreating(false);
             setCreateModalOpen(false);
             nav.navigateTo(`/designs/${design.id}/editor`);
         }).catch((error: any) => {
-            // TODO handle error
             console.error(error);
+            setCreateModalOpen(false);
+            setCreating(false);
+            setError(error);
         });
     };
 
     const importDesign = async (cd: CreateDesign, content: CreateDesignContent): Promise<void> => {
+        setImporting(true);
         return designsSvc.createDesign(cd, content).then((design) => {
+            setImporting(false);
             setImportModalOpen(false);
             nav.navigateTo(`/designs/${design.id}/editor`);
-        }).catch(error => {
-            // TODO handle error
+        }).catch((error: any) => {
             console.error(error);
+            setImporting(false);
+            setImportModalOpen(false);
+            setError(error);
         });
     };
 
@@ -141,10 +153,17 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
                                     your designs locally or by exporting them to OpenShift Service Registry.
                                 </Text>
                             </TextContent>
-                            <CreateDesignModal isOpen={isCreateModalOpen} onCreate={createDesign} onCancel={() => {setCreateModalOpen(false);}} />
-                            <ImportDesignModal isOpen={isImportModalOpen} onImport={importDesign} onCancel={() => {setImportModalOpen(false);}}
+                            <CreateDesignModal isOpen={isCreateModalOpen} onCreate={createDesign}
+                                isCreating={isCreating}
+                                onCancel={() => {setCreateModalOpen(false);}} />
+                            <ImportDesignModal isOpen={isImportModalOpen} onImport={importDesign}
+                                isImporting={isImporting}
+                                onCancel={() => {setImportModalOpen(false);}}
                                 importType={importType} />
-                            <ImportFromRegistryModal isOpen={isImportFromRegistryModalOpen} onImport={importDesign} onCancel={() => {setImportFromRegistryModalOpen(false);}} />
+                            <ImportFromRegistryModal isOpen={isImportFromRegistryModalOpen} onImport={importDesign}
+                                isImporting={isImporting}
+                                onCancel={() => {setImportFromRegistryModalOpen(false);}} />
+                            <ErrorModal title={"Error detected"} message={undefined} error={error} isOpen={error !== undefined} onClose={() => setError(undefined)} />
                         </PageSection>
                         <PageSection variant={PageSectionVariants.default} isFilled={true}>
                             <DesignsPanel onCreate={() => {setCreateModalOpen(true);}}

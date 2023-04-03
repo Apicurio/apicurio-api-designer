@@ -44,7 +44,7 @@ export const UrlUpload: FunctionComponent<UrlUploadProps> = ({ id, urlPlaceholde
             setPreviewContent(content);
             setLoading(false);
             onChange(content, url);
-        }).catch(error => {
+        }).catch((error: any) => {
             setDownloadError(error.message);
             setLoading(false);
         });

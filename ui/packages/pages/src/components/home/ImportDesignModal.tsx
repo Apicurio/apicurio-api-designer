@@ -9,7 +9,7 @@ import {
     Select,
     SelectOption,
     SelectOptionObject,
-    SelectVariant,
+    SelectVariant, Spinner,
     TextArea,
     TextInput
 } from "@patternfly/react-core";
@@ -38,6 +38,7 @@ import { UrlUpload } from "./UrlUpload";
 export type ImportDesignModalProps = {
     importType: ImportFrom;
     isOpen: boolean | undefined;
+    isImporting: boolean|undefined;
     onImport: (event: CreateDesign, content: CreateDesignContent) => void;
     onCancel: () => void;
 }
@@ -99,7 +100,7 @@ type DetectionInfo = {
 }
 
 
-export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ importType, isOpen, onImport, onCancel }: ImportDesignModalProps) => {
+export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ importType, isOpen, isImporting, onImport, onCancel }: ImportDesignModalProps) => {
     const [isValid, setValid] = useState(false);
 
     const [designContent, setDesignContent] = useState<string>();
@@ -337,8 +338,14 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
             isOpen={isOpen}
             onClose={onCancel}
             actions={[
-                <Button key="create" variant="primary" isDisabled={!isValid} onClick={doImport}>
-                    Import
+                <Button key="import" variant="primary" isDisabled={!isValid || isImporting} onClick={doImport}>
+                    <If condition={isImporting}>
+                        <Spinner size="sm" style={{ marginRight: "5px" }} />
+                        Importing
+                    </If>
+                    <If condition={!isImporting}>
+                        Import
+                    </If>
                 </Button>,
                 <Button key="cancel" variant="link" onClick={onCancel}>
                     Cancel

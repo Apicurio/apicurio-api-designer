@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Button, Modal, ModalVariant } from "@patternfly/react-core";
+import { Button, Modal, ModalVariant, Spinner } from "@patternfly/react-core";
 import { Registry } from "@rhoas/registry-management-sdk";
 import { RhosrService, useRhosrService } from "@apicurio/apicurio-api-designer-services";
 import {
@@ -16,12 +16,13 @@ import { ArtifactSelector } from "./ArtifactSelector";
 
 export type ImportFromRegistryModalProps = {
     isOpen: boolean | undefined;
+    isImporting: boolean | undefined;
     onImport: (event: CreateDesign, content: CreateDesignContent) => void;
     onCancel: () => void;
 }
 
 
-export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalProps> = ({ isOpen, onImport, onCancel }: ImportFromRegistryModalProps) => {
+export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalProps> = ({ isOpen, isImporting, onImport, onCancel }: ImportFromRegistryModalProps) => {
     const [isValid, setValid] = useState(false);
     const [isLoading, setLoading] = useState(true);
     const [registries, setRegistries] = useState([] as Registry[]);
@@ -88,8 +89,14 @@ export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalP
     }, [design, designContent]);
 
     const actions: any[] = registries.length === 0 ? [] : [
-        <Button key="create" variant="primary" isDisabled={!isValid} onClick={doImport}>
-            Import
+        <Button key="import" variant="primary" isDisabled={!isValid || isImporting} onClick={doImport}>
+            <If condition={isImporting}>
+                <Spinner size="sm" style={{ marginRight: "5px" }} />
+                Importing
+            </If>
+            <If condition={!isImporting}>
+                Import
+            </If>
         </Button>,
         <Button key="cancel" variant="link" onClick={onCancel}>
             Cancel

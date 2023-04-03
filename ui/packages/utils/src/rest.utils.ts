@@ -89,8 +89,7 @@ export function createEndpoint(baseHref: string, path: string, params?: any, que
  * @param headers
  */
 export function createOptions(headers: { [header: string]: string }): AxiosRequestConfig {
-    const options: AxiosRequestConfig = { headers };
-    return options;
+    return { headers };
 }
 
 
@@ -114,7 +113,7 @@ export function httpGet<T>(url: string, options?: AxiosRequestConfig, successCal
             } else {
                 return data;
             }
-        }).catch(error => {
+        }).catch((error: any) => {
             return Promise.reject(unwrapErrorData(error));
         });
 }
@@ -150,7 +149,7 @@ export function httpPost<I>(url: string, body: I, options?: AxiosRequestConfig, 
             } else {
                 return;
             }
-        }).catch(error => {
+        }).catch((error: any) => {
             return Promise.reject(unwrapErrorData(error));
         });
 }
@@ -161,6 +160,7 @@ export function httpPost<I>(url: string, body: I, options?: AxiosRequestConfig, 
  * @param url
  * @param body
  * @param options
+ * @param successCallback
  */
 export function httpPostWithReturn<I, O>(url: string, body: I, options?: AxiosRequestConfig, successCallback?: (data: any) => O): Promise<O> {
     console.info("[BaseService] Making a POST request to: ", url);
@@ -181,7 +181,7 @@ export function httpPostWithReturn<I, O>(url: string, body: I, options?: AxiosRe
             } else {
                 return data;
             }
-        }).catch(error => {
+        }).catch((error: any) => {
             return Promise.reject(unwrapErrorData(error));
         });
 }
@@ -192,6 +192,7 @@ export function httpPostWithReturn<I, O>(url: string, body: I, options?: AxiosRe
  * @param url
  * @param body
  * @param options
+ * @param successCallback
  */
 export function httpPut<I>(url: string, body: I, options?: AxiosRequestConfig, successCallback?: () => void): Promise<void> {
     console.info("[BaseService] Making a PUT request to: ", url);
@@ -208,7 +209,7 @@ export function httpPut<I>(url: string, body: I, options?: AxiosRequestConfig, s
             } else {
                 return;
             }
-        }).catch(error => {
+        }).catch((error: any) => {
             return Promise.reject(unwrapErrorData(error));
         });
 }
@@ -219,6 +220,7 @@ export function httpPut<I>(url: string, body: I, options?: AxiosRequestConfig, s
  * @param url
  * @param body
  * @param options
+ * @param successCallback
  */
 export function httpPutWithReturn<I, O>(url: string, body: I, options?: AxiosRequestConfig, successCallback?: (data: O) => O): Promise<O> {
     console.info("[BaseService] Making a PUT request to: ", url);
@@ -239,7 +241,7 @@ export function httpPutWithReturn<I, O>(url: string, body: I, options?: AxiosReq
             } else {
                 return data;
             }
-        }).catch(error => {
+        }).catch((error: any) => {
             return Promise.reject(unwrapErrorData(error));
         });
 }
@@ -248,6 +250,7 @@ export function httpPutWithReturn<I, O>(url: string, body: I, options?: AxiosReq
  * Performs an HTTP DELETE operation to the given URL with the given body and options.
  * @param url
  * @param options
+ * @param successCallback
  */
 export function httpDelete<T>(url: string, options?: AxiosRequestConfig, successCallback?: () => T): Promise<T> {
     console.info("[BaseService] Making a DELETE request to: ", url);
@@ -263,7 +266,7 @@ export function httpDelete<T>(url: string, options?: AxiosRequestConfig, success
     return AXIOS.request(config)
         .then(() => {
             return successCallback ? successCallback() : null;
-        }).catch(error => {
+        }).catch((error: any) => {
             return Promise.reject(unwrapErrorData(error));
         });
 }

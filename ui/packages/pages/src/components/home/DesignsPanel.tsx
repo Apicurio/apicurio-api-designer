@@ -54,7 +54,7 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
         filterOn: "name"
     });
     const [ sort, setSort ] = useState<DesignsSort>({
-        by: "modified-on",
+        by: "modifiedOn",
         direction: "desc"
     });
     const [ designs, setDesigns ] = useState<DesignsSearchResults>();
@@ -93,7 +93,7 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
             }
             setRenameModalOpen(false);
             alerts.designRenamed(event);
-        }).catch(() => {
+        }).catch(error => {
             // TODO error handling
         });
     };
