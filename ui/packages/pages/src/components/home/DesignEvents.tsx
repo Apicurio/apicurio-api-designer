@@ -66,13 +66,13 @@ export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design }: D
     const designsService: DesignsService = useDesignsService();
 
     const originGroupId = (): string => {
-        return design?.origin?.rhosr?.groupId || "default";
+        return design?.origin?.registry?.groupId || "default";
     };
     const originArtifactId = (): string => {
-        return design?.origin?.rhosr?.artifactId || "Unknown";
+        return design?.origin?.registry?.artifactId || "Unknown";
     };
     const originVersion = (): string => {
-        return design?.origin?.rhosr?.version || "latest";
+        return design?.origin?.registry?.version || "latest";
     };
     const originFilename = (): string => {
         return design?.origin?.file?.fileName || "";
@@ -102,7 +102,7 @@ export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design }: D
                 <OriginLabel>Time created</OriginLabel>
                 <OriginValue><DateTime date={design?.createdOn} /></OriginValue>
 
-                <If condition={hasOrigin(design, "rhosr")}>
+                <If condition={hasOrigin(design, "registry")}>
                     <OriginLabel>Group</OriginLabel>
                     <OriginValue>{originGroupId()}</OriginValue>
 

@@ -89,12 +89,12 @@ export const TestRegistryModal: React.FunctionComponent<TestRegistryModalProps> 
             if (filteredEvents && filteredEvents.length > 0) {
                 const regEvent: DesignEvent = filteredEvents[0];
                 return {
-                    type: "rhosr",
-                    rhosr: regEvent.data
+                    type: "registry",
+                    registry: regEvent.data
                 };
             }
         }
-        if (design?.origin?.type === "rhosr") {
+        if (design?.origin?.type === "registry") {
             return design.origin;
         }
 
@@ -103,7 +103,7 @@ export const TestRegistryModal: React.FunctionComponent<TestRegistryModalProps> 
 
     const defaultRegistry = (registries: Registry[], context: DesignContext|undefined): Registry | undefined => {
         if (context) {
-            const filteredRegistries: Registry[] = registries.filter(registry => registry.id === design.origin.rhosr?.instanceId);
+            const filteredRegistries: Registry[] = registries.filter(registry => registry.id === design.origin.registry?.instanceId);
             if (filteredRegistries?.length > 0) {
                 return filteredRegistries[0];
             }
@@ -117,7 +117,7 @@ export const TestRegistryModal: React.FunctionComponent<TestRegistryModalProps> 
     };
 
     const setFormValues = (context: DesignContext | undefined): void => {
-        setGroupAndId(context?.rhosr?.groupId || "", context?.rhosr?.artifactId || "");
+        setGroupAndId(context?.registry?.groupId || "", context?.registry?.artifactId || "");
     };
 
     useEffect(() => {

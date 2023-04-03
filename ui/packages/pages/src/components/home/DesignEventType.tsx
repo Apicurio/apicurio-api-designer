@@ -20,19 +20,19 @@ export const DesignEventType: FunctionComponent<DesignEventTypeProps> = ({ event
             case "register":
                 // eslint-disable-next-line no-case-declarations
                 // const context: DesignContext = {
-                //     type: "rhosr",
-                //     rhosr: event.data
+                //     type: "registry",
+                //     registry: event.data
                 // };
                 return variant === "short" ? <span>Service Registry</span> : (
                     <React.Fragment>
                         <span>Exported to Service Registry </span>
                         {/*<RegistryNavLink context={context}>*/}
                         {/*    <span>(</span>*/}
-                        {/*    <span>{context.rhosr?.groupId || "default"}</span>*/}
+                        {/*    <span>{context.registry?.groupId || "default"}</span>*/}
                         {/*    <span> / </span>*/}
-                        {/*    <span>{context.rhosr?.artifactId}</span>*/}
+                        {/*    <span>{context.registry?.artifactId}</span>*/}
                         {/*    <span> - </span>*/}
-                        {/*    <span>{context.rhosr?.version || "latest"})</span>*/}
+                        {/*    <span>{context.registry?.version || "latest"})</span>*/}
                         {/*</RegistryNavLink>*/}
                     </React.Fragment>
                 );
@@ -46,17 +46,17 @@ export const DesignEventType: FunctionComponent<DesignEventTypeProps> = ({ event
         switch (context.type) {
             case "file":
                 return variant === "short" ? <span>File</span> : <span>{`Imported from file ${context.file?.fileName}`}</span>;
-            case "rhosr":
+            case "registry":
                 return variant === "short" ? <span>Service Registry</span> : (
                     <React.Fragment>
                         <span>Imported from Service Registry </span>
                         {/*<RegistryNavLink context={context}>*/}
                         {/*    <span>(</span>*/}
-                        {/*    <span>{context.rhosr?.groupId || "default"}</span>*/}
+                        {/*    <span>{context.registry?.groupId || "default"}</span>*/}
                         {/*    <span> / </span>*/}
-                        {/*    <span>{context.rhosr?.artifactId}</span>*/}
+                        {/*    <span>{context.registry?.artifactId}</span>*/}
                         {/*    <span> - </span>*/}
-                        {/*    <span>{context.rhosr?.version || "latest"})</span>*/}
+                        {/*    <span>{context.registry?.version || "latest"})</span>*/}
                         {/*</RegistryNavLink>*/}
                     </React.Fragment>
                 );

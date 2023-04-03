@@ -65,8 +65,8 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
             };
             rhosrInstance?.createOrUpdateArtifact(data).then(amd => {
                 const context: DesignContext = {
-                    type: "rhosr",
-                    rhosr: {
+                    type: "registry",
+                    registry: {
                         instanceId: registry?.id as string,
                         groupId: amd.groupId as string,
                         artifactId: amd.id,
@@ -84,7 +84,7 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
                     id: design.id,
                     type: "register",
                     on: new Date(),
-                    data: context.rhosr
+                    data: context.registry
                 };
 
                 // Create an event (add to the design's history).
@@ -118,12 +118,12 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
             if (filteredEvents && filteredEvents.length > 0) {
                 const regEvent: DesignEvent = filteredEvents[0];
                 return {
-                    type: "rhosr",
-                    rhosr: regEvent.data
+                    type: "registry",
+                    registry: regEvent.data
                 };
             }
         }
-        if (design?.origin?.type === "rhosr") {
+        if (design?.origin?.type === "registry") {
             return design.origin;
         }
 
@@ -132,7 +132,7 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
 
     const defaultRegistry = (registries: Registry[], context: DesignContext|undefined): Registry | undefined => {
         if (context) {
-            const filteredRegistries: Registry[] = registries.filter(registry => registry.id === design.origin.rhosr?.instanceId);
+            const filteredRegistries: Registry[] = registries.filter(registry => registry.id === design.origin.registry?.instanceId);
             if (filteredRegistries?.length > 0) {
                 return filteredRegistries[0];
             }
@@ -152,9 +152,9 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
     };
 
     const setFormValues = (context: DesignContext | undefined): void => {
-        setGroup(context?.rhosr?.groupId);
-        setArtifactId(context?.rhosr?.artifactId);
-        setVersion(context?.rhosr?.version);
+        setGroup(context?.registry?.groupId);
+        setArtifactId(context?.registry?.artifactId);
+        setVersion(context?.registry?.version);
     };
 
     useEffect(() => {
