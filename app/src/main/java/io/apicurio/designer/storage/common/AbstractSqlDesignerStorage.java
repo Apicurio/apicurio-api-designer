@@ -185,12 +185,14 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
     @Override
     @Transactional
     public List<DesignMetadataDto> getDesignMetadataList(int page, int size) {
+        int limit = size;
+        int offset = page * size;
         return handles.withHandleNoExceptionMapped(handle ->
                 handle.createQuery(sqlStatements.selectDesignMetadataPage())
                         .setContext(RESOURCE_CONTEXT_KEY, "design metadata")
                         .bind(0, DEFAULT_TENANT_ID)
-                        .bind(1, size)
-                        .bind(2, page)
+                        .bind(1, limit)
+                        .bind(2, offset)
                         .mapTo(DesignMetadataDto.class)
                         .list()
         );

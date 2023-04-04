@@ -67,7 +67,7 @@ const menuActions: EditorContextMenuItem[] = [
     {
         label: "Format design content",
         key: "action-format",
-        accept: (props: EditorContextProps) => { return [ArtifactTypes.AVRO, ArtifactTypes.JSON].includes(props.design.type); },
+        accept: (props: EditorContextProps) => { return [ArtifactTypes.AVRO, ArtifactTypes.JSON].includes(props.design?.type); },
     },
     {
         label: "Show design changes",
@@ -212,7 +212,7 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
                 </div>
                 <div className="editor-context-last-modified">
                     <span>Last modified:</span>
-                    <Moment date={props.design.modifiedOn} fromNow={true} />
+                    <Moment date={props.design?.modifiedOn} fromNow={true} />
                 </div>
                 <div className="editor-context-actions">
                     <Dropdown
@@ -244,7 +244,7 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
                             <DescriptionListGroup>
                                 <DescriptionListTerm>Type</DescriptionListTerm>
                                 <DescriptionListDescription>
-                                    <ArtifactTypeIcon type={props.design.type} isShowLabel={true} isShowIcon={true} />
+                                    <ArtifactTypeIcon type={props.design?.type} isShowLabel={true} isShowIcon={true} />
                                 </DescriptionListDescription>
                             </DescriptionListGroup>
                             <If condition={hasRhosrContext}>

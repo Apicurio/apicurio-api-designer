@@ -364,7 +364,7 @@ export const EditorPage: FunctionComponent<EditorPageProps> = ({ params }: Edito
         <IsLoading condition={isLoading}>
             <PageSection variant={PageSectionVariants.light} id="section-context" style={sectionContextStyle}>
                 <EditorContext
-                    design={design as Design}
+                    design={design}
                     dirty={isDirty}
                     onSave={onSave}
                     onFormat={onFormat}
