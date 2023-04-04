@@ -1,5 +1,16 @@
 package io.apicurio.designer.rest.v0.impl;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Consumer;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+
 import io.apicurio.common.apps.content.handle.ContentHandle;
 import io.apicurio.designer.common.MediaTypes;
 import io.apicurio.designer.rest.v0.DesignsResource;
@@ -14,15 +25,6 @@ import io.apicurio.designer.rest.v0.beans.SortOrder;
 import io.apicurio.designer.service.DesignService;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Consumer;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
@@ -35,15 +37,14 @@ public class DesignsResourceImpl implements DesignsResource {
     @Override
     public DesignSearchResults getDesigns(String name, SortOrder order, SortBy orderby, String description,
             String type, Integer pageSize, Integer page) {
-//        page = page != null ? page : 0;
-//        pageSize = pageSize != null ? pageSize : 10;
-//        var list = designService.getDesignMetadataList(pageSize, page);
-//        var total = designService.countDesigns();
-//        DesignMetaDataList dataList = DesignMetaDataList.builder().kind("DesignMetaDataList").page(page).size(pageSize)
-//                .total((int) total).items(list.stream().map(this::convert).toList()).build();
-        
-        // FIXME need to return a search results object here!
-        return DesignSearchResults.builder().count(0).designs(Collections.emptyList()).build();
+        page = page != null ? page : 1;
+        pageSize = pageSize != null ? pageSize : 10;
+        // Note: the design service has page # as zero-based
+        var list = designService.getDesignMetadataList(page - 1, pageSize);
+        int total = (int) designService.countDesigns();
+        return DesignSearchResults.builder().kind("DesignSearchResults").count(total).page(page).pageSize(pageSize)
+                .designs(list.stream().map(this::convert).toList())
+                .build();
     }
 
     /**
@@ -118,8 +119,8 @@ public class DesignsResourceImpl implements DesignsResource {
      */
     @Override
     public List<DesignEvent> getAllDesignEvents(String designId) {
-        // FIXME implement this method
-        return null;
+        List<DesignEvent> events = new ArrayList<>();
+        return events;
     }
 
     /**
@@ -127,7 +128,11 @@ public class DesignsResourceImpl implements DesignsResource {
      */
     @Override
     public DesignEvent createDesignEvent(String designId, CreateDesignEvent data) {
-        // FIXME implement this method
-        return null;
+        return DesignEvent.builder()
+                .designId(designId)
+                .id(UUID.randomUUID().toString())
+                .kind("DesignEvent")
+                .on(new Date())
+                .build();
     }
 }
