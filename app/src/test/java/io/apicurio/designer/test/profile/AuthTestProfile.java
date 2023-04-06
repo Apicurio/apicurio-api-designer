@@ -21,5 +21,4 @@ public class AuthTestProfile implements QuarkusTestProfile {
         return List.of(
                 new TestResourceEntry(JWSMockResource.class));
     }
-
 }

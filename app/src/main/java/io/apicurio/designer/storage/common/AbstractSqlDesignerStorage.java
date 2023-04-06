@@ -10,8 +10,11 @@ import io.apicurio.common.apps.storage.sql.jdbi.HandleFactory;
 import io.apicurio.designer.spi.storage.DesignerSqlStatements;
 import io.apicurio.designer.spi.storage.DesignerStorage;
 import io.apicurio.designer.spi.storage.DesignerStorageException;
+import io.apicurio.designer.spi.storage.SearchQuerySpecification.SearchQuery;
 import io.apicurio.designer.spi.storage.model.DesignDto;
+import io.apicurio.designer.spi.storage.model.DesignEventDto;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
+import org.slf4j.Logger;
 
 import java.time.Instant;
 import java.util.List;
@@ -29,6 +32,7 @@ import static io.apicurio.designer.spi.mt.MtConstants.DEFAULT_TENANT_ID;
 public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
 
     protected static String CONTENT_SEQUENCE_KEY = "content";
+    protected static String DESIGN_EVENT_SEQUENCE_KEY = "design_event";
 
     @Inject
     protected HandleFactory handles;
@@ -44,6 +48,9 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
 
     @Inject
     protected StorageExceptionMapper exceptionMapper;
+
+    @Inject
+    Logger log;
 
     /**
      * The overriding method MUST be annotated with:
@@ -103,7 +110,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                         .bind(6, metadata.getModifiedBy())
                         .bind(7, metadata.getModifiedOn())
                         .bind(8, metadata.getType())
-                        .bind(9, metadata.getSource())
+                        .bind(9, metadata.getOrigin())
                         .execute()
         );
 
@@ -178,7 +185,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                     .bind(4, metadata.getModifiedBy())
                     .bind(5, metadata.getModifiedOn())
                     .bind(6, metadata.getType())
-                    .bind(7, metadata.getSource())
+                    .bind(7, metadata.getOrigin())
                     .bind(8, DEFAULT_TENANT_ID)
                     .bind(9, metadata.getId())
                     .execute();
@@ -189,18 +196,22 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
 
     @Override
     @Transactional
-    public List<DesignMetadataDto> getDesignMetadataList(int page, int size) {
-        int limit = size;
-        int offset = page * size;
-        return handles.withHandleNoExceptionMapped(handle ->
-                handle.createQuery(sqlStatements.selectDesignMetadataPage())
-                        .setContext(RESOURCE_CONTEXT_KEY, "design metadata")
-                        .bind(0, DEFAULT_TENANT_ID)
-                        .bind(1, limit)
-                        .bind(2, offset)
-                        .mapTo(DesignMetadataDto.class)
-                        .list()
-        );
+    public List<DesignMetadataDto> searchDesignMetadata(SearchQuery search) {
+        var spec = sqlStatements.searchDesignMetadataSpecification();
+
+        spec.apply(search);
+        log.warn("Search: {}", sqlStatements.searchDesignMetadata(spec));
+
+        return handles.withHandleNoExceptionMapped(handle -> {
+            var q = handle.createQuery(sqlStatements.searchDesignMetadata(spec))
+                    .setContext(RESOURCE_CONTEXT_KEY, "design metadata")
+                    .bind(0, DEFAULT_TENANT_ID);
+
+            spec.bindWhere(1, q);
+
+            return q.mapTo(DesignMetadataDto.class)
+                    .list();
+        });
     }
 
     @Override
@@ -280,5 +291,42 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
     @Override
     public List<DynamicConfigPropertyDto> getConfigProperties() {
         return dynamicConfigSqlStorageComponent.getConfigProperties();
+    }
+
+    @Override
+    @Transactional
+    public DesignEventDto createDesignEvent(DesignEventDto event) {
+        var eventId = exceptionMapper.with(() ->
+                storageEngine.nextSequenceValue(DESIGN_EVENT_SEQUENCE_KEY)
+        );
+        event.setId(String.valueOf(eventId));
+        event.setCreatedOn(Instant.now());
+        handles.withHandleNoExceptionMapped(handle ->
+
+                handle.createUpdate(sqlStatements.insertDesignEvent())
+                        .setContext(RESOURCE_CONTEXT_KEY, "design event")
+                        .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, event.getId())
+                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(1, event.getId())
+                        .bind(2, event.getDesignId())
+                        .bind(3, event.getCreatedOn())
+                        .bind(4, event.getType())
+                        .bind(5, event.getData())
+                        .execute()
+        );
+        return event;
+    }
+
+    @Override
+    public List<DesignEventDto> getDesignEvents(String designId) {
+        return handles.withHandleNoExceptionMapped(handle ->
+
+                handle.createQuery(sqlStatements.selectDesignEvents())
+                        .setContext(RESOURCE_CONTEXT_KEY, "design event")
+                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(1, designId)
+                        .mapTo(DesignEventDto.class)
+                        .list()
+        );
     }
 }

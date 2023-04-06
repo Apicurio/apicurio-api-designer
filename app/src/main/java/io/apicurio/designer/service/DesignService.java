@@ -2,14 +2,14 @@ package io.apicurio.designer.service;
 
 import io.apicurio.common.apps.content.handle.ContentHandle;
 import io.apicurio.designer.spi.storage.DesignerStorage;
+import io.apicurio.designer.spi.storage.SearchQuerySpecification.SearchQuery;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
+import org.slf4j.Logger;
 
 import java.time.Instant;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -21,6 +21,9 @@ public class DesignService {
 
     @Inject
     DesignerStorage storage;
+
+    @Inject
+    Logger log;
 
     public DesignMetadataDto createDesign(@NotNull DesignMetadataDto metadata, @NotNull ContentHandle content) {
         var now = Instant.now();
@@ -64,8 +67,8 @@ public class DesignService {
         }
     }
 
-    public List<DesignMetadataDto> getDesignMetadataList(@Min(0) int page, @Min(10) @Max(100) int size) {
-        return storage.getDesignMetadataList(page, size);
+    public List<DesignMetadataDto> searchDesignMetadata(SearchQuery search) {
+        return storage.searchDesignMetadata(search);
     }
 
     public long countDesigns() {

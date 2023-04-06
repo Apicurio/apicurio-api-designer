@@ -1,7 +1,9 @@
 package io.apicurio.designer.spi.storage;
 
-import io.apicurio.common.apps.content.handle.ContentHandle;
 import io.apicurio.common.apps.config.DynamicConfigStorage;
+import io.apicurio.common.apps.content.handle.ContentHandle;
+import io.apicurio.designer.spi.storage.SearchQuerySpecification.SearchQuery;
+import io.apicurio.designer.spi.storage.model.DesignEventDto;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 
 import java.util.List;
@@ -21,9 +23,13 @@ public interface DesignerStorage extends DynamicConfigStorage {
 
     DesignMetadataDto updateDesignMetadata(String designId, DesignMetadataDto metadata);
 
-    List<DesignMetadataDto> getDesignMetadataList(int page, int size);
+    List<DesignMetadataDto> searchDesignMetadata(SearchQuery search);
 
     long countDesigns();
 
     void deleteDesign(String designId);
+
+    DesignEventDto createDesignEvent(DesignEventDto event);
+
+    List<DesignEventDto> getDesignEvents(String designId);
 }

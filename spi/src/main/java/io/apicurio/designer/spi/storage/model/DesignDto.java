@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 public class DesignDto {
 
-    String id;
+    private String id;
 
-    Long contentId;
+    private Long contentId;
 }

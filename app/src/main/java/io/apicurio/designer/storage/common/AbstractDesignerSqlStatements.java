@@ -19,6 +19,7 @@ package io.apicurio.designer.storage.common;
 import io.apicurio.common.apps.storage.exceptions.StorageException;
 import io.apicurio.common.apps.storage.sql.jdbi.Handle;
 import io.apicurio.designer.spi.storage.DesignerSqlStatements;
+import io.apicurio.designer.spi.storage.SearchQuerySpecification;
 
 /**
  * @author eric.wittmann@gmail.com
@@ -71,7 +72,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     @Override
     public String insertMetadata() {
         return """
-                INSERT INTO design_metadata (tenantId, designId, name, description, createdBy, createdOn, modifiedBy, modifiedOn, type, source) \
+                INSERT INTO design_metadata (tenantId, designId, name, description, createdBy, createdOn, modifiedBy, modifiedOn, type, origin) \
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\
                 """;
     }
@@ -124,7 +125,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String updateDesignMetadata() {
         return """
                 UPDATE design_metadata m \
-                SET name = ?, description = ?, createdBy = ?, createdOn = ?, modifiedBy = ?, modifiedOn = ?, type = ?, source = ? \
+                SET name = ?, description = ?, createdBy = ?, createdOn = ?, modifiedBy = ?, modifiedOn = ?, type = ?, origin = ? \
                 WHERE m.tenantId = ? AND m.designId = ?\
                 """;
     }
@@ -152,5 +153,55 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
                 DELETE FROM content c \
                 WHERE c.tenantId = ? AND c.contentId = ?\
                 """;
+    }
+
+    @Override
+    public String insertDesignEvent() {
+        return """
+                INSERT INTO design_events (tenantId, eventId, designId, createdOn, type, data) \
+                VALUES (?, ?, ?, ?, ?, ?)\
+                """;
+    }
+
+    @Override
+    public String selectDesignEvents() {
+        return """
+                SELECT e.* FROM design_events e \
+                WHERE e.tenantId = ? AND e.designId = ? \
+                ORDER BY e.createdOn DESC\
+                """;
+    }
+
+    @Override
+    public String searchDesignMetadata(SearchQuerySpecification spec) {
+        return """
+                SELECT m.* FROM design_metadata m \
+                WHERE m.tenantId = ? \
+                """
+                + spec.getWherePart() + spec.getOrderByPart() + spec.getLimitPart();
+    }
+
+    @Override
+    public SearchQuerySpecification searchDesignMetadataSpecification() {
+        return new SearchQuerySpecification()
+                .addWhereColumn("name", "AND m.name LIKE '%' || ? || '%'", (query, idx, rawValue) -> {
+                    var value = (String) rawValue;
+                    query.bind(idx, value);
+                    return null;
+                })
+                .addWhereColumn("type", "AND m.type LIKE '%' || ? || '%'", (query, idx, rawValue) -> {
+                    var value = (String) rawValue;
+                    query.bind(idx, value);
+                    return null;
+                })
+                .addWhereColumn("description", "AND m.description LIKE '%' || ? || '%'", (query, idx, rawValue) -> {
+                    var value = (String) rawValue;
+                    query.bind(idx, value);
+                    return null;
+                })
+                .addOrderByColumn("name", "m")
+                .addOrderByColumn("type", "m")
+                .addOrderByColumn("modifiedOn", "m")
+                .addOrderByColumn("createdOn", "m");
     }
 }

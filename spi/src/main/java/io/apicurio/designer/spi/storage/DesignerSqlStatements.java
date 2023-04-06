@@ -49,4 +49,12 @@ public interface DesignerSqlStatements extends BaseSqlStatements {
 
     // TODO Deduplication?
     String deleteDesignContent();
+
+    String insertDesignEvent();
+
+    String selectDesignEvents();
+
+    String searchDesignMetadata(SearchQuerySpecification spec);
+
+    SearchQuerySpecification searchDesignMetadataSpecification();
 }
