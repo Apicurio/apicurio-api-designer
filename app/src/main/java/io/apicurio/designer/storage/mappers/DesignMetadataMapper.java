@@ -29,7 +29,7 @@ public class DesignMetadataMapper implements RowMapper<DesignMetadataDto> {
                 .modifiedBy(rs.getString("modifiedBy"))
                 .modifiedOn(rs.getTimestamp("modifiedOn").toInstant())
                 .type(rs.getString("type"))
-                .source(rs.getString("source"))
+                .origin(rs.getString("origin"))
                 .build();
     }
 }

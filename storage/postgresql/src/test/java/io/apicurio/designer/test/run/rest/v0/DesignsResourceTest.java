@@ -22,4 +22,19 @@ class DesignsResourceTest {
     void basicCRUD() {
         drts.runBasicCRUD();
     }
+
+    @Test
+    void createDesign() {
+        drts.runCreateDesign();
+    }
+
+    @Test
+    void createDesignEvent() {
+        drts.runCreateDesignEvent();
+    }
+
+    @Test
+    void searchDesigns() {
+        drts.runSearchDesigns();
+    }
 }

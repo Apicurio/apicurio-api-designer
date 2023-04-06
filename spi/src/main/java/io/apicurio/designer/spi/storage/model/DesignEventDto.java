@@ -1,5 +1,6 @@
 package io.apicurio.designer.spi.storage.model;
 
+import io.apicurio.common.apps.content.handle.ContentHandle;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,23 +17,15 @@ import java.time.Instant;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class DesignMetadataDto {
+public class DesignEventDto {
 
     private String id;
 
-    private String name;
-
-    private String description;
+    private String designId;
 
     private String type;
 
-    private String origin;
-
     private Instant createdOn;
 
-    private String createdBy;
-
-    private Instant modifiedOn;
-
-    private String modifiedBy;
+    private ContentHandle data;
 }

@@ -2,6 +2,7 @@ package io.apicurio.designer.rest.v0.impl;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import io.apicurio.designer.rest.v0.beans.Error;
+import io.apicurio.designer.rest.v0.impl.ex.BadRequestException;
 import io.apicurio.designer.spi.storage.DesignerStorageException;
 import io.apicurio.designer.spi.storage.ResourceAlreadyExistsStorageException;
 import io.apicurio.designer.spi.storage.ResourceNotFoundStorageException;
@@ -57,6 +58,7 @@ public class DesignerExceptionMapper implements ExceptionMapper<Throwable> {
         Map<Class<? extends Exception>, Integer> map = new LinkedHashMap<>();
 
         map.put(JsonParseException.class, HTTP_BAD_REQUEST);
+        map.put(BadRequestException.class, HTTP_BAD_REQUEST); // TODO Maybe use ValidationException?
         map.put(ValidationException.class, HTTP_BAD_REQUEST);
 
         map.put(ResourceNotFoundStorageException.class, HTTP_NOT_FOUND);

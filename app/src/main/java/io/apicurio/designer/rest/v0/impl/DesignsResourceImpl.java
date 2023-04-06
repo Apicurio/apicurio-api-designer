@@ -1,17 +1,5 @@
 package io.apicurio.designer.rest.v0.impl;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.core.Response;
-
 import io.apicurio.common.apps.content.handle.ContentHandle;
 import io.apicurio.designer.auth.Authorized;
 import io.apicurio.designer.common.MediaTypes;
@@ -24,9 +12,24 @@ import io.apicurio.designer.rest.v0.beans.DesignSearchResults;
 import io.apicurio.designer.rest.v0.beans.EditableDesignMetadata;
 import io.apicurio.designer.rest.v0.beans.SortBy;
 import io.apicurio.designer.rest.v0.beans.SortOrder;
+import io.apicurio.designer.rest.v0.impl.ex.BadRequestException;
+import io.apicurio.designer.service.DesignEventService;
 import io.apicurio.designer.service.DesignService;
-import io.apicurio.designer.service.TemporaryInMemoryEventStorage;
+import io.apicurio.designer.spi.storage.ResourceNotFoundStorageException;
+import io.apicurio.designer.spi.storage.SearchQuerySpecification.SearchOrdering;
+import io.apicurio.designer.spi.storage.SearchQuerySpecification.SearchQuery;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import java.util.function.Consumer;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.validation.ValidationException;
+import javax.ws.rs.core.Response;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
@@ -36,19 +39,42 @@ public class DesignsResourceImpl implements DesignsResource {
 
     @Inject
     DesignService designService;
-    
-    @Inject TemporaryInMemoryEventStorage eventStorage;
+
+    @Inject
+    DesignEventService eventService;
 
     @Override
     @Authorized
     public DesignSearchResults getDesigns(String name, SortOrder order, SortBy orderby, String description,
-            String type, Integer pageSize, Integer page) {
-        page = page != null ? page : 1;
-        pageSize = pageSize != null ? pageSize : 10;
-        // Note: the design service has page # as zero-based
-        var list = designService.getDesignMetadataList(page - 1, pageSize);
-        int total = (int) designService.countDesigns();
-        return DesignSearchResults.builder().kind("DesignSearchResults").count(total).page(page).pageSize(pageSize)
+                                          String type, Integer pageSize, Integer page) {
+        // TODO Do we want to limit max page size?
+        if (page != null && page < 0) {
+            throw new ValidationException("Page index must not be negative");
+        }
+
+        var search = new SearchQuery()
+                .column("name", name)
+                .column("description", description)
+                .column("type", type);
+
+        order = order != null ? order : SortOrder.desc;
+        // TODO Write the default ordering in API spec
+        // TODO Sort by modifiedOn (best for UI) or createdOn (best for more consistent processing)
+        orderby = orderby != null ? orderby : SortBy.modifiedOn;
+        search.orderBy(orderby.name(), order == SortOrder.desc ? SearchOrdering.DESC : SearchOrdering.ASC);
+
+        page = page != null ? page : 0;
+        pageSize = pageSize != null ? pageSize : 20;
+
+        search.limit(page * pageSize, pageSize);
+        // TODO: Move vvv to service layer
+        var list = designService.searchDesignMetadata(search);
+        int total = (int) designService.countDesigns(); // TODO Check cast
+        return DesignSearchResults.builder()
+                .kind("DesignSearchResults")
+                .count(total)
+                .page(page)
+                .pageSize(pageSize)
                 .designs(list.stream().map(this::convert).toList())
                 .build();
     }
@@ -59,20 +85,25 @@ public class DesignsResourceImpl implements DesignsResource {
     @Override
     @Authorized
     public Design createDesign(String xDesignerName, String xDesignerDescription, String xDesignerType,
-            DesignOriginType xDesignerOrigin, InputStream data) {
-        if (xDesignerOrigin == null) {
-            xDesignerOrigin = DesignOriginType.create;
-        }
-        if (xDesignerName != null && xDesignerName.startsWith("==")) {
+                               DesignOriginType xDesignerOrigin, InputStream data) {
+
+        BadRequestException.requireNotNullAnd(xDesignerName, "Valid 'X-Designer-Name' header is required.", p -> !p.isBlank());
+        BadRequestException.requireNotNullAnd(xDesignerType, "Valid 'X-Designer-Type' header is required.", p -> !p.isBlank());
+        BadRequestException.requireNotNullAnd(xDesignerOrigin, "Valid 'X-Designer-Origin' header is required.", p -> true);
+
+        if (xDesignerName.startsWith("==")) {
             xDesignerName = decodeHeaderValue(xDesignerName);
         }
         if (xDesignerDescription != null && xDesignerDescription.startsWith("==")) {
             xDesignerDescription = decodeHeaderValue(xDesignerDescription);
         }
-        
-        // FIXME handle "origin" rather than "source"
-        var metadata = DesignMetadataDto.builder().name(xDesignerName).description(xDesignerDescription)
-                .type(xDesignerType).source(xDesignerOrigin.name()).build();
+
+        var metadata = DesignMetadataDto.builder()
+                .name(xDesignerName)
+                .description(xDesignerDescription)
+                .type(xDesignerType)
+                .origin(xDesignerOrigin.name())
+                .build();
         return convert(designService.createDesign(metadata, ContentHandle.create(data)));
     }
 
@@ -111,36 +142,14 @@ public class DesignsResourceImpl implements DesignsResource {
     }
 
     /**
-     * @see io.apicurio.designer.rest.v0.DesignsResource#getAllDesignEvents(java.lang.String)
-     */
-    @Override
-    public List<DesignEvent> getAllDesignEvents(String designId) {
-        return eventStorage.getAll(designId);
-    }
-    
-    /**
      * @see io.apicurio.designer.rest.v0.DesignsResource#getFirstEvent(java.lang.String)
      */
     @Override
     public DesignEvent getFirstEvent(String designId) {
-        return eventStorage.getFirst(designId);
-    }
-    
-    /**
-     * @see io.apicurio.designer.rest.v0.DesignsResource#createDesignEvent(java.lang.String, io.apicurio.designer.rest.v0.beans.CreateDesignEvent)
-     */
-    @Override
-    public DesignEvent createDesignEvent(String designId, CreateDesignEvent cde) {
-        DesignEvent newEvent = DesignEvent.builder()
-            .designId(designId)
-            .type(cde.getType())
-            .id(UUID.randomUUID().toString())
-            .kind("DesignEvent")
-            .on(new Date())
-            .data(cde.getData())
-            .build();
-        eventStorage.add(designId, newEvent);
-        return newEvent;
+        // TODO This endpoint feels really hacky. Use paging.
+        return getAllDesignEvents(designId).stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundStorageException("There is no first event yet."));
     }
 
     private static String decodeHeaderValue(String encodedString) {
@@ -152,12 +161,19 @@ public class DesignsResourceImpl implements DesignsResource {
     }
 
     private Design convert(DesignMetadataDto from) {
-        // FIXME handle Origin better?
-        return Design.builder().id(from.getId()).kind("DesignMetadata")
-                .href("/apis/designer/v0/designs/" + from.getId()).name(from.getName())
-                .description(from.getDescription()).type(from.getType()).origin(DesignOriginType.fromValue(from.getSource()))
-                .createdOn(Date.from(from.getCreatedOn())).createdBy(from.getCreatedBy())
-                .modifiedOn(Date.from(from.getModifiedOn())).modifiedBy(from.getModifiedBy()).build();
+        return Design.builder()
+                .id(from.getId())
+                .kind("DesignMetadata")
+                .href("/apis/designer/v0/designs/" + from.getId())
+                .name(from.getName())
+                .description(from.getDescription())
+                .type(from.getType())
+                .origin(DesignOriginType.fromValue(from.getOrigin()))
+                .createdOn(Date.from(from.getCreatedOn()))
+                .createdBy(from.getCreatedBy())
+                .modifiedOn(Date.from(from.getModifiedOn()))
+                .modifiedBy(from.getModifiedBy())
+                .build();
     }
 
     private <T> void setIfNotNull(T data, Consumer<T> setter) {
@@ -166,4 +182,19 @@ public class DesignsResourceImpl implements DesignsResource {
         }
     }
 
+    /**
+     * @see io.apicurio.designer.rest.v0.DesignsResource#getAllDesignEvents(java.lang.String)
+     */
+    @Override
+    public List<DesignEvent> getAllDesignEvents(String designId) {
+        return eventService.getAllDesignEvents(designId);
+    }
+
+    /**
+     * @see io.apicurio.designer.rest.v0.DesignsResource#createDesignEvent(java.lang.String, io.apicurio.designer.rest.v0.beans.CreateDesignEvent)
+     */
+    @Override
+    public DesignEvent createDesignEvent(String designId, CreateDesignEvent data) {
+        return eventService.createDesignEvent(designId, data);
+    }
 }
