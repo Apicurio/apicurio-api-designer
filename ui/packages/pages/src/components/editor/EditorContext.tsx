@@ -32,6 +32,7 @@ import { ArtifactTypeIcon, If, ToggleIcon } from "@apicurio/apicurio-api-designe
 import { DesignDescription } from "../common/DesignDescription";
 import { RegistryNavLink } from "../common/RegistryNavLink";
 import { ExportToRegistryModal } from "../common/ExportToRegistryModal";
+import { PageConfig, usePageConfig } from "../../context/PageConfigContext";
 
 /**
  * Properties
@@ -59,47 +60,6 @@ type EditorContextMenuItem = {
     isDisabled?: (props: EditorContextProps) => boolean;
 };
 
-const menuActions: EditorContextMenuItem[] = [
-    {
-        label: "Edit design metadata",
-        key: "action-rename",
-    },
-    {
-        label: "Format design content",
-        key: "action-format",
-        accept: (props: EditorContextProps) => { return [ArtifactTypes.AVRO, ArtifactTypes.JSON].includes(props.design?.type); },
-    },
-    {
-        label: "Show design changes",
-        key: "action-compare",
-        isDisabled: (props: EditorContextProps) => { return !props.dirty; },
-    },
-    {
-        key: "action-separator-1",
-        isSeparator: true
-    },
-    {
-        label: "Run Service Registry check",
-        key: "action-test-registry"
-    },
-    {
-        label: "Export design to Service Registry",
-        key: "action-export-to-rhosr",
-    },
-    {
-        label: "Download design",
-        key: "action-download"
-    },
-    {
-        key: "action-separator-2",
-        isSeparator: true
-    },
-    {
-        label: "Delete design",
-        key: "action-delete"
-    },
-];
-
 
 /**
  * The context of the design when editing a design on the editor page.
@@ -115,6 +75,50 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
     const [isTestRegistryModalOpen, setIsTestRegistryModalOpen] = useState(false);
 
     const alerts: AlertsService = useAlertsService();
+    const pageConfig: PageConfig = usePageConfig();
+
+    const menuActions: EditorContextMenuItem[] = [
+        {
+            label: "Edit design metadata",
+            key: "action-rename",
+        },
+        {
+            label: "Format design content",
+            key: "action-format",
+            accept: (props: EditorContextProps) => { return [ArtifactTypes.AVRO, ArtifactTypes.JSON].includes(props.design?.type); }
+        },
+        {
+            label: "Show design changes",
+            key: "action-compare",
+            isDisabled: (props: EditorContextProps) => { return !props.dirty; }
+        },
+        {
+            key: "action-separator-1",
+            isSeparator: true
+        },
+        {
+            label: "Run Service Registry check",
+            key: "action-test-registry",
+            accept: () => { return pageConfig.serviceConfig.registry.api !== "none"; }
+        },
+        {
+            label: "Export design to Service Registry",
+            key: "action-export-to-rhosr",
+            accept: () => { return pageConfig.serviceConfig.registry.api !== "none"; }
+        },
+        {
+            label: "Download design",
+            key: "action-download"
+        },
+        {
+            key: "action-separator-2",
+            isSeparator: true
+        },
+        {
+            label: "Delete design",
+            key: "action-delete"
+        },
+    ];
 
     const onActionMenuToggle = (value: boolean): void => {
         setActionMenuToggled(value);
@@ -179,7 +183,7 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
 
     useEffect(() => {
         if (props.design) {
-            // FIXME get the full origin information from the design's events?
+            // FIXME get the full origin information from the design's events
             // const context: DesignContext|undefined = props.design.origin;
             // setDesignContext(context);
         }

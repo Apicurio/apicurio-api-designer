@@ -10,6 +10,7 @@ import { NavLink } from "../common/NavLink";
 import { ArtifactTypeIcon } from "@apicurio/apicurio-api-designer-components";
 import { DesignOriginLabel } from "./DesignOriginLabel";
 import { ResponsiveTable } from "@rhoas/app-services-ui-components";
+import { PageConfig, usePageConfig } from "../../context/PageConfigContext";
 
 
 export type DesignListProps = {
@@ -29,6 +30,7 @@ export const DesignList: FunctionComponent<DesignListProps> = (
     { designs, selectedDesign, sort, onSort, onEdit, onRename, onDelete, onRegister, onDownload, onSelect }: DesignListProps) => {
 
     const [sortByIndex, setSortByIndex] = useState<number>();
+    const pageConfig: PageConfig = usePageConfig();
 
     const columns: any[] = [
         { index: 0, id: "name", label: "Name", width: 40, sortable: true },
@@ -84,7 +86,8 @@ export const DesignList: FunctionComponent<DesignListProps> = (
     };
 
     const actionsFor = (design: any): IAction[] => {
-        return [
+        const serviceRegistryActions: number[] = [4];
+        const actions: IAction[] = [
             { title: "View design details", onClick: () => onSelect(design) },
             { isSeparator: true, },
             { title: "Edit design content", onClick: () => onEdit(design) },
@@ -94,6 +97,12 @@ export const DesignList: FunctionComponent<DesignListProps> = (
             { isSeparator: true, },
             { title: "Delete design", onClick: () => onDelete(design) }
         ];
+        if (pageConfig.serviceConfig.registry?.api === "none") {
+            serviceRegistryActions.forEach(index => {
+                actions.splice(index, 1);
+            });
+        }
+        return actions;
     };
 
     const sortParams = (column: any): ThProps["sort"] | undefined => {
