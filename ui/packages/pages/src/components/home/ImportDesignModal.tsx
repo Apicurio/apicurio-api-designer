@@ -18,7 +18,7 @@ import {
     ArtifactTypes, ContentTypes,
     CreateDesign,
     CreateDesignContent,
-    DesignContext
+    DesignOriginType
 } from "@apicurio/apicurio-api-designer-models";
 import {
     isJson,
@@ -143,22 +143,12 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
 
     // Called when the user clicks the Import button in the modal
     const doImport = (): void => {
-        const context: DesignContext = importType === ImportFrom.FILE ? {
-            type: "file",
-            file: {
-                fileName: fileName as string
-            }
-        } : {
-            type: "url",
-            url: {
-                url: url as string
-            }
-        };
+        const origin: DesignOriginType = importType === ImportFrom.FILE ? "file" : "url";
         const cd: CreateDesign = {
             type: type as string,
             name,
             description,
-            context
+            origin
         };
         const cdc: CreateDesignContent = {
             contentType: contentType as string,
@@ -167,6 +157,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
 
         console.debug("[ImportDesignModal] Importing design: ", cd);
         console.debug("[ImportDesignModal] Importing content-type: ", contentType);
+        // FIXME also pass the filename and/or url as an Event when calling "onImport()"
         onImport(cd, cdc);
     };
 

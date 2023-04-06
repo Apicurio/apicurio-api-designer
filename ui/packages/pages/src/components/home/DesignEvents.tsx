@@ -66,25 +66,35 @@ export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design }: D
     const designsService: DesignsService = useDesignsService();
 
     const originGroupId = (): string => {
-        return design?.origin?.registry?.groupId || "default";
+        // FIXME get the groupId from the first event
+        //return design?.origin?.registry?.groupId || "default";
+        return "default";
     };
     const originArtifactId = (): string => {
-        return design?.origin?.registry?.artifactId || "Unknown";
+        // FIXME get the artifactId from the first event
+        // return design?.origin?.registry?.artifactId || "Unknown";
+        return "Unknown";
     };
     const originVersion = (): string => {
-        return design?.origin?.registry?.version || "latest";
+        // FIXME get the version from the first event
+        // return design?.origin?.registry?.version || "latest";
+        return "latest";
     };
     const originFilename = (): string => {
-        return design?.origin?.file?.fileName || "";
+        // FIXME get the file name from the first event
+        // return design?.origin?.file?.fileName || "";
+        return "";
     };
     const originUrl = (): string => {
-        return design?.origin?.url?.url || "";
+        // FIXME get the URL from the first event
+        // return design?.origin?.url?.url || "";
+        return "";
     };
 
     useEffect(() => {
         if (design) {
             designsService.getEvents(design.id).then(events => {
-                setExports(events?.filter(event => event.type === "download" || event.type === "register"));
+                setExports(events?.filter(event => event.type === "REGISTER"));
                 setLoading(false);
             }).catch(error => {
                 // TODO error handling!

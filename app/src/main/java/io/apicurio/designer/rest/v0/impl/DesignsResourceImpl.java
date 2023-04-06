@@ -1,7 +1,9 @@
 package io.apicurio.designer.rest.v0.impl;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -56,12 +58,11 @@ public class DesignsResourceImpl implements DesignsResource {
         if (xDesignerOrigin == null) {
             xDesignerOrigin = DesignOriginType.create;
         }
-        
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (xDesignerName.startsWith("==")) {
+            xDesignerName = decodeHeaderValue(xDesignerName);
+        }
+        if (xDesignerDescription.startsWith("==")) {
+            xDesignerDescription = decodeHeaderValue(xDesignerDescription);
         }
         
         // FIXME handle "origin" rather than "source"
@@ -135,4 +136,13 @@ public class DesignsResourceImpl implements DesignsResource {
                 .on(new Date())
                 .build();
     }
+
+    private static String decodeHeaderValue(String encodedString) {
+        if (encodedString.length() == 2) {
+            return "";
+        }
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedString.substring(2));
+        return new String(decodedBytes, StandardCharsets.UTF_8);
+    }
+
 }

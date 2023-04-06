@@ -1,4 +1,4 @@
-import { DesignContext } from "./DesignContext";
+export type DesignOriginType = "create" | "file" | "url" | "registry";
 
 export interface Design {
 
@@ -10,6 +10,6 @@ export interface Design {
     createdOn: Date;
     modifiedBy: string;
     modifiedOn: Date;
-    origin: DesignContext;
+    origin: DesignOriginType;
 
 }

@@ -1,3 +1,5 @@
+import { RegistryArtifactCoordinates } from "../rhosr-instance";
+
 export type DesignContextType = "create" | "file" | "url" | "registry";
 
 export interface DesignContextFile {
@@ -8,19 +10,11 @@ export interface DesignContextUrl {
     url: string;
 }
 
-export interface DesignContextRhosr {
-    instanceId: string;
-    groupId: string;
-    artifactId: string;
-    version: string;
-}
-
-
 export interface DesignContext {
 
     type: DesignContextType;
     file?: DesignContextFile;
     url?: DesignContextUrl;
-    registry?: DesignContextRhosr;
+    registry?: RegistryArtifactCoordinates;
 
 }

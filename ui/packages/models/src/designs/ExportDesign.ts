@@ -1,5 +1,5 @@
 import { Design } from "./Design";
-import { DesignContext } from "./DesignContext";
+import { RegistryArtifactCoordinates } from "../rhosr-instance";
 
 export enum ExportType {
     FILE,
@@ -10,5 +10,5 @@ export interface ExportDesign {
     type: ExportType;
     to: any;
     design: Design;
-    context: DesignContext;
+    registry?: RegistryArtifactCoordinates;
 }

@@ -11,8 +11,9 @@ import {
 } from "@apicurio/apicurio-api-designer-models";
 import Dexie from "dexie";
 import { v4 as uuidv4 } from "uuid";
-import { cloneObject, limit } from "@apicurio/apicurio-api-designer-utils";
+import { limit } from "@apicurio/apicurio-api-designer-utils";
 import { DesignsService } from "./DesignsService";
+import { CreateDesignEvent } from "@apicurio/apicurio-api-designer-models/src/designs/CreateDesignEvent";
 
 
 const db = new Dexie("designsDB");
@@ -23,7 +24,7 @@ db.version(4).stores({
 });
 
 
-async function createDesign(cd: CreateDesign, cdc: CreateDesignContent): Promise<Design> {
+async function createDesign(cd: CreateDesign, cdc: CreateDesignContent, cde?: CreateDesignEvent): Promise<Design> {
     const id: string = uuidv4();
     const newDesign: Design = {
         id,
@@ -34,27 +35,13 @@ async function createDesign(cd: CreateDesign, cdc: CreateDesignContent): Promise
         createdBy: "user",
         modifiedOn: new Date(),
         modifiedBy: "user",
-        origin: cloneObject(cd.context)
+        origin: cd.origin
     };
     const newDesignContent: DesignContent = {
         id,
         contentType: cdc.contentType,
         data: cdc.data
     };
-    const newEvent: DesignEvent = {
-        id,
-        type: "create",
-        on: new Date(),
-        data: {}
-    };
-    if (cd.context) {
-        newEvent.data.context = cloneObject(cd.context);
-        if (cd.context.type !== "create") {
-            newEvent.type = "import";
-        }
-    }
-    // Make sure the ID is properly set always.
-    newEvent.id = id;
 
     return Promise.all([
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -63,7 +50,14 @@ async function createDesign(cd: CreateDesign, cdc: CreateDesignContent): Promise
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         db.content.add(newDesignContent),
-        createEvent(newEvent)
+        createEvent(id, cde || {
+            type: "CREATE",
+            data: {
+                create: {
+                    template: ""
+                }
+            }
+        })
     ]).then(() => newDesign);
 }
 
@@ -158,11 +152,13 @@ async function getDesignContent(id: string): Promise<DesignContent> {
 }
 
 async function updateDesignContent(content: DesignContent): Promise<void> {
-    const newEvent: DesignEvent = {
-        id: content.id,
-        type: "update",
-        on: new Date(),
-        data: {}
+    const cevent: CreateDesignEvent = {
+        type: "UPDATE",
+        data: {
+            update: {
+                notes: ""
+            }
+        }
     };
 
     return Promise.all([
@@ -176,7 +172,7 @@ async function updateDesignContent(content: DesignContent): Promise<void> {
         db.designs.update(content.id, {
             modifiedOn: new Date()
         }),
-        createEvent(newEvent)
+        createEvent(content.id, cevent)
     ]).then(() => {
         // This space intentionally left blank.
     });
@@ -190,11 +186,17 @@ async function getEvents(id: string): Promise<DesignEvent[]> {
 }
 
 
-async function createEvent(event: DesignEvent): Promise<DesignEvent> {
-    event.eventId = uuidv4();
+async function createEvent(id: string, cevent: CreateDesignEvent): Promise<DesignEvent> {
+    const newEvent: DesignEvent = {
+        id,
+        eventId: uuidv4(),
+        type: cevent.type,
+        on: new Date(),
+        data: cevent.data
+    };
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return db.events.add(event);
+    return db.events.add(newEvent);
 }
 
 

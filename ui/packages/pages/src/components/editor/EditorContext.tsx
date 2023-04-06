@@ -179,8 +179,9 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
 
     useEffect(() => {
         if (props.design) {
-            const context: DesignContext|undefined = props.design.origin;
-            setDesignContext(context);
+            // FIXME get the full origin information from the design's events?
+            // const context: DesignContext|undefined = props.design.origin;
+            // setDesignContext(context);
         }
     }, [props.design]);
 

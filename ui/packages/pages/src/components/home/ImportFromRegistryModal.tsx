@@ -12,6 +12,7 @@ import { If, IsLoading } from "@apicurio/apicurio-api-designer-components";
 import { BrowserDataWarning } from "../common/BrowserDataWarning";
 import { RhosrEmptyState } from "../common/RhosrEmptyState";
 import { ArtifactSelector } from "./ArtifactSelector";
+import { CreateDesignEvent } from "@apicurio/apicurio-api-designer-models/src/designs/CreateDesignEvent";
 
 
 export type ImportFromRegistryModalProps = {
@@ -28,6 +29,7 @@ export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalP
     const [registries, setRegistries] = useState([] as Registry[]);
     const [design, setDesign] = useState<CreateDesign>();
     const [designContent, setDesignContent] = useState<CreateDesignContent>();
+    const [designEvent, setDesignEvent] = useState<CreateDesignEvent>();
 
     const rhosr: RhosrService = useRhosrService();
 
@@ -41,23 +43,30 @@ export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalP
                 type: artifact.type,
                 name: artifact.name || artifact.id,
                 description: artifact.description || "",
-                context: {
-                    type: "registry",
-                    registry: {
-                        instanceId: registry?.id as string,
-                        groupId: artifact.groupId as string,
-                        artifactId: artifact.id,
-                        version: version?.version as string
+                origin: "registry"
+            };
+            const cde: CreateDesignEvent = {
+                type: "IMPORT",
+                data: {
+                    register: {
+                        registry: {
+                            instanceId: registry?.id as string,
+                            groupId: artifact.groupId as string,
+                            artifactId: artifact.id,
+                            version: version?.version as string
+                        }
                     }
                 }
             };
             setDesign(cd);
             setDesignContent(content);
+            setDesignEvent(cde);
         }
     };
 
     // Called when the user clicks the Import button in the modal
     const doImport = (): void => {
+        // FIXME include the design event in the onImport() call
         onImport(design as CreateDesign, designContent as CreateDesignContent);
     };
 

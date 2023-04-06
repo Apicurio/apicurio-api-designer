@@ -10,7 +10,12 @@ import {
     TextInput
 } from "@patternfly/react-core";
 import { Registry } from "@rhoas/registry-management-sdk";
-import { CreateOrUpdateArtifactData, Design, DesignContext, DesignEvent } from "@apicurio/apicurio-api-designer-models";
+import {
+    CreateOrUpdateArtifactData,
+    Design,
+    DesignEvent,
+    RegistryArtifactCoordinates
+} from "@apicurio/apicurio-api-designer-models";
 import {
     DesignsService,
     RhosrInstanceService, RhosrInstanceServiceFactory,
@@ -22,6 +27,7 @@ import { RhosrEmptyState } from "./RhosrEmptyState";
 import { IfRhosr } from "./IfRhosr";
 import { RegistrationError } from "./RegistrationError";
 import { ExportDesign, ExportType } from "@apicurio/apicurio-api-designer-models/src/designs/ExportDesign";
+import { CreateDesignEvent } from "@apicurio/apicurio-api-designer-models/src/designs/CreateDesignEvent";
 
 
 export type ExportToRegistryModalProps = {
@@ -64,31 +70,30 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
                 contentType: content.contentType
             };
             rhosrInstance?.createOrUpdateArtifact(data).then(amd => {
-                const context: DesignContext = {
-                    type: "registry",
-                    registry: {
-                        instanceId: registry?.id as string,
-                        groupId: amd.groupId as string,
-                        artifactId: amd.id,
-                        version: amd.version
-                    }
+                const registryCoordinates: RegistryArtifactCoordinates = {
+                    instanceId: registry?.id as string,
+                    groupId: amd.groupId as string,
+                    artifactId: amd.id,
+                    version: amd.version
                 };
                 const data: ExportDesign = {
                     type: ExportType.REGISTRY,
                     to: registry as Registry,
                     design,
-                    context
+                    registry: registryCoordinates
                 };
 
-                const event: DesignEvent = {
-                    id: design.id,
-                    type: "register",
-                    on: new Date(),
-                    data: context.registry
+                const cevent: CreateDesignEvent = {
+                    type: "REGISTER",
+                    data: {
+                        register: {
+                            registry: registryCoordinates
+                        }
+                    }
                 };
 
                 // Create an event (add to the design's history).
-                designs.createEvent(event).then(() => {
+                designs.createEvent(design.id, cevent).then(() => {
                     setExporting(false);
                     onExported(data);
                 }).catch(error => {
@@ -112,27 +117,21 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
         setRegistry(registry);
     };
 
-    const detectRhosrContext = (events: DesignEvent[]): DesignContext|undefined => {
+    const detectRhosrCoordinates = (events: DesignEvent[]): RegistryArtifactCoordinates|undefined => {
         if (events) {
-            const filteredEvents: DesignEvent[] = events.filter(event => event.type === "register");
+            const filteredEvents: DesignEvent[] = events.filter(event => event.type === "REGISTER");
             if (filteredEvents && filteredEvents.length > 0) {
                 const regEvent: DesignEvent = filteredEvents[0];
-                return {
-                    type: "registry",
-                    registry: regEvent.data
-                };
+                return regEvent.data.register.registry;
             }
-        }
-        if (design?.origin?.type === "registry") {
-            return design.origin;
         }
 
         return undefined;
     };
 
-    const defaultRegistry = (registries: Registry[], context: DesignContext|undefined): Registry | undefined => {
-        if (context) {
-            const filteredRegistries: Registry[] = registries.filter(registry => registry.id === design.origin.registry?.instanceId);
+    const defaultRegistry = (registries: Registry[], coordinates: RegistryArtifactCoordinates|undefined): Registry | undefined => {
+        if (coordinates) {
+            const filteredRegistries: Registry[] = registries.filter(registry => registry.id === coordinates.instanceId);
             if (filteredRegistries?.length > 0) {
                 return filteredRegistries[0];
             }
@@ -151,10 +150,10 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
         setVersion(undefined);
     };
 
-    const setFormValues = (context: DesignContext | undefined): void => {
-        setGroup(context?.registry?.groupId);
-        setArtifactId(context?.registry?.artifactId);
-        setVersion(context?.registry?.version);
+    const setFormValues = (coordinates: RegistryArtifactCoordinates | undefined): void => {
+        setGroup(coordinates?.groupId);
+        setArtifactId(coordinates?.artifactId);
+        setVersion(coordinates?.version);
     };
 
     useEffect(() => {
@@ -174,9 +173,9 @@ export const ExportToRegistryModal: FunctionComponent<ExportToRegistryModalProps
                         const name2: string = b.name as string;
                         return name1.localeCompare(name2);
                     }));
-                    const context: DesignContext | undefined = detectRhosrContext(events);
-                    setFormValues(context);
-                    setRegistry(defaultRegistry(registries, context));
+                    const coordinates: RegistryArtifactCoordinates | undefined = detectRhosrCoordinates(events);
+                    setFormValues(coordinates);
+                    setRegistry(defaultRegistry(registries, coordinates));
                     setLoadingRegistries(false);
                 }).catch(error => {
                     // TODO handle this error case

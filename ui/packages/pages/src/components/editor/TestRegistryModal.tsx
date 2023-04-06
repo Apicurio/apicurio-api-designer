@@ -1,7 +1,7 @@
 import { Button, Form, FormGroup, Modal, ModalVariant, TextInput } from "@patternfly/react-core";
 import { Registry } from "@rhoas/registry-management-sdk";
 import React, { useEffect, useState } from "react";
-import { Design, DesignContext, DesignEvent } from "@apicurio/apicurio-api-designer-models";
+import { Design, DesignEvent, RegistryArtifactCoordinates } from "@apicurio/apicurio-api-designer-models";
 import { DesignsService, useDesignsService, useRhosrService } from "@apicurio/apicurio-api-designer-services";
 import { IfNotEmpty, IsLoading, ObjectSelect } from "@apicurio/apicurio-api-designer-components";
 import { RhosrEmptyState } from "../common/RhosrEmptyState";
@@ -83,27 +83,21 @@ export const TestRegistryModal: React.FunctionComponent<TestRegistryModalProps> 
         });
     };
 
-    const detectRhosrContext = (events: DesignEvent[]): DesignContext|undefined => {
+    const detectRhosrCoordinates = (events: DesignEvent[]): RegistryArtifactCoordinates|undefined => {
         if (events) {
-            const filteredEvents: DesignEvent[] = events.filter(event => event.type === "register");
+            const filteredEvents: DesignEvent[] = events.filter(event => event.type === "REGISTER");
             if (filteredEvents && filteredEvents.length > 0) {
                 const regEvent: DesignEvent = filteredEvents[0];
-                return {
-                    type: "registry",
-                    registry: regEvent.data
-                };
+                return regEvent.data.register.registry;
             }
-        }
-        if (design?.origin?.type === "registry") {
-            return design.origin;
         }
 
         return undefined;
     };
 
-    const defaultRegistry = (registries: Registry[], context: DesignContext|undefined): Registry | undefined => {
-        if (context) {
-            const filteredRegistries: Registry[] = registries.filter(registry => registry.id === design.origin.registry?.instanceId);
+    const defaultRegistry = (registries: Registry[], coordinates: RegistryArtifactCoordinates|undefined): Registry | undefined => {
+        if (coordinates) {
+            const filteredRegistries: Registry[] = registries.filter(registry => registry.id === coordinates?.instanceId);
             if (filteredRegistries?.length > 0) {
                 return filteredRegistries[0];
             }
@@ -116,8 +110,8 @@ export const TestRegistryModal: React.FunctionComponent<TestRegistryModalProps> 
         }
     };
 
-    const setFormValues = (context: DesignContext | undefined): void => {
-        setGroupAndId(context?.registry?.groupId || "", context?.registry?.artifactId || "");
+    const setFormValues = (coordinates: RegistryArtifactCoordinates | undefined): void => {
+        setGroupAndId(coordinates?.groupId || "", coordinates?.artifactId || "");
     };
 
     useEffect(() => {
@@ -134,9 +128,9 @@ export const TestRegistryModal: React.FunctionComponent<TestRegistryModalProps> 
                         const name2: string = b.name as string;
                         return name1.localeCompare(name2);
                     }));
-                    const context: DesignContext | undefined = detectRhosrContext(events);
-                    setFormValues(context);
-                    setRegistry(defaultRegistry(registries, context));
+                    const coordinates: RegistryArtifactCoordinates | undefined = detectRhosrCoordinates(events);
+                    setFormValues(coordinates);
+                    setRegistry(defaultRegistry(registries, coordinates));
                     setLoadingRegistries(false);
                 }).catch(error => {
                     // TODO handle this error case

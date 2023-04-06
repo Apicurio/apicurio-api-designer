@@ -96,13 +96,14 @@ export function isProto(content: string): boolean {
 export function fileExtensionForDesign(design: Design, content: DesignContent): string {
     // If the design was originally imported from a file, let's just use the extension
     // from that file.
-    if (design.origin && design.origin.type === "file") {
-        const filename: string = design.origin.file?.fileName as string;
-        if (filename.indexOf(".") > 0) {
-            const split: string[] = filename.split(".");
-            return split[split.length - 1];
-        }
-    }
+    // FIXME we now need to get this information from the first event
+    // if (design.origin && design.origin.type === "file") {
+    //     const filename: string = design.origin.file?.fileName as string;
+    //     if (filename.indexOf(".") > 0) {
+    //         const split: string[] = filename.split(".");
+    //         return split[split.length - 1];
+    //     }
+    // }
 
     if (design.type === ArtifactTypes.PROTOBUF) {
         return "proto";

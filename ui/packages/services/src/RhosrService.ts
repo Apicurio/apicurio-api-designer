@@ -60,8 +60,7 @@ const RHOSR_MOCK_DATA_OF: Registry[] = [
 /**
  * Async function to get the RHOSR instances.  Uses a provided auth token and API
  * base path to create a RHOSR SDK instance.
- * @param auth the application auth
- * @param basePath base path of the fleet manager API
+ * @param svcConfig the service config
  */
 async function getRegistries(svcConfig: ServiceConfig): Promise<Registry[]> {
     console.debug("[RhosrService] Getting a list of registries from: ", svcConfig.registry.api);
@@ -80,7 +79,7 @@ async function getRegistries(svcConfig: ServiceConfig): Promise<Registry[]> {
 
 /**
  * Gets information about a single registry instances by its unique ID.
- * @param auth the application auth
+ * @param svcConfig the service config
  * @param local the local storage service
  * @param id the registry instance ID
  */

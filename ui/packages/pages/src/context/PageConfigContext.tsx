@@ -57,6 +57,7 @@ export type PageContextProviderProps = {
 /**
  * A custom context provider for the page context.
  * @param value
+ * @param children
  * @constructor
  */
 export const PageContextProvider: FunctionComponent<PageContextProviderProps> = ({ value, children }: PageContextProviderProps) => {

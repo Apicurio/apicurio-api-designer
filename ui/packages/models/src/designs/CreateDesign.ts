@@ -1,10 +1,10 @@
-import { DesignContext } from "./DesignContext";
+import { DesignOriginType } from "./Design";
 
 export interface CreateDesign {
 
     type: string;
     name: string;
     description: string | undefined;
-    context: DesignContext;
+    origin: DesignOriginType;
 
 }
