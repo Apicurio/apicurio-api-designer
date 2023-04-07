@@ -18,7 +18,7 @@ import {
     ArtifactTypes, ContentTypes,
     CreateDesign,
     CreateDesignContent,
-    DesignContext
+    DesignOriginType
 } from "@apicurio/apicurio-api-designer-models";
 import {
     isJson,
@@ -33,13 +33,14 @@ import {
 import { BrowserDataWarning } from "../common/BrowserDataWarning";
 import { If } from "@apicurio/apicurio-api-designer-components";
 import { UrlUpload } from "./UrlUpload";
+import { CreateDesignEvent } from "@apicurio/apicurio-api-designer-models/src/designs/CreateDesignEvent";
 
 
 export type ImportDesignModalProps = {
     importType: ImportFrom;
     isOpen: boolean | undefined;
     isImporting: boolean|undefined;
-    onImport: (event: CreateDesign, content: CreateDesignContent) => void;
+    onImport: (design: CreateDesign, content: CreateDesignContent, event?: CreateDesignEvent) => void;
     onCancel: () => void;
 }
 
@@ -143,31 +144,31 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
 
     // Called when the user clicks the Import button in the modal
     const doImport = (): void => {
-        const context: DesignContext = importType === ImportFrom.FILE ? {
-            type: "file",
-            file: {
-                fileName: fileName as string
-            }
-        } : {
-            type: "url",
-            url: {
-                url: url as string
-            }
-        };
+        const origin: DesignOriginType = importType === ImportFrom.FILE ? "file" : "url";
         const cd: CreateDesign = {
             type: type as string,
             name,
             description,
-            context
+            origin
         };
         const cdc: CreateDesignContent = {
             contentType: contentType as string,
             data: designContent
         };
+        const cde: CreateDesignEvent = {
+            type: "IMPORT",
+            data: {
+                import: {
+                    url: url || undefined,
+                    file: fileName || undefined
+                }
+            }
+        };
 
         console.debug("[ImportDesignModal] Importing design: ", cd);
         console.debug("[ImportDesignModal] Importing content-type: ", contentType);
-        onImport(cd, cdc);
+        console.debug("[ImportDesignModal] Importing event: ", cde);
+        onImport(cd, cdc, cde);
     };
 
     const hasDesignContent = (): boolean => {

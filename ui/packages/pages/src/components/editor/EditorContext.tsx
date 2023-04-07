@@ -20,10 +20,15 @@ import { Registry } from "@rhoas/registry-management-sdk";
 import {
     ArtifactTypes,
     Design,
-    DesignContext,
+    DesignEvent,
     TestRegistryErrorResponse
 } from "@apicurio/apicurio-api-designer-models";
-import { LocalStorageService, useLocalStorageService } from "@apicurio/apicurio-api-designer-services";
+import {
+    DesignsService,
+    LocalStorageService,
+    useDesignsService,
+    useLocalStorageService
+} from "@apicurio/apicurio-api-designer-services";
 import { AlertsService, useAlertsService } from "@apicurio/apicurio-api-designer-services/src/AlertsService";
 import { ExportDesign } from "@apicurio/apicurio-api-designer-models/src/designs/ExportDesign";
 import { TestRegistryModal } from "./TestRegistryModal";
@@ -32,6 +37,7 @@ import { ArtifactTypeIcon, If, ToggleIcon } from "@apicurio/apicurio-api-designe
 import { DesignDescription } from "../common/DesignDescription";
 import { RegistryNavLink } from "../common/RegistryNavLink";
 import { ExportToRegistryModal } from "../common/ExportToRegistryModal";
+import { PageConfig, usePageConfig } from "../../context/PageConfigContext";
 
 /**
  * Properties
@@ -59,62 +65,65 @@ type EditorContextMenuItem = {
     isDisabled?: (props: EditorContextProps) => boolean;
 };
 
-const menuActions: EditorContextMenuItem[] = [
-    {
-        label: "Edit design metadata",
-        key: "action-rename",
-    },
-    {
-        label: "Format design content",
-        key: "action-format",
-        accept: (props: EditorContextProps) => { return [ArtifactTypes.AVRO, ArtifactTypes.JSON].includes(props.design?.type); },
-    },
-    {
-        label: "Show design changes",
-        key: "action-compare",
-        isDisabled: (props: EditorContextProps) => { return !props.dirty; },
-    },
-    {
-        key: "action-separator-1",
-        isSeparator: true
-    },
-    {
-        label: "Run Service Registry check",
-        key: "action-test-registry"
-    },
-    {
-        label: "Export design to Service Registry",
-        key: "action-export-to-rhosr",
-    },
-    {
-        label: "Download design",
-        key: "action-download"
-    },
-    {
-        key: "action-separator-2",
-        isSeparator: true
-    },
-    {
-        label: "Delete design",
-        key: "action-delete"
-    },
-];
-
 
 /**
  * The context of the design when editing a design on the editor page.
  */
 export const EditorContext: FunctionComponent<EditorContextProps> = (props: EditorContextProps) => {
-
     const lss: LocalStorageService = useLocalStorageService();
 
-    const [designContext, setDesignContext] = useState<DesignContext>();
+    const [originEvent, setOriginEvent] = useState<DesignEvent>();
     const [isActionMenuToggled, setActionMenuToggled] = useState(false);
     const [isExpanded, setExpanded] = useState(lss.getConfigProperty("editor-context.isExpanded", "false") === "true");
     const [isRegisterModalOpen, setRegisterModalOpen] = useState(false);
     const [isTestRegistryModalOpen, setIsTestRegistryModalOpen] = useState(false);
 
+    const designService: DesignsService = useDesignsService();
     const alerts: AlertsService = useAlertsService();
+    const pageConfig: PageConfig = usePageConfig();
+
+    const menuActions: EditorContextMenuItem[] = [
+        {
+            label: "Edit design metadata",
+            key: "action-rename",
+        },
+        {
+            label: "Format design content",
+            key: "action-format",
+            accept: (props: EditorContextProps) => { return [ArtifactTypes.AVRO, ArtifactTypes.JSON].includes(props.design?.type); }
+        },
+        {
+            label: "Show design changes",
+            key: "action-compare",
+            isDisabled: (props: EditorContextProps) => { return !props.dirty; }
+        },
+        {
+            key: "action-separator-1",
+            isSeparator: true
+        },
+        {
+            label: "Run Service Registry check",
+            key: "action-test-registry",
+            accept: () => { return pageConfig.serviceConfig.registry.api !== "none"; }
+        },
+        {
+            label: "Export design to Service Registry",
+            key: "action-export-to-rhosr",
+            accept: () => { return pageConfig.serviceConfig.registry.api !== "none"; }
+        },
+        {
+            label: "Download design",
+            key: "action-download"
+        },
+        {
+            key: "action-separator-2",
+            isSeparator: true
+        },
+        {
+            label: "Delete design",
+            key: "action-delete"
+        },
+    ];
 
     const onActionMenuToggle = (value: boolean): void => {
         setActionMenuToggled(value);
@@ -160,16 +169,16 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
         }
     };
 
-    const hasRhosrContext = (): boolean => {
-        return designContext !== undefined && designContext.type && designContext.type === "registry";
+    const hasRegistryContext = (): boolean => {
+        return originEvent?.data.import?.registry !== undefined;
     };
 
     const hasFileContext = (): boolean => {
-        return designContext !== undefined && designContext.type && designContext.type === "file";
+        return originEvent?.data.import?.file !== undefined;
     };
 
     const hasUrlContext = (): boolean => {
-        return designContext !== undefined && designContext.type && designContext.type === "url";
+        return originEvent?.data.import?.url !== undefined;
     };
 
     const onRegisterDesignConfirmed = (event: ExportDesign): void => {
@@ -179,8 +188,11 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
 
     useEffect(() => {
         if (props.design) {
-            const context: DesignContext|undefined = props.design.origin;
-            setDesignContext(context);
+            designService.getFirstEvent(props.design.id).then(event => {
+                setOriginEvent(event);
+            }).catch(error => {
+                // FIXME handle errors
+            });
         }
     }, [props.design]);
 
@@ -247,17 +259,17 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
                                     <ArtifactTypeIcon type={props.design?.type} isShowLabel={true} isShowIcon={true} />
                                 </DescriptionListDescription>
                             </DescriptionListGroup>
-                            <If condition={hasRhosrContext}>
+                            <If condition={hasRegistryContext}>
                                 <DescriptionListGroup>
                                     <DescriptionListTerm>Artifact</DescriptionListTerm>
                                     <DescriptionListDescription>
-                                        <span className="group">{designContext?.registry?.groupId || "default"}</span>
+                                        <span className="group">{originEvent?.data.import?.registry?.groupId || "default"}</span>
                                         <span> / </span>
-                                        <RegistryNavLink context={designContext}>
-                                            <span className="group">{designContext?.registry?.artifactId}</span>
+                                        <RegistryNavLink coordinates={originEvent?.data.import?.registry}>
+                                            <span className="group">{originEvent?.data.import?.registry?.artifactId || "unknown"}</span>
                                             <span> </span>
                                             <span>(</span>
-                                            <span className="group">{designContext?.registry?.version || "latest"}</span>
+                                            <span className="group">{originEvent?.data.import?.registry?.version || "latest"}</span>
                                             <span>)</span>
                                         </RegistryNavLink>
                                     </DescriptionListDescription>
@@ -267,7 +279,7 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
                                 <DescriptionListGroup>
                                     <DescriptionListTerm>File name</DescriptionListTerm>
                                     <DescriptionListDescription>
-                                        <span>{designContext?.file?.fileName}</span>
+                                        <span>{originEvent?.data.import?.file}</span>
                                     </DescriptionListDescription>
                                 </DescriptionListGroup>
                             </If>
@@ -275,7 +287,7 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
                                 <DescriptionListGroup>
                                     <DescriptionListTerm>URL</DescriptionListTerm>
                                     <DescriptionListDescription>
-                                        <a href={designContext?.url?.url}>{designContext?.url?.url}</a>
+                                        <a href={originEvent?.data.import?.url}>{originEvent?.data.import?.url}</a>
                                     </DescriptionListDescription>
                                 </DescriptionListGroup>
                             </If>

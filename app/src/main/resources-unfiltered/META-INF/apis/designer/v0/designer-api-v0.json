@@ -430,6 +430,40 @@
                 "operationId": "createDesign"
             }
         },
+        "/designs/{designId}/events/first": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DesignEvent"
+                                }
+                            }
+                        },
+                        "description": "Successful response."
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                },
+                "operationId": "getFirstEvent",
+                "summary": "Get the first event"
+            },
+            "parameters": [
+                {
+                    "name": "designId",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
         "x-codegen-contextRoot": "/apis/designer/v0"
     },
     "components": {
@@ -759,6 +793,9 @@
             },
             "DesignEventDataRegister": {
                 "description": "",
+                "required": [
+                    "registry"
+                ],
                 "type": "object",
                 "properties": {
                     "registry": {

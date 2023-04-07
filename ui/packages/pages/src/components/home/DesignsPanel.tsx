@@ -170,7 +170,6 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
             setDesigns(designs);
             setLoading(false);
         }).catch(error => {
-            console.info("===> Error caught!");
             console.error(error);
             setLoading(false);
             setError(error);

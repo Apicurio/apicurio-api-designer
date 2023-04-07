@@ -1,7 +1,7 @@
-import { Design, DesignContextType } from "@apicurio/apicurio-api-designer-models";
+import { Design, DesignOriginType } from "@apicurio/apicurio-api-designer-models";
 
-export function hasOrigin(design: Design | undefined, contextType: DesignContextType): boolean {
-    return design?.origin?.type === contextType;
+export function hasOrigin(design: Design | undefined, contextType: DesignOriginType): boolean {
+    return design?.origin === contextType;
 }
 
 

@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Registry } from "@rhoas/registry-management-sdk";
-import { DesignContext } from "@apicurio/apicurio-api-designer-models";
+import { RegistryArtifactCoordinates } from "@apicurio/apicurio-api-designer-models";
 import { RhosrService, useRhosrService } from "@apicurio/apicurio-api-designer-services";
 import { stripTrailingSlash } from "@apicurio/apicurio-api-designer-utils";
 
@@ -9,7 +9,7 @@ import { stripTrailingSlash } from "@apicurio/apicurio-api-designer-utils";
  */
 export type RegistryNavLinkProps = {
     registry?: Registry;
-    context: DesignContext | undefined;
+    coordinates: RegistryArtifactCoordinates | undefined;
     children?: React.ReactNode;
 };
 
@@ -17,29 +17,29 @@ export type RegistryNavLinkProps = {
  * A navigation link to an artifact in a service registry instance.  The context passed to this
  * component must be of type "registry".
  */
-export const RegistryNavLink: FunctionComponent<RegistryNavLinkProps> = ({ registry, context, children }: RegistryNavLinkProps) => {
+export const RegistryNavLink: FunctionComponent<RegistryNavLinkProps> = ({ registry, coordinates, children }: RegistryNavLinkProps) => {
     const [href, setHref] = useState<string>();
 
     const rhosr: RhosrService | undefined = registry === undefined ? useRhosrService() : undefined;
 
-    const setHrefFrom = (registry: Registry, context: DesignContext): void => {
-        const group: string = context.registry?.groupId || "default";
-        const id: string = context.registry?.artifactId as string;
+    const setHrefFrom = (registry: Registry, coordinates: RegistryArtifactCoordinates): void => {
+        const group: string = coordinates?.groupId || "default";
+        const id: string = coordinates?.artifactId || "unknown";
         setHref(`${stripTrailingSlash(registry.browserUrl)}/artifacts/${group}/${id}`);
     };
 
     useEffect(() => {
         setHref(undefined);
-        if (context?.type === "registry") {
+        if (coordinates) {
             if (registry) {
-                setHrefFrom(registry, context);
+                setHrefFrom(registry, coordinates);
             } else {
-                (rhosr as RhosrService).getRegistry(context.registry?.instanceId as string).then(registry => {
-                    setHrefFrom(registry, context);
+                rhosr.getRegistry(coordinates.instanceId).then(registry => {
+                    setHrefFrom(registry, coordinates);
                 });
             }
         }
-    }, [context]);
+    }, [coordinates]);
 
     return (
         href ? <a href={href} children={children as any} /> : <span children={children as any} />

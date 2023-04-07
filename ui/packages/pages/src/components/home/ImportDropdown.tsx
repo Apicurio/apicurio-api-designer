@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { Dropdown, DropdownItem, DropdownToggle } from "@patternfly/react-core";
+import { PageConfig, usePageConfig } from "../../context/PageConfigContext";
 
 export enum ImportFrom {
     FILE,
@@ -21,6 +22,7 @@ export type ImportDropdownProps = {
  */
 export const ImportDropdown: FunctionComponent<ImportDropdownProps> = ({ variant, onImport }: ImportDropdownProps) => {
     const [isToggled, setToggled] = useState(false);
+    const pageConfig: PageConfig = usePageConfig();
 
     const onToggle = (value: boolean): void => {
         setToggled(value);
@@ -44,6 +46,15 @@ export const ImportDropdown: FunctionComponent<ImportDropdownProps> = ({ variant
         }
     };
 
+    const importItems = [
+        <DropdownItem key="action-rhosr" data-id="action-rhosr">Import from Service Registry</DropdownItem>,
+        <DropdownItem key="action-url" data-id="action-url">Import from URL</DropdownItem>,
+        <DropdownItem key="action-file" data-id="action-file">Import from file</DropdownItem>,
+    ];
+    if (pageConfig.serviceConfig.registry?.api === "none") {
+        importItems.splice(0, 1);
+    }
+
     return (
         <Dropdown
             onSelect={onMenuSelect}
@@ -54,13 +65,7 @@ export const ImportDropdown: FunctionComponent<ImportDropdownProps> = ({ variant
             }
             isOpen={isToggled}
             isPlain
-            dropdownItems={
-                [
-                    <DropdownItem key="action-rhosr" data-id="action-rhosr">Import from Service Registry</DropdownItem>,
-                    <DropdownItem key="action-url" data-id="action-url">Import from URL</DropdownItem>,
-                    <DropdownItem key="action-file" data-id="action-file">Import from file</DropdownItem>,
-                ]
-            }
+            dropdownItems={importItems}
             position="right"
         />
     );

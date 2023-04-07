@@ -97,9 +97,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
             type,
             name,
             description,
-            context: {
-                type: "create"
-            }
+            origin: "create"
         };
         onCreate(cd, template as Template);
     };

@@ -1,5 +1,6 @@
+import { DesignEventData } from "./DesignEventData";
 
-export type DesignEventType = "create" | "import" | "update" | "download" | "register";
+export type DesignEventType = "CREATE" | "IMPORT" | "UPDATE" | "REGISTER" | "DOWNLOAD";
 
 export interface DesignEvent {
 
@@ -7,6 +8,6 @@ export interface DesignEvent {
     id: string;
     type: DesignEventType;
     on: Date;
-    data: any;
+    data: DesignEventData;
 
 }

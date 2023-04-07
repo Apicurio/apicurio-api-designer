@@ -9,6 +9,7 @@ export * from "./CreateVersionData";
 export * from "./EditableMetaData";
 export * from "./GetArtifactsCriteria";
 export * from "./Paging";
+export * from "./RegistryArtifactCoordinates";
 export * from "./SearchedArtifact";
 export * from "./SearchedVersion";
 export * from "./TestRegistryErrorResponse";

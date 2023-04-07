@@ -27,6 +27,7 @@ import { ImportFrom } from "./components/home/ImportDropdown";
 import { DesignsPanel } from "./components/home/DesignsPanel";
 import { ImportFromRegistryModal } from "./components/home/ImportFromRegistryModal";
 import { ErrorModal } from "./components/common/ErrorModal";
+import { CreateDesignEvent } from "@apicurio/apicurio-api-designer-models/src/designs/CreateDesignEvent";
 
 export type HomePageProps = Record<string, never>;
 
@@ -96,9 +97,10 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
         });
     };
 
-    const importDesign = async (cd: CreateDesign, content: CreateDesignContent): Promise<void> => {
+    const importDesign = async (cd: CreateDesign, content: CreateDesignContent, cde: CreateDesignEvent): Promise<void> => {
+        console.info("[HomePage] Importing design: ", cd, cde);
         setImporting(true);
-        return designsSvc.createDesign(cd, content).then((design) => {
+        return designsSvc.createDesign(cd, content, cde).then((design) => {
             setImporting(false);
             setImportModalOpen(false);
             nav.navigateTo(`/designs/${design.id}/editor`);

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { DesignContext, DesignEvent } from "@apicurio/apicurio-api-designer-models";
+import { DesignEvent } from "@apicurio/apicurio-api-designer-models";
 
 
 export type DesignEventTypeProps = {
@@ -11,15 +11,17 @@ export type DesignEventTypeProps = {
 export const DesignEventType: FunctionComponent<DesignEventTypeProps> = ({ event, variant }: DesignEventTypeProps) => {
     const typeLabel = (): React.ReactNode => {
         switch (event.type) {
-            case "download":
+            case "DOWNLOAD":
                 return variant === "short" ? <span>File</span> : <span>Downloaded to file system</span>;
-            case "create":
+            case "CREATE":
                 return variant === "short" ? <span>New</span> : <span>Created new design</span>;
-            case "import":
+            case "IMPORT":
                 return importTypeLabel();
-            case "register":
+            case "UPDATE":
+                return variant === "short" ? <span>Edited</span> : <span>Modified using the editor</span>;
+            case "REGISTER":
                 // eslint-disable-next-line no-case-declarations
-                // const context: DesignContext = {
+                // const coordinates: RegistryArtifactCoordinates = {
                 //     type: "registry",
                 //     registry: event.data
                 // };
@@ -36,37 +38,35 @@ export const DesignEventType: FunctionComponent<DesignEventTypeProps> = ({ event
                         {/*</RegistryNavLink>*/}
                     </React.Fragment>
                 );
-            case "update":
-                return variant === "short" ? <span>Edited</span> : <span>Modified using the editor</span>;
         }
     };
 
     const importTypeLabel = (): React.ReactNode => {
-        const context: DesignContext = event.data.context;
-        switch (context.type) {
-            case "file":
-                return variant === "short" ? <span>File</span> : <span>{`Imported from file ${context.file?.fileName}`}</span>;
-            case "registry":
-                return variant === "short" ? <span>Service Registry</span> : (
-                    <React.Fragment>
-                        <span>Imported from Service Registry </span>
-                        {/*<RegistryNavLink context={context}>*/}
-                        {/*    <span>(</span>*/}
-                        {/*    <span>{context.registry?.groupId || "default"}</span>*/}
-                        {/*    <span> / </span>*/}
-                        {/*    <span>{context.registry?.artifactId}</span>*/}
-                        {/*    <span> - </span>*/}
-                        {/*    <span>{context.registry?.version || "latest"})</span>*/}
-                        {/*</RegistryNavLink>*/}
-                    </React.Fragment>
-                );
-            case "url":
-                return variant === "short" ? <span>URL</span> : (
-                    <React.Fragment>
-                        <span>Imported from URL: </span>
-                        <a href={context.url?.url}>{context.url?.url}</a>
-                    </React.Fragment>
-                );
+        if (event.data.import.url) {
+            return variant === "short" ? <span>URL</span> : (
+                <React.Fragment>
+                    <span>Imported from URL: </span>
+                    <a href={event.data.import.url}>{event.data.import.url}</a>
+                </React.Fragment>
+            );
+        }
+        if (event.data.import.file) {
+            return variant === "short" ? <span>File</span> : <span>{`Imported from file ${event.data.import.file}`}</span>;
+        }
+        if (event.data.import.registry) {
+            return variant === "short" ? <span>Service Registry</span> : (
+                <React.Fragment>
+                    <span>Imported from Service Registry </span>
+                    {/*<RegistryNavLink context={context}>*/}
+                    {/*    <span>(</span>*/}
+                    {/*    <span>{context.registry?.groupId || "default"}</span>*/}
+                    {/*    <span> / </span>*/}
+                    {/*    <span>{context.registry?.artifactId}</span>*/}
+                    {/*    <span> - </span>*/}
+                    {/*    <span>{context.registry?.version || "latest"})</span>*/}
+                    {/*</RegistryNavLink>*/}
+                </React.Fragment>
+            );
         }
         return <span>Imported content</span>;
     };

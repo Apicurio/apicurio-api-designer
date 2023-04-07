@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Divider } from "@patternfly/react-core";
 import { Design, DesignEvent } from "@apicurio/apicurio-api-designer-models";
-import { DesignsService, useDesignsService } from "@apicurio/apicurio-api-designer-services";
 import { DesignOriginLabel } from "./DesignOriginLabel";
-import { DateTime, If, IfNotEmpty, IsLoading } from "@apicurio/apicurio-api-designer-components";
+import { DateTime, If, IfNotEmpty } from "@apicurio/apicurio-api-designer-components";
 import { hasOrigin } from "@apicurio/apicurio-api-designer-utils";
 import { DesignEventType } from "./DesignEventType";
 import styled from "styled-components";
@@ -11,6 +10,7 @@ import styled from "styled-components";
 
 export type DesignEventsProps = {
     design: Design | undefined;
+    events: DesignEvent[] | undefined;
 };
 
 const Origin = styled.div`
@@ -59,38 +59,35 @@ const OriginExportsTime = styled.div`
 `;
 
 
-export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design }: DesignEventsProps) => {
-    const [isLoading, setLoading] = useState<boolean>(false);
+export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design, events }: DesignEventsProps) => {
     const [exports, setExports] = useState<DesignEvent[]>();
-
-    const designsService: DesignsService = useDesignsService();
+    const [originEvent, setOriginEvent] = useState<DesignEvent>();
 
     const originGroupId = (): string => {
-        return design?.origin?.registry?.groupId || "default";
+        return originEvent?.data?.register?.registry?.groupId || "default";
     };
     const originArtifactId = (): string => {
-        return design?.origin?.registry?.artifactId || "Unknown";
+        return originEvent?.data?.register?.registry?.artifactId || "unknown";
     };
     const originVersion = (): string => {
-        return design?.origin?.registry?.version || "latest";
+        return originEvent?.data?.register?.registry?.version || "latest";
     };
     const originFilename = (): string => {
-        return design?.origin?.file?.fileName || "";
+        return originEvent?.data?.import?.file || "";
     };
     const originUrl = (): string => {
-        return design?.origin?.url?.url || "";
+        return originEvent?.data?.import?.url || "";
     };
 
     useEffect(() => {
-        if (design) {
-            designsService.getEvents(design.id).then(events => {
-                setExports(events?.filter(event => event.type === "download" || event.type === "register"));
-                setLoading(false);
-            }).catch(error => {
-                // TODO error handling!
-            });
+        if (events) {
+            // Extract just the "register" events (events related to exporting).
+            setExports(events?.filter(event => event.type === "REGISTER"));
+            // The origin event is the oldest (first) event.
+            setOriginEvent(events.slice(-1)[0]);
         }
-    }, [design]);
+    }, [events]);
+
     return (
         <React.Fragment>
             <Origin>
@@ -130,25 +127,23 @@ export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design }: D
                 </If>
             </Origin>
             <StyledDivider />
-            <IsLoading condition={isLoading}>
-                <OriginExports>
-                    <OriginExportsLabel>Exported to</OriginExportsLabel>
-                    <div></div>
+            <OriginExports>
+                <OriginExportsLabel>Exported to</OriginExportsLabel>
+                <div></div>
 
-                    <IfNotEmpty collection={exports} emptyState={(
-                        <span>This design has not been exported.</span>
-                    )}>
-                        {
-                            exports?.map((event, idx) => (
-                                <React.Fragment key={idx}>
-                                    <OriginExportsItem key={`${idx}-type`}><DesignEventType event={event} variant="short" /></OriginExportsItem>
-                                    <OriginExportsTime key={`${idx}-time`}><DateTime date={event.on} /></OriginExportsTime>
-                                </React.Fragment>
-                            ))
-                        }
-                    </IfNotEmpty>
-                </OriginExports>
-            </IsLoading>
+                <IfNotEmpty collection={exports} emptyState={(
+                    <span>This design has not been exported.</span>
+                )}>
+                    {
+                        exports?.map((event, idx) => (
+                            <React.Fragment key={idx}>
+                                <OriginExportsItem key={`${idx}-type`}><DesignEventType event={event} variant="short" /></OriginExportsItem>
+                                <OriginExportsTime key={`${idx}-time`}><DateTime date={event.on} /></OriginExportsTime>
+                            </React.Fragment>
+                        ))
+                    }
+                </IfNotEmpty>
+            </OriginExports>
         </React.Fragment>
     );
 };

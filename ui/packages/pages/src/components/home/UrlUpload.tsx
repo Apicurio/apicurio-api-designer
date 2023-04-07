@@ -90,7 +90,7 @@ export const UrlUpload: FunctionComponent<UrlUploadProps> = ({ id, urlPlaceholde
                         </div>
                     </If>
                     <If condition={!hasError()}>
-                        <TextArea value={previewContent} isReadOnly={true}></TextArea>
+                        <TextArea id="url-content-preview" value={previewContent} readOnlyVariant="default"></TextArea>
                     </If>
                 </IsLoading>
             </div>

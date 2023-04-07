@@ -1,6 +1,6 @@
 const ApiDesignerConfig = {
     "apis": {
-        "registry": "local-mock",
+        "registry": "none",
         "designer": "http://localhost:8080/apis/designer/v0"
     },
     "ui": {

@@ -1,8 +1,13 @@
 #!/bin/sh
 
-if [ "x$BASENAME" = "x" ]
+if [ "x$CONTEXT_PATH" = "x" ]
 then
-  BASENAME="/"
+  CONTEXT_PATH="/"
+fi
+
+if [ "x$NAV_PREFIX_PATH" = "x" ]
+then
+  NAV_PREFIX_PATH=""
 fi
 
 if [ "x$REGISTRY_API_URL" = "x" ]
@@ -10,74 +15,89 @@ then
   REGISTRY_API_URL="http://localhost:8090"
 fi
 
+if [ "x$DESIGNER_API_URL" = "x" ]
+then
+  DESIGNER_API_URL="http://localhost:8080/apis/designer/v0"
+fi
+
+if [ "x$EDITORS_URL" = "x" ]
+then
+  EDITORS_URL="/editors"
+fi
+
+if [ "x$SHOW_NAVIGATION" = "x" ]
+then
+  SHOW_NAVIGATION="false"
+fi
+
+if [ "x$REGISTRY_NAVIGATION_URL" = "x" ]
+then
+  REGISTRY_NAVIGATION_URL=""
+fi
+
+if [ "x$SHOW_MASTHEAD" = "x" ]
+then
+  SHOW_MASTHEAD="true"
+fi
+
+if [ "x$MASTHEAD_LABEL" = "x" ]
+then
+  MASTHEAD_LABEL="API Designer"
+fi
+
 if [ "x$AUTH_TYPE" = "x" ]
 then
   AUTH_TYPE="none"
 fi
 
-if [ "x$EDITORS_URL" = "x" ]
+if [ "x$AUTH_REDIRECT_URI" = "x" ]
 then
-  EDITORS_URL="http://localhost:9011"
+  AUTH_REDIRECT_URI="/"
 fi
-
-if [ "x$NAV_ENABLED" = "x" ]
+if [ "x$AUTH_CLIENT_ID" = "x" ]
 then
-  NAV_ENABLED="false"
+  AUTH_CLIENT_ID="apicurio-api-designer"
 fi
-
-if [ "x$NAV_REGISTRY_URL" = "x" ]
+if [ "x$AUTH_URL" = "x" ]
 then
-  NAV_REGISTRY_URL=""
-fi
-
-if [ "x$KEYCLOAK_REALM" = "x" ]
-then
-  KEYCLOAK_REALM="operate-first-apicurio"
-fi
-if [ "x$KEYCLOAK_URL" = "x" ]
-then
-  KEYCLOAK_URL="https://auth.apicur.io/auth/"
-fi
-if [ "x$KEYCLOAK_SSL_REQUIRED" = "x" ]
-then
-  KEYCLOAK_SSL_REQUIRED="external"
-fi
-if [ "x$KEYCLOAK_RESOURCE" = "x" ]
-then
-  KEYCLOAK_RESOURCE="ad-ui"
+  AUTH_URL="https://auth.apicur.io/auth/realms/apicurio"
 fi
 
 
 echo "Generating config.js"
 
+
 echo "const ApiDesignerConfig = {
-    \"apis\": {
-        \"registry\": \"$REGISTRY_API_URL\"
+    \"ui\" : {
+        \"contextPath\" : \"$CONTEXT_PATH\",
+        \"navPrefixPath\" : \"$NAV_PREFIX_PATH\"
     },
-    \"ui\": {
-        \"basename\": \"$BASENAME\"
+    \"apis\" : {
+        \"registry\" : \"$REGISTRY_API_URL\",
+        \"designer\" : \"$DESIGNER_API_URL\"
     },
-    \"components\": {
-        \"editors\": {
-            \"url\": \"$EDITORS_URL\"
+    \"components\" : {
+        \"masthead\" : {
+            \"show\" : $SHOW_MASTHEAD,
+            \"label\" : \"$MASTHEAD_LABEL\"
         },
-        \"nav\": {
-            \"show\": $NAV_ENABLED,
-            \"registry\": \"$NAV_REGISTRY_URL\"
+        \"editors\" : {
+            \"url\" : \"$EDITORS_URL\"
+        },
+        \"nav\" : {
+            \"show\" : $SHOW_NAVIGATION,
+            \"registry\" : \"$REGISTRY_NAVIGATION_URL\"
         }
     },
-    \"auth\": {
-        \"type\": \"$AUTH_TYPE\",
-        \"options\": {
-          \"realm\": \"$KEYCLOAK_REALM\",
-          \"auth-server-url\": \"$KEYCLOAK_URL\",
-          \"ssl-required\": \"$KEYCLOAK_SSL_REQUIRED\",
-          \"resource\": \"$KEYCLOAK_RESOURCE\",
-          \"public-client\": true,
-          \"confidential-port\": 0
+    \"auth\" : {
+        \"type\" : \"$AUTH_TYPE\",
+        \"options\" : {
+            \"redirectUri\" : \"$AUTH_REDIRECT_URI\",
+            \"clientId\" : \"$AUTH_CLIENT_ID\",
+            \"url\" : \"$AUTH_URL\"
         }
     }
-}
+};
 " > /opt/app-root/src/config.js
 
 
