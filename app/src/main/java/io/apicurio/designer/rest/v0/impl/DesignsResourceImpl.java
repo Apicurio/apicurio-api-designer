@@ -60,10 +60,10 @@ public class DesignsResourceImpl implements DesignsResource {
         if (xDesignerOrigin == null) {
             xDesignerOrigin = DesignOriginType.create;
         }
-        if (xDesignerName.startsWith("==")) {
+        if (xDesignerName != null && xDesignerName.startsWith("==")) {
             xDesignerName = decodeHeaderValue(xDesignerName);
         }
-        if (xDesignerDescription.startsWith("==")) {
+        if (xDesignerDescription != null && xDesignerDescription.startsWith("==")) {
             xDesignerDescription = decodeHeaderValue(xDesignerDescription);
         }
         
