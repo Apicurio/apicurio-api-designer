@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Design, DesignEvent } from "@apicurio/apicurio-api-designer-models";
-import { DesignsService, useDesignsService } from "@apicurio/apicurio-api-designer-services";
-import { DateTime, IfNotEmpty, IsLoading } from "@apicurio/apicurio-api-designer-components";
+import { DesignEvent } from "@apicurio/apicurio-api-designer-models";
+import { DateTime, IfNotEmpty } from "@apicurio/apicurio-api-designer-components";
 import { DesignEventType } from "./DesignEventType";
 import styled from "styled-components";
 

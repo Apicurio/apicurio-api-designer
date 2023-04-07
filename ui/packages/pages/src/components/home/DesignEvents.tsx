@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Divider } from "@patternfly/react-core";
 import { Design, DesignEvent } from "@apicurio/apicurio-api-designer-models";
-import { DesignsService, useDesignsService } from "@apicurio/apicurio-api-designer-services";
 import { DesignOriginLabel } from "./DesignOriginLabel";
-import { DateTime, If, IfNotEmpty, IsLoading } from "@apicurio/apicurio-api-designer-components";
+import { DateTime, If, IfNotEmpty } from "@apicurio/apicurio-api-designer-components";
 import { hasOrigin } from "@apicurio/apicurio-api-designer-utils";
 import { DesignEventType } from "./DesignEventType";
 import styled from "styled-components";

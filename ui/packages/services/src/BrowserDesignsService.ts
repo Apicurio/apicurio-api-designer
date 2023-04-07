@@ -185,6 +185,11 @@ async function getEvents(id: string): Promise<DesignEvent[]> {
     return db.events.where("id").equals(id).reverse().sortBy("on");
 }
 
+async function getFirstEvent(id: string): Promise<DesignEvent> {
+    return getEvents(id).then(events => {
+        return events[0];
+    });
+}
 
 async function createEvent(id: string, cevent: CreateDesignEvent): Promise<DesignEvent> {
     const newEvent: DesignEvent = {
@@ -213,6 +218,7 @@ export const useBrowserDesignsService: () => DesignsService = (): DesignsService
         getDesignContent,
         updateDesignContent,
         getEvents,
+        getFirstEvent,
         createEvent
     };
 };
