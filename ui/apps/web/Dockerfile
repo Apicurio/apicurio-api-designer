@@ -16,7 +16,6 @@ RUN chmod -R g+w /opt/app-root/src /usr/local/bin/
 # Copy configuration scripts
 COPY --chown=1001:0 build-scripts/create-config.sh /usr/local/bin/create-config.sh
 COPY --chown=1001:0 build-scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY --chown=1001:0 build-scripts/notify-gchat.sh /usr/local/bin/notify-gchat.sh
 
 # Copy nginx config
 COPY --chown=1001:0 build-scripts/nginx.conf /etc/nginx/nginx.conf
