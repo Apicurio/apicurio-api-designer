@@ -11,6 +11,7 @@ import styled from "styled-components";
 
 export type DesignEventsProps = {
     design: Design | undefined;
+    events: DesignEvent[] | undefined;
 };
 
 const Origin = styled.div`
@@ -59,48 +60,35 @@ const OriginExportsTime = styled.div`
 `;
 
 
-export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design }: DesignEventsProps) => {
-    const [isLoading, setLoading] = useState<boolean>(false);
+export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design, events }: DesignEventsProps) => {
     const [exports, setExports] = useState<DesignEvent[]>();
-
-    const designsService: DesignsService = useDesignsService();
+    const [originEvent, setOriginEvent] = useState<DesignEvent>();
 
     const originGroupId = (): string => {
-        // FIXME get the groupId from the first event
-        //return design?.origin?.registry?.groupId || "default";
-        return "default";
+        return originEvent?.data?.register?.registry?.groupId || "default";
     };
     const originArtifactId = (): string => {
-        // FIXME get the artifactId from the first event
-        // return design?.origin?.registry?.artifactId || "Unknown";
-        return "Unknown";
+        return originEvent?.data?.register?.registry?.artifactId || "unknown";
     };
     const originVersion = (): string => {
-        // FIXME get the version from the first event
-        // return design?.origin?.registry?.version || "latest";
-        return "latest";
+        return originEvent?.data?.register?.registry?.version || "latest";
     };
     const originFilename = (): string => {
-        // FIXME get the file name from the first event
-        // return design?.origin?.file?.fileName || "";
-        return "";
+        return originEvent?.data?.import?.file || "";
     };
     const originUrl = (): string => {
-        // FIXME get the URL from the first event
-        // return design?.origin?.url?.url || "";
-        return "";
+        return originEvent?.data?.import?.url || "";
     };
 
     useEffect(() => {
-        if (design) {
-            designsService.getEvents(design.id).then(events => {
-                setExports(events?.filter(event => event.type === "REGISTER"));
-                setLoading(false);
-            }).catch(error => {
-                // TODO error handling!
-            });
+        if (events) {
+            // Extract just the "register" events (events related to exporting).
+            setExports(events?.filter(event => event.type === "REGISTER"));
+            // The origin event is the oldest (first) event.
+            setOriginEvent(events.slice(-1)[0]);
         }
-    }, [design]);
+    }, [events]);
+
     return (
         <React.Fragment>
             <Origin>
@@ -140,25 +128,23 @@ export const DesignEvents: FunctionComponent<DesignEventsProps> = ({ design }: D
                 </If>
             </Origin>
             <StyledDivider />
-            <IsLoading condition={isLoading}>
-                <OriginExports>
-                    <OriginExportsLabel>Exported to</OriginExportsLabel>
-                    <div></div>
+            <OriginExports>
+                <OriginExportsLabel>Exported to</OriginExportsLabel>
+                <div></div>
 
-                    <IfNotEmpty collection={exports} emptyState={(
-                        <span>This design has not been exported.</span>
-                    )}>
-                        {
-                            exports?.map((event, idx) => (
-                                <React.Fragment key={idx}>
-                                    <OriginExportsItem key={`${idx}-type`}><DesignEventType event={event} variant="short" /></OriginExportsItem>
-                                    <OriginExportsTime key={`${idx}-time`}><DateTime date={event.on} /></OriginExportsTime>
-                                </React.Fragment>
-                            ))
-                        }
-                    </IfNotEmpty>
-                </OriginExports>
-            </IsLoading>
+                <IfNotEmpty collection={exports} emptyState={(
+                    <span>This design has not been exported.</span>
+                )}>
+                    {
+                        exports?.map((event, idx) => (
+                            <React.Fragment key={idx}>
+                                <OriginExportsItem key={`${idx}-type`}><DesignEventType event={event} variant="short" /></OriginExportsItem>
+                                <OriginExportsTime key={`${idx}-time`}><DateTime date={event.on} /></OriginExportsTime>
+                            </React.Fragment>
+                        ))
+                    }
+                </IfNotEmpty>
+            </OriginExports>
         </React.Fragment>
     );
 };

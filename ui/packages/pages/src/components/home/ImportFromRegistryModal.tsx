@@ -18,7 +18,7 @@ import { CreateDesignEvent } from "@apicurio/apicurio-api-designer-models/src/de
 export type ImportFromRegistryModalProps = {
     isOpen: boolean | undefined;
     isImporting: boolean | undefined;
-    onImport: (event: CreateDesign, content: CreateDesignContent) => void;
+    onImport: (design: CreateDesign, content: CreateDesignContent, event?: CreateDesignEvent) => void;
     onCancel: () => void;
 }
 
@@ -67,7 +67,7 @@ export const ImportFromRegistryModal: FunctionComponent<ImportFromRegistryModalP
     // Called when the user clicks the Import button in the modal
     const doImport = (): void => {
         // FIXME include the design event in the onImport() call
-        onImport(design as CreateDesign, designContent as CreateDesignContent);
+        onImport(design, designContent, designEvent);
     };
 
     useEffect(() => {

@@ -33,13 +33,14 @@ import {
 import { BrowserDataWarning } from "../common/BrowserDataWarning";
 import { If } from "@apicurio/apicurio-api-designer-components";
 import { UrlUpload } from "./UrlUpload";
+import { CreateDesignEvent } from "@apicurio/apicurio-api-designer-models/src/designs/CreateDesignEvent";
 
 
 export type ImportDesignModalProps = {
     importType: ImportFrom;
     isOpen: boolean | undefined;
     isImporting: boolean|undefined;
-    onImport: (event: CreateDesign, content: CreateDesignContent) => void;
+    onImport: (design: CreateDesign, content: CreateDesignContent, event?: CreateDesignEvent) => void;
     onCancel: () => void;
 }
 
@@ -154,11 +155,20 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
             contentType: contentType as string,
             data: designContent
         };
+        const cde: CreateDesignEvent = {
+            type: "IMPORT",
+            data: {
+                import: {
+                    url: url || undefined,
+                    file: fileName || undefined
+                }
+            }
+        };
 
         console.debug("[ImportDesignModal] Importing design: ", cd);
         console.debug("[ImportDesignModal] Importing content-type: ", contentType);
-        // FIXME also pass the filename and/or url as an Event when calling "onImport()"
-        onImport(cd, cdc);
+        console.debug("[ImportDesignModal] Importing event: ", cde);
+        onImport(cd, cdc, cde);
     };
 
     const hasDesignContent = (): boolean => {

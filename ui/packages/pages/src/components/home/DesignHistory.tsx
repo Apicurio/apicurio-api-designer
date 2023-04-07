@@ -9,7 +9,7 @@ import styled from "styled-components";
  * Properties
  */
 export type DesignHistoryProps = {
-    design: Design;
+    events: DesignEvent[] | undefined;
 };
 
 const History = styled.div`
@@ -27,36 +27,19 @@ const EventTime = styled.div`
     white-space: nowrap;
 `;
 
-export const DesignHistory: FunctionComponent<DesignHistoryProps> = ({ design }: DesignHistoryProps) => {
-    const [isLoading, setLoading] = useState<boolean>(false);
-    const [events, setEvents] = useState<DesignEvent[]>();
-
-    const designsService: DesignsService = useDesignsService();
-
-    useEffect(() => {
-        if (design) {
-            designsService.getEvents(design.id).then(events => {
-                setEvents(events);
-                setLoading(false);
-            }).catch(error => {
-                // TODO error handling!
-            });
-        }
-    }, [design]);
+export const DesignHistory: FunctionComponent<DesignHistoryProps> = ({ events }: DesignHistoryProps) => {
     return (
-        <IsLoading condition={isLoading}>
-            <IfNotEmpty collection={events}>
-                <History>
-                    {
-                        events?.map((event, idx) => (
-                            <React.Fragment key={idx}>
-                                <EventType key={`${idx}-type`}><DesignEventType event={event} /></EventType>
-                                <EventTime key={`${idx}-time`}><DateTime date={event.on} /></EventTime>
-                            </React.Fragment>
-                        ))
-                    }
-                </History>
-            </IfNotEmpty>
-        </IsLoading>
+        <IfNotEmpty collection={events}>
+            <History>
+                {
+                    events?.map((event, idx) => (
+                        <React.Fragment key={idx}>
+                            <EventType key={`${idx}-type`}><DesignEventType event={event} /></EventType>
+                            <EventTime key={`${idx}-time`}><DateTime date={event.on} /></EventTime>
+                        </React.Fragment>
+                    ))
+                }
+            </History>
+        </IfNotEmpty>
     );
 };

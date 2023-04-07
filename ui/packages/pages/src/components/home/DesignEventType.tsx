@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { DesignContext, DesignEvent } from "@apicurio/apicurio-api-designer-models";
+import { DesignEvent } from "@apicurio/apicurio-api-designer-models";
 
 
 export type DesignEventTypeProps = {
@@ -21,7 +21,7 @@ export const DesignEventType: FunctionComponent<DesignEventTypeProps> = ({ event
                 return variant === "short" ? <span>Edited</span> : <span>Modified using the editor</span>;
             case "REGISTER":
                 // eslint-disable-next-line no-case-declarations
-                // const context: DesignContext = {
+                // const coordinates: RegistryArtifactCoordinates = {
                 //     type: "registry",
                 //     registry: event.data
                 // };

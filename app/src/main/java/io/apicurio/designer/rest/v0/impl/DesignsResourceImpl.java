@@ -2,7 +2,6 @@ package io.apicurio.designer.rest.v0.impl;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +24,7 @@ import io.apicurio.designer.rest.v0.beans.EditableDesignMetadata;
 import io.apicurio.designer.rest.v0.beans.SortBy;
 import io.apicurio.designer.rest.v0.beans.SortOrder;
 import io.apicurio.designer.service.DesignService;
+import io.apicurio.designer.service.TemporaryInMemoryEventStorage;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 
 /**
@@ -35,6 +35,8 @@ public class DesignsResourceImpl implements DesignsResource {
 
     @Inject
     DesignService designService;
+    
+    @Inject TemporaryInMemoryEventStorage eventStorage;
 
     @Override
     public DesignSearchResults getDesigns(String name, SortOrder order, SortBy orderby, String description,
@@ -100,6 +102,47 @@ public class DesignsResourceImpl implements DesignsResource {
         return convert(designService.updateDesignMetadata(designId, metadata));
     }
 
+    /**
+     * @see io.apicurio.designer.rest.v0.DesignsResource#getAllDesignEvents(java.lang.String)
+     */
+    @Override
+    public List<DesignEvent> getAllDesignEvents(String designId) {
+        return eventStorage.getAll(designId);
+    }
+    
+    /**
+     * @see io.apicurio.designer.rest.v0.DesignsResource#getFirstEvent(java.lang.String)
+     */
+    @Override
+    public DesignEvent getFirstEvent(String designId) {
+        return eventStorage.getFirst(designId);
+    }
+    
+    /**
+     * @see io.apicurio.designer.rest.v0.DesignsResource#createDesignEvent(java.lang.String, io.apicurio.designer.rest.v0.beans.CreateDesignEvent)
+     */
+    @Override
+    public DesignEvent createDesignEvent(String designId, CreateDesignEvent cde) {
+        DesignEvent newEvent = DesignEvent.builder()
+            .designId(designId)
+            .type(cde.getType())
+            .id(UUID.randomUUID().toString())
+            .kind("DesignEvent")
+            .on(new Date())
+            .data(cde.getData())
+            .build();
+        eventStorage.add(designId, newEvent);
+        return newEvent;
+    }
+
+    private static String decodeHeaderValue(String encodedString) {
+        if (encodedString.length() == 2) {
+            return "";
+        }
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedString.substring(2));
+        return new String(decodedBytes, StandardCharsets.UTF_8);
+    }
+
     private Design convert(DesignMetadataDto from) {
         // FIXME handle Origin better?
         return Design.builder().id(from.getId()).kind("DesignMetadata")
@@ -113,36 +156,6 @@ public class DesignsResourceImpl implements DesignsResource {
         if (data != null) {
             setter.accept(data);
         }
-    }
-
-    /**
-     * @see io.apicurio.designer.rest.v0.DesignsResource#getAllDesignEvents(java.lang.String)
-     */
-    @Override
-    public List<DesignEvent> getAllDesignEvents(String designId) {
-        List<DesignEvent> events = new ArrayList<>();
-        return events;
-    }
-
-    /**
-     * @see io.apicurio.designer.rest.v0.DesignsResource#createDesignEvent(java.lang.String, io.apicurio.designer.rest.v0.beans.CreateDesignEvent)
-     */
-    @Override
-    public DesignEvent createDesignEvent(String designId, CreateDesignEvent data) {
-        return DesignEvent.builder()
-                .designId(designId)
-                .id(UUID.randomUUID().toString())
-                .kind("DesignEvent")
-                .on(new Date())
-                .build();
-    }
-
-    private static String decodeHeaderValue(String encodedString) {
-        if (encodedString.length() == 2) {
-            return "";
-        }
-        byte[] decodedBytes = Base64.getDecoder().decode(encodedString.substring(2));
-        return new String(decodedBytes, StandardCharsets.UTF_8);
     }
 
 }

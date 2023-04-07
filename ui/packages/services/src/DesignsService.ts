@@ -28,7 +28,8 @@ function limit(value: string | undefined, size: number): string {
 }
 
 async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: CreateDesignContent, cde?: CreateDesignEvent): Promise<Design> {
-    console.debug("[DesignsService] Creating a new design: ", cd, cdc);
+    console.debug("[DesignsService] Creating a new design: ", cd);
+    console.info("===> CDE 1: ", cde);
     const token: string | undefined = await svcConfig.auth.getToken();
 
     const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs");
@@ -42,6 +43,7 @@ async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: Cre
     };
 
     return httpPostWithReturn<any, Design>(endpoint, cdc.data, createOptions(headers)).then(response => {
+        console.info("===> CDE 2: ", cde);
         const cevent: CreateDesignEvent = cde || {
             type: "CREATE",
             data: {
@@ -151,7 +153,18 @@ async function updateDesignContent(svcConfig: ServiceConfig, content: DesignCont
         "Authorization": `Bearer ${token}`,
         "Content-Type": content.contentType,
     };
-    return httpPut<any>(endpoint, content.data, createOptions(headers));
+    return httpPut<any>(endpoint, content.data, createOptions(headers)).then(response => {
+        const cevent: CreateDesignEvent = {
+            type: "UPDATE",
+            data: {
+                update: {
+                    notes: ""
+                }
+            }
+        };
+        createEvent(svcConfig, content.id, cevent);
+        return response;
+    });
 }
 
 async function getEvents(svcConfig: ServiceConfig, id: string): Promise<DesignEvent[]> {
@@ -165,6 +178,19 @@ async function getEvents(svcConfig: ServiceConfig, id: string): Promise<DesignEv
         "Authorization": `Bearer ${token}`
     };
     return httpGet<DesignEvent[]>(endpoint, createOptions(headers));
+}
+
+async function getFirstEvent(svcConfig: ServiceConfig, id: string): Promise<DesignEvent> {
+    const token: string | undefined = await svcConfig.auth.getToken();
+
+    console.info("[DesignsService] Getting first event for design with ID: ", id);
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/events/first", {
+        designId: id
+    });
+    const headers: any = {
+        "Authorization": `Bearer ${token}`
+    };
+    return httpGet<DesignEvent>(endpoint, createOptions(headers));
 }
 
 async function createEvent(svcConfig: ServiceConfig, id: string, cevent: CreateDesignEvent): Promise<DesignEvent> {
@@ -193,6 +219,7 @@ export interface DesignsService {
     getDesignContent(id: string): Promise<DesignContent>;
     updateDesignContent(content: DesignContent): Promise<void>;
     getEvents(id: string): Promise<DesignEvent[]>;
+    getFirstEvent(id: string): Promise<DesignEvent>;
     createEvent(id: string, event: CreateDesignEvent): Promise<DesignEvent>;
 }
 
@@ -207,7 +234,7 @@ export const useDesignsService: () => DesignsService = (): DesignsService => {
     }
 
     return {
-        createDesign: (cd: CreateDesign, cdc: CreateDesignContent) => createDesign(svcConfig, cd, cdc),
+        createDesign: (cd: CreateDesign, cdc: CreateDesignContent, cde: CreateDesignEvent) => createDesign(svcConfig, cd, cdc, cde),
         searchDesigns: (criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort) => searchDesigns(svcConfig, criteria, paging, sort),
         getDesign: (id: string) => getDesign(svcConfig, id),
         deleteDesign: (id: string) => deleteDesign(svcConfig, id),
@@ -215,6 +242,7 @@ export const useDesignsService: () => DesignsService = (): DesignsService => {
         getDesignContent: (id: string) => getDesignContent(svcConfig, id),
         updateDesignContent: (content: DesignContent) => updateDesignContent(svcConfig, content),
         getEvents: (id: string) => getEvents(svcConfig, id),
+        getFirstEvent: (id: string) => getFirstEvent(svcConfig, id),
         createEvent: (id: string, cevent: CreateDesignEvent) => createEvent(svcConfig, id, cevent)
     };
 };
