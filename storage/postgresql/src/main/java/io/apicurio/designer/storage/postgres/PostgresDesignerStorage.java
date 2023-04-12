@@ -1,5 +1,6 @@
 package io.apicurio.designer.storage.postgres;
 
+import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
 import io.apicurio.common.apps.logging.LoggerProducer;
 import io.apicurio.common.apps.storage.sql.BaseSqlStorageComponent;
 import io.apicurio.designer.spi.storage.DesignerStorage;
@@ -9,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.List;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
@@ -28,5 +30,30 @@ public class PostgresDesignerStorage extends AbstractSqlDesignerStorage implemen
                 .supportsAtomicSequenceIncrement(true)
                 .ddlDirRootPath("META-INF/storage/schema")
                 .build());
+    }
+
+    @Override
+    public boolean isReady() {
+        return true;
+    }
+
+    @Override
+    public DynamicConfigPropertyDto getConfigProperty(String s) {
+        return null;
+    }
+
+    @Override
+    public void setConfigProperty(DynamicConfigPropertyDto dynamicConfigPropertyDto) {
+
+    }
+
+    @Override
+    public void deleteConfigProperty(String s) {
+
+    }
+
+    @Override
+    public List<DynamicConfigPropertyDto> getConfigProperties() {
+        return null;
     }
 }

@@ -44,7 +44,7 @@ export type ApiDesignerConfigType = {
 };
 
 export const ApiDesignerConfigContext = createContext<ApiDesignerConfigType | undefined>(
-    undefined
+    ApiDesignerConfig
 );
 export const useApiDesignerConfig = (): ApiDesignerConfigType | undefined =>
     useContext(ApiDesignerConfigContext);

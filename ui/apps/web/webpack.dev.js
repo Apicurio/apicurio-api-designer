@@ -39,6 +39,9 @@ if (devServerConfig.warning) {
 module.exports = merge(common("development"), {
     mode: "development",
     devtool: "eval-source-map",
+    watchOptions: {
+        ignored: /node_modules/
+    },
     devServer: {
         https: devServerConfig.protocol === "https",
         host: devServerConfig.host,

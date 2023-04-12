@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
 import io.apicurio.common.apps.content.handle.ContentHandle;
+import io.apicurio.designer.auth.Authorized;
 import io.apicurio.designer.common.MediaTypes;
 import io.apicurio.designer.rest.v0.DesignsResource;
 import io.apicurio.designer.rest.v0.beans.CreateDesignEvent;
@@ -39,6 +40,7 @@ public class DesignsResourceImpl implements DesignsResource {
     @Inject TemporaryInMemoryEventStorage eventStorage;
 
     @Override
+    @Authorized
     public DesignSearchResults getDesigns(String name, SortOrder order, SortBy orderby, String description,
             String type, Integer pageSize, Integer page) {
         page = page != null ? page : 1;
@@ -55,6 +57,7 @@ public class DesignsResourceImpl implements DesignsResource {
      * @see io.apicurio.designer.rest.v0.DesignsResource#createDesign(java.lang.String, java.lang.String, java.lang.String, io.apicurio.designer.rest.v0.beans.DesignOriginType, java.io.InputStream)
      */
     @Override
+    @Authorized
     public Design createDesign(String xDesignerName, String xDesignerDescription, String xDesignerType,
             DesignOriginType xDesignerOrigin, InputStream data) {
         if (xDesignerOrigin == null) {
@@ -74,27 +77,32 @@ public class DesignsResourceImpl implements DesignsResource {
     }
 
     @Override
+    @Authorized
     public Response getDesign(String designId) {
         var content = designService.getDesignContent(designId);
         return Response.ok(content.string(), MediaTypes.BINARY).build();
     }
 
     @Override
+    @Authorized
     public Design updateDesign(String designId, InputStream data) {
         return convert(designService.updateDesignContent(designId, ContentHandle.create(data)));
     }
 
     @Override
+    @Authorized
     public void deleteDesign(String designId) {
         designService.deleteDesign(designId);
     }
 
     @Override
+    @Authorized
     public Design getDesignMetadata(String designId) {
         return convert(designService.getDesignMetadata(designId));
     }
 
     @Override
+    @Authorized
     public Design updateDesignMetadata(String designId, EditableDesignMetadata editableMetadata) {
         var metadata = designService.getDesignMetadata(designId);
         setIfNotNull(editableMetadata.getName(), metadata::setName);

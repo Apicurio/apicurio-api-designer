@@ -1,2 +1,2 @@
-export * from "./keycloak/keycloakAuth";
-export * from "./keycloak/KeycloakContext";
+export * from "./oidc/oidcAuth";
+export * from "./oidc/OidcContext";

@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { AppLayout } from "./app-layout";
 import { AppRoutes } from "./routes";
 import { PageConfig, PageContextProvider } from "@apicurio/apicurio-api-designer-pages";
-import { getKeycloak, useKeycloakAuth } from "@app/auth";
+import { getOidc, useOidcAuth } from "@app/auth";
 import { AlertProps, AuthConfig } from "@apicurio/apicurio-api-designer-services";
 import { ApiDesignerConfigContext, ApiDesignerConfigType } from "@app/contexts/config";
 
@@ -25,9 +25,7 @@ const apiDesignerConfig: ApiDesignerConfigType = ApiDesignerConfig || window["Ap
 
 const App: React.FunctionComponent = () => {
     const [initialized, setInitialized] = useState(false);
-    // TODO support non-keycloak auth - probably should create "useOidcAuth", "useNoAuth", and "useKeycloakAuth" maybe?
-    //      or else maybe just "useApplicationAuth" that will hide the details
-    const auth: AuthConfig = useKeycloakAuth();
+    const auth: AuthConfig = useOidcAuth();
 
     const loadingState: React.ReactNode = (
         <EmptyState>
@@ -39,11 +37,10 @@ const App: React.FunctionComponent = () => {
     );
 
     // Initialize Auth
-    // TODO add support for non-keycloak auth
     useEffect(() => {
-        if (apiDesignerConfig.auth.type === "keycloakjs") {
+        if (apiDesignerConfig.auth.type === "oidc") {
             const init = async () => {
-                await getKeycloak();
+                await getOidc();
                 setInitialized(true);
             };
             init();

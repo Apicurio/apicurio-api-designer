@@ -6,6 +6,9 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.ws.rs.core.Response.Status;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,13 +16,12 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.core.Response.Status;
 
 import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
@@ -30,17 +32,22 @@ public class DesignsResourceTestShared {
     @Inject
     Logger log;
 
-    public void runBasicCRUD() {
+    public void runBasicCRUD(String accessToken) {
 
         String content1 = resourceToString("openapi-empty.json");
 
-        var metadata = given()
+        var metadataRequest = given()
                 .log().all()
                 .when()
                 .contentType(ContentType.JSON)
                 .body(content1)
-                .header("X-Designer-Name", "design1")
-                .post("/apis/designer/v0/designs")
+                .header("X-Designer-Name", "design1");
+
+        if (accessToken != null) {
+            metadataRequest = metadataRequest.header("Authorization", "Bearer " + accessToken);
+        }
+
+        var metadata = metadataRequest.post("/apis/designer/v0/designs")
                 .then()
                 .statusCode(Status.OK.getStatusCode()) // TODO Codegen needs to be updated if we want to return 201
                 .extract().as(Design.class);
@@ -49,10 +56,15 @@ public class DesignsResourceTestShared {
 
         log.info("{}", metadata);
 
-        var metadata2 = given()
+        var metadata2Request = given()
                 .log().all()
-                .when()
-                .get("/apis/designer/v0/designs/{designId}/meta", metadata.getId())
+                .when();
+
+        if (accessToken != null) {
+            metadata2Request = metadata2Request.header("Authorization", "Bearer " + accessToken);
+        }
+
+        var metadata2 = metadata2Request.get("/apis/designer/v0/designs/{designId}/meta", metadata.getId())
                 .then()
                 .statusCode(Status.OK.getStatusCode())
                 .extract().as(Design.class);
@@ -71,9 +83,15 @@ public class DesignsResourceTestShared {
 
         await().pollDelay(Duration.ofSeconds(3)).untilAsserted(() -> Assertions.assertTrue(true));
 
-        var metadata3 = given()
+        var metadata3Request = given()
                 .log().all()
-                .when()
+                .when();
+
+        if (accessToken != null) {
+            metadata3Request = metadata3Request.header("Authorization", "Bearer " + accessToken);
+        }
+
+        var metadata3 = metadata3Request.header("Authorization", "Bearer " + accessToken)
                 .contentType(ContentType.JSON)
                 .body(updatedMetadata)
                 .put("/apis/designer/v0/designs/{designId}/meta", metadata.getId())
@@ -89,9 +107,15 @@ public class DesignsResourceTestShared {
         assertEquals(metadata.getCreatedOn(), metadata3.getCreatedOn());
         assertNotEquals(metadata.getModifiedOn(), metadata3.getModifiedOn());
 
-        var content2 = given()
+        var content2Request = given()
                 .log().all()
-                .when()
+                .when();
+
+        if (accessToken != null) {
+            content2Request = content2Request.header("Authorization", "Bearer " + accessToken);
+        }
+
+        var content2 = content2Request.header("Authorization", "Bearer " + accessToken)
                 .get("/apis/designer/v0/designs/{designId}", metadata.getId())
                 .then()
                 .statusCode(Status.OK.getStatusCode())
@@ -99,19 +123,35 @@ public class DesignsResourceTestShared {
 
         assertEquals(content1, content2);
 
-        given()
+        var designRequest = given()
                 .log().all()
-                .when()
+                .when();
+
+        if (accessToken != null) {
+            designRequest = designRequest.header("Authorization", "Bearer " + accessToken);
+        }
+
+        designRequest.header("Authorization", "Bearer " + accessToken)
                 .delete("/apis/designer/v0/designs/{designId}", metadata.getId())
                 .then()
                 .statusCode(Status.NO_CONTENT.getStatusCode());
 
-        given()
+        var designRequest2 = given()
                 .log().all()
-                .when()
+                .when();
+
+        if (accessToken != null) {
+            designRequest2 = designRequest2.header("Authorization", "Bearer " + accessToken);
+        }
+
+        designRequest2.header("Authorization", "Bearer " + accessToken)
                 .get("/apis/designer/v0/designs/{designId}/meta", metadata.getId())
                 .then()
                 .statusCode(Status.NOT_FOUND.getStatusCode());
+    }
+
+    public void runBasicCRUD() {
+        runBasicCRUD(null);
     }
 
     /**
