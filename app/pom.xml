@@ -82,11 +82,9 @@
             <artifactId>apicurio-common-app-components-config-impl</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-common-rest-client-vertx</artifactId>
-            <version>${apicurio-common-rest-client.version}</version>
         </dependency>
 
         <dependency>
@@ -344,7 +342,6 @@
             <plugin>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-common-app-components-maven-plugin</artifactId>
-                <version>${apicurio-common-app-components.version}</version>
                 <executions>
                     <execution>
                         <id>merge-test-properties</id>

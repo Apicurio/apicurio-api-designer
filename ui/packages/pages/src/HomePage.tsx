@@ -35,7 +35,7 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
     const [ error, setError ] = useState<any>();
     const [ isCreating, setCreating ] = useState<boolean>(false);
     const [ isImporting, setImporting ] = useState<boolean>(false);
-    const [ isDrawerExpanded, setDrawerExpanded ] = useState(true);
+    const [ isDrawerExpanded, setDrawerExpanded ] = useState(false);
     const [ isCreateModalOpen, setCreateModalOpen ] = useState(false);
     const [ isImportModalOpen, setImportModalOpen ] = useState(false);
     const [ isImportFromRegistryModalOpen, setImportFromRegistryModalOpen ] = useState(false);

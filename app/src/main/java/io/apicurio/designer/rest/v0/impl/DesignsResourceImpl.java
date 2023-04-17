@@ -48,7 +48,7 @@ public class DesignsResourceImpl implements DesignsResource {
     public DesignSearchResults getDesigns(String name, SortOrder order, SortBy orderby, String description,
                                           String type, Integer pageSize, Integer page) {
         // TODO Do we want to limit max page size?
-        if (page != null && page < 0) {
+        if (page != null && page < 1) {
             throw new ValidationException("Page index must not be negative");
         }
 
@@ -63,10 +63,10 @@ public class DesignsResourceImpl implements DesignsResource {
         orderby = orderby != null ? orderby : SortBy.modifiedOn;
         search.orderBy(orderby.name(), order == SortOrder.desc ? SearchOrdering.DESC : SearchOrdering.ASC);
 
-        page = page != null ? page : 0;
+        page = page != null ? page : 1;
         pageSize = pageSize != null ? pageSize : 20;
 
-        search.limit(page * pageSize, pageSize);
+        search.limit((page - 1) * pageSize, pageSize);
         // TODO: Move vvv to service layer
         var list = designService.searchDesignMetadata(search);
         int total = (int) designService.countDesigns(); // TODO Check cast

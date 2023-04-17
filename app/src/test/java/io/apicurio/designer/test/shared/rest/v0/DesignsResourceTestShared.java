@@ -322,7 +322,7 @@ public class DesignsResourceTestShared {
                 .extract().as(DesignSearchResults.class);
 
         assertEquals(4, search1.getCount());
-        assertEquals(0, search1.getPage()); // TODO Do we want to start page be zero?
+        assertEquals(1, search1.getPage());
         assertEquals(20, search1.getPageSize());
         assertEquals(List.of("green2", "red2", "green1", "red1"), search1.getDesigns().stream().map(Design::getName).toList());
 
@@ -383,7 +383,7 @@ public class DesignsResourceTestShared {
                 .log().all()
                 .when()
                 .contentType(ContentType.JSON)
-                .queryParam("page", "1")
+                .queryParam("page", "2")
                 .queryParam("pageSize", "2")
                 .get(DESIGNS_BASE_URL)
                 .then()
@@ -391,7 +391,7 @@ public class DesignsResourceTestShared {
                 .extract().as(DesignSearchResults.class);
 
         assertEquals(4, search6.getCount());
-        assertEquals(1, search6.getPage());
+        assertEquals(2, search6.getPage());
         assertEquals(2, search6.getPageSize());
         assertEquals(List.of("green1", "red1"), search6.getDesigns().stream().map(Design::getName).toList());
     }
