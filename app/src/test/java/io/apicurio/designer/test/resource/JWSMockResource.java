@@ -142,7 +142,7 @@ public class JWSMockResource implements QuarkusTestResourceLifecycleManager {
                         .withHeader("Content-Type", "application/json")
                         .withBody("{\n" +
                                 "  \"access_token\": \""
-                                + generateJwtToken(client, null) + "\",\n" +
+                                + generateJwtToken(client, client) + "\",\n" +
                                 "  \"refresh_token\": \"07e08903-1263-4dd1-9fd1-4a59b0db5283\",\n" +
                                 "  \"token_type\": \"bearer\"\n" +
                                 "}")));

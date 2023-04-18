@@ -3,6 +3,7 @@ package io.apicurio.designer.storage.common;
 import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
 import io.apicurio.common.apps.config.impl.storage.DynamicConfigSqlStorageComponent;
 import io.apicurio.common.apps.content.handle.ContentHandle;
+import io.apicurio.common.apps.multitenancy.TenantContext;
 import io.apicurio.common.apps.storage.exceptions.StorageException;
 import io.apicurio.common.apps.storage.exceptions.StorageExceptionMapper;
 import io.apicurio.common.apps.storage.sql.BaseSqlStorageComponent;
@@ -16,15 +17,14 @@ import io.apicurio.designer.spi.storage.model.DesignEventDto;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 import org.slf4j.Logger;
 
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 import static io.apicurio.common.apps.storage.sql.jdbi.query.Sql.RESOURCE_CONTEXT_KEY;
 import static io.apicurio.common.apps.storage.sql.jdbi.query.Sql.RESOURCE_IDENTIFIER_CONTEXT_KEY;
-import static io.apicurio.designer.spi.mt.MtConstants.DEFAULT_TENANT_ID;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
@@ -50,6 +50,9 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
     protected StorageExceptionMapper exceptionMapper;
 
     @Inject
+    protected TenantContext tenantContext;
+
+    @Inject
     Logger log;
 
     /**
@@ -72,7 +75,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                 handle.createUpdate(sqlStatements.insertDesignContent())
                         .setContext(RESOURCE_CONTEXT_KEY, "content")
                         .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, String.valueOf(contentId))
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .bind(1, contentId) // TODO Nested handle
                         .bind(2, content.getSha256Hash())
                         .bind(3, content)
@@ -85,7 +88,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                 handle.createUpdate(sqlStatements.insertDesign())
                         .setContext(RESOURCE_CONTEXT_KEY, "design")
                         .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, designId)
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .bind(1, designId)
                         .bind(2, contentId)
                         .execute()
@@ -101,7 +104,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                 handle.createUpdate(sqlStatements.insertMetadata())
                         .setContext(RESOURCE_CONTEXT_KEY, "design metadata")
                         .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, metadata.getId())
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .bind(1, metadata.getId())
                         .bind(2, metadata.getName())
                         .bind(3, metadata.getDescription())
@@ -124,7 +127,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                 handle.createQuery(sqlStatements.selectContentByDesignId())
                         .setContext(RESOURCE_CONTEXT_KEY, "content")
                         .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, designId)
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .bind(1, designId)
                         .mapTo(ContentHandle.class)
                         .one()
@@ -140,8 +143,8 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                     .setContext(RESOURCE_CONTEXT_KEY, "content")
                     .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, designId)
                     .bind(0, content)
-                    .bind(1, DEFAULT_TENANT_ID)
-                    .bind(2, DEFAULT_TENANT_ID)
+                    .bind(1, tenantContext.tenantId())
+                    .bind(2, tenantContext.tenantId())
                     .bind(3, designId)
                     .execute();
 
@@ -160,7 +163,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                 handle.createQuery(sqlStatements.selectDesignMetadata())
                         .setContext(RESOURCE_CONTEXT_KEY, "content")
                         .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, designId)
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .bind(1, designId)
                         .mapTo(DesignMetadataDto.class)
                         .one()
@@ -186,7 +189,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                     .bind(5, metadata.getModifiedOn())
                     .bind(6, metadata.getType())
                     .bind(7, metadata.getOrigin())
-                    .bind(8, DEFAULT_TENANT_ID)
+                    .bind(8, tenantContext.tenantId())
                     .bind(9, metadata.getId())
                     .execute();
 
@@ -205,7 +208,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
         return handles.withHandleNoExceptionMapped(handle -> {
             var q = handle.createQuery(sqlStatements.searchDesignMetadata(spec))
                     .setContext(RESOURCE_CONTEXT_KEY, "design metadata")
-                    .bind(0, DEFAULT_TENANT_ID);
+                    .bind(0, tenantContext.tenantId());
 
             spec.bindWhere(1, q);
 
@@ -220,7 +223,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
         return handles.withHandleNoExceptionMapped(handle ->
                 handle.createQuery(sqlStatements.countDesigns())
                         .setContext(RESOURCE_CONTEXT_KEY, "design")
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .mapTo(Long.class)
                         .one()
         );
@@ -235,7 +238,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                     handle.createUpdate(sqlStatements.deleteDesign())
                             .setContext(RESOURCE_CONTEXT_KEY, "design")
                             .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, designId)
-                            .bind(0, DEFAULT_TENANT_ID)
+                            .bind(0, tenantContext.tenantId())
                             .bind(1, designId)
                             .execute()
             );
@@ -243,7 +246,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                     handle.createUpdate(sqlStatements.deleteDesignMetadata())
                             .setContext(RESOURCE_CONTEXT_KEY, "design metadata")
                             .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, designId)
-                            .bind(0, DEFAULT_TENANT_ID)
+                            .bind(0, tenantContext.tenantId())
                             .bind(1, designId)
                             .execute()
             );
@@ -251,7 +254,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                     handle.createUpdate(sqlStatements.deleteDesignContent())
                             .setContext(RESOURCE_CONTEXT_KEY, "content")
                             .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, String.valueOf(design.getContentId()))
-                            .bind(0, DEFAULT_TENANT_ID)
+                            .bind(0, tenantContext.tenantId())
                             .bind(1, design.getContentId())
                             .execute()
             );
@@ -266,7 +269,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                 handle.createQuery(sqlStatements.selectDesign())
                         .setContext(RESOURCE_CONTEXT_KEY, "design")
                         .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, designId)
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .bind(1, designId)
                         .mapTo(DesignDto.class)
                         .one()
@@ -306,7 +309,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
                 handle.createUpdate(sqlStatements.insertDesignEvent())
                         .setContext(RESOURCE_CONTEXT_KEY, "design event")
                         .setContext(RESOURCE_IDENTIFIER_CONTEXT_KEY, event.getId())
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .bind(1, event.getId())
                         .bind(2, event.getDesignId())
                         .bind(3, event.getCreatedOn())
@@ -323,7 +326,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
 
                 handle.createQuery(sqlStatements.selectDesignEvents())
                         .setContext(RESOURCE_CONTEXT_KEY, "design event")
-                        .bind(0, DEFAULT_TENANT_ID)
+                        .bind(0, tenantContext.tenantId())
                         .bind(1, designId)
                         .mapTo(DesignEventDto.class)
                         .list()

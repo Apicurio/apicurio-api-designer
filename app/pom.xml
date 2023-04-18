@@ -92,6 +92,16 @@
             <artifactId>apicurio-common-app-components-storage</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-common-app-components-multitenancy</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.apicurio</groupId>
+            <artifactId>apicurio-tenant-manager-client</artifactId>
+        </dependency>
+
         <!-- Quarkus -->
 
         <dependency>
@@ -128,7 +138,6 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy-jackson</artifactId>
         </dependency>
-
         <!-- Third-party -->
 
         <dependency>
