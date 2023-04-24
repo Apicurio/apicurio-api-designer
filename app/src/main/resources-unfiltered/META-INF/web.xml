@@ -15,13 +15,13 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>RegistryApplicationServletFilter</filter-name>
+        <filter-name>DesignerApplicationServletFilter</filter-name>
         <filter-class>io.apicurio.designer.rest.DesignerApplicationServletFilter</filter-class>
         <async-supported>true</async-supported>
     </filter>
     <filter-mapping>
-        <filter-name>RegistryApplicationServletFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <filter-name>DesignerApplicationServletFilter</filter-name>
+        <url-pattern>/apis/*</url-pattern>
     </filter-mapping>
 
     <filter>
