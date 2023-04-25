@@ -104,7 +104,7 @@ async function renameDesign(svcConfig: ServiceConfig, id: string, newName: strin
     console.debug("[DesignsService] Renaming design with ID: ", id, newName);
     const token: string | undefined = await svcConfig.auth.getToken();
 
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId", {
+    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/meta", {
         designId: id
     });
     const headers: any = {
