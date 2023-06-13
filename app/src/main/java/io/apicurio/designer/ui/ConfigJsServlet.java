@@ -109,7 +109,13 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
     }
 
     private String getEditorsUrl(HttpServletRequest request) {
-        String relativePath = "/editors";
+        if (appConfig.editorsUrl != null && appConfig.editorsUrl.startsWith("http")) {
+            return appConfig.editorsUrl;
+        }
+        String relativePath = "/editors/";
+        if (appConfig.editorsUrl != null && appConfig.editorsUrl.startsWith("/")) {
+            relativePath = appConfig.editorsUrl;
+        }
         
         // FIXME the following logic (resolving a relative path using XForward and request URL should be available
         //       in the base class (some base class refactoring needed).
