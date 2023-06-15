@@ -7,6 +7,7 @@ IMAGE_REPO ?= quay.io
 IMAGE_GROUP ?= apicurio
 IMAGE_TAG ?= latest-snapshot
 
+SKIP_TESTS ?= false
 COMMON_ARGS=-Dmaven.javadoc.skip=true --no-transfer-progress -DtrimStackTrace=false
 EXTRA_ARGS ?=
 
@@ -34,18 +35,17 @@ help:
 
 
 build:
-	mvn install $(COMMON_ARGS) $(EXTRA_ARGS)
+	mvn install -DskipTests=$(SKIP_TESTS) $(COMMON_ARGS) $(EXTRA_ARGS)
 .PHONY: build ## Builds and runs unit tests
+
+deploy:
+	mvn deploy -Pprod,release -DskipTests=$(SKIP_TESTS) $(COMMON_ARGS) $(EXTRA_ARGS)
+.PHONY: deploy ## Deploys to maven central
 
 
 #integration-tests:
 #	mvn verify -Pit -pl integration-tests $(COMMON_ARGS) $(EXTRA_ARGS)
 #.PHONY: integration-tests  ## Builds and runs integration tests
-
-
-pr-check: build
-.PHONY: pr-check ## Builds Apicurio API Designer with the required dependencies, and executes tests
-
 
 
 build-image:
