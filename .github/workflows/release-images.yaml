@@ -13,7 +13,6 @@ on:
 env:
   PLATFORMS: linux/amd64,linux/arm64,linux/s390x,linux/ppc64le
   IMAGE_ORG: apicurio
-  IMAGE_NAME: apicurio-api-designer-mem
   # The below values are extracted from the github.event context,
   # which is only availble when the workflow gets triggered by a release event.
   RELEASE_VERSION: ${{ github.event.release.name }}
@@ -75,7 +74,9 @@ jobs:
       - name: Build Apicurio API Designer
         env:
           SKIP_TESTS: "true"
-        run: cd designer && make build
+        run: |
+          cd designer
+          mvn install -DskipTests=true -Dmaven.javadoc.skip=true --no-transfer-progress -DtrimStackTrace=false
 
       - name: Login to Quay.io Registry
         run: docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" quay.io
@@ -83,7 +84,7 @@ jobs:
       - name: Login to DockerHub Registry
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
-      - name: Build and Publish Docker Image
+      - name: Build and Publish Docker Image (Mem)
         uses: docker/build-push-action@v2
         with:
           context: ./designer/dist/docker/target/docker
@@ -91,8 +92,23 @@ jobs:
           platforms: ${{env.PLATFORMS}}
           push: true
           tags: |
-            docker.io/${{env.IMAGE_ORG}}/${{env.IMAGE_NAME}}:${{env.RELEASE_VERSION}}
-            quay.io/${{env.IMAGE_ORG}}/${{env.IMAGE_NAME}}:${{env.RELEASE_VERSION}}
+            docker.io/${{env.IMAGE_ORG}}/apicurio-api-designer-mem:${{env.RELEASE_VERSION}}
+            docker.io/${{env.IMAGE_ORG}}/apicurio-api-designer-mem:latest
+            quay.io/${{env.IMAGE_ORG}}/apicurio-api-designer-mem:${{env.RELEASE_VERSION}}
+            quay.io/${{env.IMAGE_ORG}}/apicurio-api-designer-mem:latest
+
+      - name: Build and Publish Docker Image (SQL)
+        uses: docker/build-push-action@v2
+        with:
+          context: ./designer/dist/docker/target/docker
+          file: ./designer/dist/docker/target/docker/Dockerfile.postgresql.jvm
+          platforms: ${{env.PLATFORMS}}
+          push: true
+          tags: |
+            docker.io/${{env.IMAGE_ORG}}/apicurio-api-designer-sql:${{env.RELEASE_VERSION}}
+            docker.io/${{env.IMAGE_ORG}}/apicurio-api-designer-sql:latest
+            quay.io/${{env.IMAGE_ORG}}/apicurio-api-designer-sql:${{env.RELEASE_VERSION}}
+            quay.io/${{env.IMAGE_ORG}}/apicurio-api-designer-sql:latest
 
       - name: Google Chat Notification
         if: ${{ failure() }}

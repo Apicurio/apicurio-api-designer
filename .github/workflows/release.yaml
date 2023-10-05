@@ -53,6 +53,11 @@ jobs:
       - name: Update Release Version ${{ github.event.inputs.release-version }} in pom.xml
         run: cd api-designer && mvn versions:set -DnewVersion=${{ github.event.inputs.release-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
 
+      - name: Build Apicurio API Designer
+        run: |
+          cd api-designer
+          mvn install -Dmaven.javadoc.skip=false --no-transfer-progress -DtrimStackTrace=false
+
       - name: Set up settings.xml
         if: github.event.inputs.skip-maven-deploy == 'false'
         run: |
@@ -68,19 +73,6 @@ jobs:
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-
-      - name: Maven Deploy
-        if: github.event.inputs.skip-maven-deploy == 'false'
-        env:
-          SKIP_TESTS: "false"
-          EXTRA_ARGS: "--batch-mode --settings /home/runner/.m2/settings.xml"
-        run: |
-          cd api-designer
-          # Retry 3 times before the steps actually fails
-          (echo "===== Maven Deploy Attempt: 1 ====" && make deploy) || \
-          (echo "===== Maven Deploy Attempt: 2 ====" && make deploy) || \
-          (echo "===== Maven Deploy Attempt: 3 ====" && make deploy) || \
-          (echo "==== Maven Deploy Step Failed ====" && exit 1)
         
       - name: Push Changes for Release Version ${{ github.event.inputs.release-version }}
         run: |
