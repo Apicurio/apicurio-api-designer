@@ -189,7 +189,7 @@
 
             <dependency>
                 <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-api-designer-storage-postgres</artifactId>
+                <artifactId>apicurio-api-designer-storage-postgresql</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

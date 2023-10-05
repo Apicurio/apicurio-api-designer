@@ -12,8 +12,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>apicurio-api-designer-storage-postgres</artifactId>
-    <name>apicurio-api-designer-storage-postgres</name>
+    <artifactId>apicurio-api-designer-storage-postgresql</artifactId>
+    <name>apicurio-api-designer-storage-postgresql</name>
     <packaging>jar</packaging>
 
     <dependencies>
