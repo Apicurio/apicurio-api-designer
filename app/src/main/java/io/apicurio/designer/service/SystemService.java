@@ -4,8 +4,8 @@ import io.apicurio.common.apps.core.System;
 import io.apicurio.designer.service.model.SystemInfoDto;
 
 import java.time.Instant;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>

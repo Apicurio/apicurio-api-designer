@@ -20,8 +20,8 @@ import io.apicurio.common.apps.config.DynamicConfigStorage;
 import io.apicurio.common.apps.config.DynamicConfigStorageAccessor;
 import io.apicurio.designer.spi.storage.DesignerStorage;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * @author eric.wittmann@gmail.com

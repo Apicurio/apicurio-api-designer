@@ -4,7 +4,7 @@ import io.apicurio.designer.test.shared.rest.v0.DesignsResourceTestShared;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>

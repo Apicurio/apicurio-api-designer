@@ -2,8 +2,8 @@ package io.apicurio.designer.test.shared.rest.v0;
 
 import io.restassured.http.ContentType;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.core.Response;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.Response;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;

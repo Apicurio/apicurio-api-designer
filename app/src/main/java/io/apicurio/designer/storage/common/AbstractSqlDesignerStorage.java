@@ -17,8 +17,8 @@ import io.apicurio.designer.spi.storage.model.DesignEventDto;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 import org.slf4j.Logger;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -264,7 +264,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
     }
 
     @Transactional
-    private DesignDto getDesign(String designId) {
+    public DesignDto getDesign(String designId) {
         return handles.withHandleNoExceptionMapped(handle ->
                 handle.createQuery(sqlStatements.selectDesign())
                         .setContext(RESOURCE_CONTEXT_KEY, "design")

@@ -6,11 +6,11 @@ import io.apicurio.common.apps.storage.sql.BaseSqlStorageComponent;
 import io.apicurio.designer.spi.storage.DesignerStorage;
 import io.apicurio.designer.storage.common.AbstractSqlDesignerStorage;
 import io.quarkus.arc.DefaultBean;
+import jakarta.annotation.PostConstruct;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

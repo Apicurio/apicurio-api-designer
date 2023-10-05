@@ -21,7 +21,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * @author Carles Arnal

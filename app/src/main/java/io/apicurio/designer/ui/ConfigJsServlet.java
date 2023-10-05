@@ -21,8 +21,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 
 import io.apicurio.designer.config.ApiDesignerConfig;
 import io.apicurio.designer.ui.beans.ApiDesignerConfigType;
@@ -53,7 +53,7 @@ public class ConfigJsServlet extends io.apicurio.common.apps.web.servlets.Config
     }
 
     /**
-     * @see io.apicurio.common.apps.web.servlets.ConfigJsServlet#generateConfig(javax.servlet.http.HttpServletRequest)
+     * @see io.apicurio.common.apps.web.servlets.ConfigJsServlet#generateConfig(jakarta.servlet.http.HttpServletRequest)
      */
     @Override
     protected Object generateConfig(HttpServletRequest request) {

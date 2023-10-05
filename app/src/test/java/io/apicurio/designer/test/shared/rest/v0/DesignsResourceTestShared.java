@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.core.Response.Status;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.ws.rs.core.Response.Status;
 
 import static io.apicurio.designer.test.shared.Utils.assertTimeWithin;
 import static io.restassured.RestAssured.given;

@@ -8,7 +8,7 @@ import io.apicurio.designer.spi.storage.DesignerStorageException;
 import io.apicurio.designer.spi.storage.ResourceAlreadyExistsStorageException;
 import io.apicurio.designer.spi.storage.ResourceNotFoundStorageException;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
