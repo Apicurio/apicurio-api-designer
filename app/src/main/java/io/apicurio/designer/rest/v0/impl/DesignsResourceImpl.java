@@ -21,15 +21,16 @@ import io.apicurio.designer.spi.storage.SearchQuerySpecification.SearchQuery;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
 
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Consumer;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.validation.ValidationException;
-import javax.ws.rs.core.Response;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.validation.ValidationException;
+import jakarta.ws.rs.core.Response;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
@@ -46,9 +47,9 @@ public class DesignsResourceImpl implements DesignsResource {
     @Override
     @Authorized
     public DesignSearchResults getDesigns(String name, SortOrder order, SortBy orderby, String description,
-                                          String type, Integer pageSize, Integer page) {
+                                          String type, BigInteger pageSize, BigInteger page) {
         // TODO Do we want to limit max page size?
-        if (page != null && page < 1) {
+        if (page != null && page.intValue() < 1) {
             throw new ValidationException("Page index must not be negative");
         }
 
@@ -63,18 +64,18 @@ public class DesignsResourceImpl implements DesignsResource {
         orderby = orderby != null ? orderby : SortBy.modifiedOn;
         search.orderBy(orderby.name(), order == SortOrder.desc ? SearchOrdering.DESC : SearchOrdering.ASC);
 
-        page = page != null ? page : 1;
-        pageSize = pageSize != null ? pageSize : 20;
+        page = page != null ? page : BigInteger.valueOf(1);
+        pageSize = pageSize != null ? pageSize : BigInteger.valueOf(20);
 
-        search.limit((page - 1) * pageSize, pageSize);
+        search.limit((page.intValue() - 1) * pageSize.intValue(), pageSize.intValue());
         // TODO: Move vvv to service layer
         var list = designService.searchDesignMetadata(search);
         int total = (int) designService.countDesigns(); // TODO Check cast
         return DesignSearchResults.builder()
                 .kind("DesignSearchResults")
                 .count(total)
-                .page(page)
-                .pageSize(pageSize)
+                .page(page.intValue())
+                .pageSize(pageSize.intValue())
                 .designs(list.stream().map(this::convert).toList())
                 .build();
     }

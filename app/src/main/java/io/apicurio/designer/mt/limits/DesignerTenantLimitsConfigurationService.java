@@ -4,7 +4,7 @@ import io.apicurio.common.apps.multitenancy.limits.TenantLimitsConfiguration;
 import io.apicurio.common.apps.multitenancy.limits.TenantLimitsConfigurationService;
 import io.apicurio.tenantmanager.api.datamodel.ApicurioTenant;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class DesignerTenantLimitsConfigurationService implements TenantLimitsConfigurationService {

@@ -7,8 +7,8 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.Date;
 import java.util.Optional;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>

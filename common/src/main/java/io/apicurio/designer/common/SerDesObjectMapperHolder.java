@@ -7,7 +7,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 /**
- * @author Jakub Senko <jsenko@redhat.com>
+ * @author Jakub Senko jsenko@redhat.com
  */
 public class SerDesObjectMapperHolder {
 

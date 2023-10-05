@@ -23,7 +23,7 @@ import io.apicurio.designer.storage.common.AbstractDesignerSqlStatements;
 import io.quarkus.arc.DefaultBean;
 
 import java.sql.SQLException;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * @author eric.wittmann@gmail.com

@@ -5,7 +5,7 @@ import io.apicurio.designer.spi.storage.model.DesignDto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>

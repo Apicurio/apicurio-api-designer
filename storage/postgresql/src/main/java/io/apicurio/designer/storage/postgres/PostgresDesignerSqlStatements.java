@@ -22,7 +22,7 @@ import io.apicurio.designer.spi.storage.DesignerSqlStatements;
 import io.apicurio.designer.storage.common.AbstractDesignerSqlStatements;
 
 import java.sql.SQLException;
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>

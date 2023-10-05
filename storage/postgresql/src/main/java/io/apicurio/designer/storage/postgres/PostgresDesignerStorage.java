@@ -6,10 +6,10 @@ import io.apicurio.common.apps.storage.sql.BaseSqlStorageComponent;
 import io.apicurio.designer.spi.storage.DesignerStorage;
 import io.apicurio.designer.storage.common.AbstractSqlDesignerStorage;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import java.util.List;
 
 /**
