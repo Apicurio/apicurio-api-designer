@@ -11,4 +11,4 @@ then
   exit 1
 fi
 
-$DOCKER_CMD build -t="apicurio/api-designer-ui" --rm .
+$DOCKER_CMD build -t="apicurio/apicurio-api-designer-ui:latest-snapshot" --rm .

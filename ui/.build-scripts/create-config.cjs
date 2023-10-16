@@ -11,7 +11,7 @@ const NAV_PREFIX_PATH=process.env["DESIGNER_NAV_PREFIX_PATH"] || "";
 const DESIGNER_API_URL=process.env["DESIGNER_API_URL"] || "/apis/designer/v0";
 const SHOW_MASTHEAD=process.env["DESIGNER_SHOW_MASTHEAD"] || "true";
 const MASTHEAD_LABEL=process.env["DESIGNER_MASTHEAD_LABEL"] || "API DESIGNER";
-const EDITORS_URL=process.env["DESIGNER_EDITORS_URL"] || "/editors";
+const EDITORS_URL=process.env["DESIGNER_EDITORS_URL"] || "/editors/";
 
 const AUTH_TYPE=process.env["DESIGNER_AUTH_TYPE"] || "none";
 const AUTH_URL=process.env["DESIGNER_AUTH_URL"] || "";
