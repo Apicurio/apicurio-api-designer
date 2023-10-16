@@ -49,14 +49,31 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
       - name: Update Release Version ${{ github.event.inputs.release-version }} in pom.xml
-        run: cd api-designer && mvn versions:set -DnewVersion=${{ github.event.inputs.release-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
+        run: |
+          cd api-designer
+          mvn versions:set -DnewVersion=${{ github.event.inputs.release-version }} -DgenerateBackupPoms=false -DprocessAllModules=true
+          cd ui
+          npm version ${{ github.event.inputs.release-version }}
+          cd ui-app
+          npm version ${{ github.event.inputs.release-version }}
+          cd ../ui-editors
+          npm version ${{ github.event.inputs.release-version }}
 
       - name: Build Apicurio API Designer
         run: |
           cd api-designer
           mvn install -Dmaven.javadoc.skip=false --no-transfer-progress -DtrimStackTrace=false
+          cd ui
+          npm install
+          npm run build
+          npm run package
 
       - name: Set up settings.xml
         if: github.event.inputs.skip-maven-deploy == 'false'
@@ -80,12 +97,12 @@ jobs:
           git add .
           git commit -m "Automated update for Release Version: ${{ github.event.inputs.release-version }}"
           git push origin ${{github.event.inputs.branch}}
-          
+
       - name: Fetch Latest Commit SHA
         run: |
           cd api-designer
           echo "latest-commit-sha=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
-         
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5
         with:
@@ -94,10 +111,18 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           target_commitish: ${{ env.latest-commit-sha }}
           prerelease: false
-     
-      - name: Update Next Snapshot Version ${{ github.event.inputs.snapshot-version }} in pom.xml
-        run: cd api-designer && mvn versions:set -DnewVersion=${{ github.event.inputs.snapshot-version }} -DgenerateBackupPoms=false -DprocessAllModules=true
-     
+
+      - name: Update Next Snapshot Version ${{ github.event.inputs.snapshot-version }}
+        run: |
+          cd api-designer
+          mvn versions:set -DnewVersion=${{ github.event.inputs.snapshot-version }} -DgenerateBackupPoms=false -DprocessAllModules=true
+          cd ui
+          npm version ${{ github.event.inputs.snapshot-version }}
+          cd ui-app
+          npm version ${{ github.event.inputs.snapshot-version }}
+          cd ../ui-editors
+          npm version ${{ github.event.inputs.snapshot-version }}
+
       - name: Push Changes for Next Snapshot Version ${{ github.event.inputs.snapshot-version }}
         run: |
           cd api-designer

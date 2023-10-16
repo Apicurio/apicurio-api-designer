@@ -177,18 +177,6 @@
 
             <dependency>
                 <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-api-designer-ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-api-designer-ui-editors</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-api-designer-storage-postgresql</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -497,10 +485,6 @@
                                     <name>quarkus.profile</name>
                                     <value>${quarkus.profile}</value>
                                 </property>
-                                <property>
-                                    <name>skipUiBuild</name>
-                                    <value>${skipUiBuild}</value>
-                                </property>
                             </properties>
                         </configuration>
                     </execution>
@@ -613,19 +597,6 @@
     </build>
 
     <profiles>
-
-        <profile>
-            <id>ui</id>
-            <activation>
-                <property>
-                    <name>!skipUiBuild</name>
-                </property>
-            </activation>
-            <modules>
-                <module>ui</module>
-                <module>ui-editors</module>
-            </modules>
-        </profile>
 
         <profile>
             <id>prod</id>
