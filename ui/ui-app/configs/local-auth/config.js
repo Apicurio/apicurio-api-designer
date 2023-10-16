@@ -22,7 +22,7 @@ const ApiDesignerConfig = {
     "auth": {
         "type": "oidc",
         "options": {
-            "redirectUri": "http://localhost:7070/ui/",
+            "redirectUri": "http://localhost:8000",
             "clientId": "apicurio-studio",
             "url": "https://auth.apicur.io/auth/realms/apicurio-local"
         }

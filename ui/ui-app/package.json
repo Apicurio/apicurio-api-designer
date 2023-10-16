@@ -1,10 +1,11 @@
 {
-  "name": "@apicurio/api-designer",
+  "name": "@apicurio/api-designer-app",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "scripts": {
     "postinstall": "node .fix_yaml.cjs",
+    "clean": "rimraf dist",
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -41,6 +42,7 @@
     "eslint": "8.50.0",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-react-refresh": "0.4.3",
+    "rimraf": "3.0.2",
     "typescript": "5.2.2",
     "vite": "4.4.9",
     "vite-tsconfig-paths": "4.2.1"

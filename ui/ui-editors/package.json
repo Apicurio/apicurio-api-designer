@@ -2,11 +2,9 @@
     "name": "@apicurio/api-designer-editors",
     "version": "0.1.0",
     "scripts": {
-        "ng": "ng",
-        "start": "ng serve --port 9011",
-        "prebuild": "npm run clean",
-        "build": "ng build --outputHashing=all",
-        "clean": "rimraf dist"
+        "clean": "rimraf dist",
+        "dev": "ng serve --port 9011",
+        "build": "ng build --outputHashing=all"
     },
     "private": true,
     "dependencies": {
