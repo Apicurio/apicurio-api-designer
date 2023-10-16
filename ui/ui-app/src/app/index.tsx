@@ -53,10 +53,14 @@ const App: React.FunctionComponent = () => {
         return loadingState;
     }
 
+    const editorsUrl: string = apiDesignerConfig.components.editors.url.startsWith("/") ?
+        (window.location.origin + apiDesignerConfig.components.editors.url) :
+        apiDesignerConfig.components.editors.url;
+
     const pageConfig: PageConfig = {
         editorConfig: {
-            openApiEditorUrl: apiDesignerConfig.components.editors.url,
-            asyncApiEditorUrl: apiDesignerConfig.components.editors.url
+            openApiEditorUrl: editorsUrl,
+            asyncApiEditorUrl: editorsUrl
         },
         serviceConfig: {
             designs: {
