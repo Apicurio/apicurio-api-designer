@@ -30,16 +30,6 @@
             <artifactId>apicurio-api-designer-spi</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>io.apicurio</groupId>
-            <artifactId>apicurio-api-designer-ui</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>io.apicurio</groupId>
-            <artifactId>apicurio-api-designer-ui-editors</artifactId>
-        </dependency>
-
         <!-- Apicurio -->
 
         <dependency>
@@ -276,57 +266,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack-ui</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipUiBuild}</skip>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>apicurio-api-designer-ui</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>${project.build.outputDirectory}/META-INF/resources/ui</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>unpack-ui-editors</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${skipUiBuild}</skip>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>${project.groupId}</groupId>
-                                    <artifactId>apicurio-api-designer-ui-editors</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                </artifactItem>
-                            </artifactItems>
-                            <outputDirectory>${project.build.outputDirectory}/META-INF/resources/editors</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
@@ -392,22 +331,5 @@
 
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>add-ui-dep</id>
-            <activation>
-                <property>
-                    <name>!skipUiBuild</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>io.apicurio</groupId>
-                    <artifactId>apicurio-api-designer-ui</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 
 </project>

@@ -1,7 +1,0 @@
-{
-  "host": "prod.foo.redhat.com",
-  "port": 1337,
-  "protocol": "https",
-  "keycloak": true,
-  "warning": "To use this configuration, you MUST map 'prod.foo.redhat.com' to your local IP address in your 'hosts' file."
-}

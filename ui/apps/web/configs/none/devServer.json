@@ -1,7 +1,0 @@
-{
-  "host": "localhost",
-  "port": 7070,
-  "protocol": "http",
-  "keycloak": false,
-  "warning": "This configuration expects a non-secure (auth disabled) instance of apicurio-registry to be running on localhost port 8081.  You can get that going by using docker:  docker run -it -p 8081:8080 apicurio/apicurio-registry-mem:latest-release"
-}
