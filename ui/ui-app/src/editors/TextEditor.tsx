@@ -3,28 +3,7 @@ import Editor from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
 import { Editor as DesignEditor, EditorProps } from "./editor-types";
-import { ContentTypes, DesignContent } from "@models/designs";
-import { contentToString } from "@utils/content.utils.ts";
-
-
-export const designContentToString = (content: DesignContent): string => {
-    return contentToString(content.data);
-};
-
-
-export const designContentToLanguage = (content: DesignContent): string => {
-    if (content.contentType === ContentTypes.APPLICATION_YAML) {
-        return "yaml";
-    } else if (content.contentType === ContentTypes.APPLICATION_XML) {
-        return "xml";
-    } else if (content.contentType === ContentTypes.TEXT_XML) {
-        return "xml";
-    } else if (content.contentType === ContentTypes.APPLICATION_WSDL) {
-        return "xml";
-    }
-    return "json";
-};
-
+import { designContentToLanguage, designContentToString } from "@utils/content.utils.ts";
 
 /**
  * Simple text editor.  This is a fallback editor for any text based content

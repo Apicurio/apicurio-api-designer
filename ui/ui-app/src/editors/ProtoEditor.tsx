@@ -3,7 +3,7 @@ import { Editor as DesignEditor, EditorProps } from "./editor-types";
 import Editor, { Monaco } from "@monaco-editor/react";
 import { editor } from "monaco-editor";
 import IStandaloneCodeEditor = editor.IStandaloneCodeEditor;
-import { designContentToString } from "./TextEditor";
+import { designContentToString } from "@utils/content.utils.ts";
 
 const protoBufThemeData = {
     base: "vs",

@@ -1,5 +1,6 @@
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import { ServiceConfig, useServiceConfig } from "./ServiceConfigContext";
+import { useServiceConfig } from "@services/useServiceConfig";
+import { ServiceConfig } from "@services/ServiceConfigContext";
 
 export const navigateTo: (path: string, svcConfig: ServiceConfig, navigateFunc: NavigateFunction) => void = (path: string, svcConfig: ServiceConfig, navigateFunc: NavigateFunction) => {
     const to: string = `${svcConfig.navigation.basename}${path}`;

@@ -46,7 +46,7 @@ export const AsyncApiEditor: DesignEditor = ({ content, onChange, className }: A
         return () => {
             window.removeEventListener("message", eventListener, false);
         };
-    }, []);
+    });
 
     const editorAppUrl = (): string => {
         return cfg.asyncApiEditorUrl;

@@ -47,7 +47,7 @@ export const OpenApiEditor: DesignEditor = ({ content, onChange, className }: Op
         return () => {
             window.removeEventListener("message", eventListener, false);
         };
-    }, []);
+    });
 
     const editorAppUrl = (): string => {
         return cfg.openApiEditorUrl;

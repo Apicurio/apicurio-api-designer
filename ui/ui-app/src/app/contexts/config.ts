@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+import { getApiDesignerConfig } from "@utils/config.utils.ts";
 
 export type EditorsType = {
     url: string;
@@ -25,7 +26,6 @@ export type ApisType = {
 
 export type AuthType = {
     type: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     options?: any;
 };
 
@@ -36,9 +36,7 @@ export type ApiDesignerConfigType = {
     auth: AuthType;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const apiDesignerConfig: ApiDesignerConfigType = (ApiDesignerConfig || window["ApiDesignerConfig"]) as ApiDesignerConfigType;
+const apiDesignerConfig: ApiDesignerConfigType = getApiDesignerConfig();
 
 export const ApiDesignerConfigContext = createContext<ApiDesignerConfigType | undefined>(
     apiDesignerConfig

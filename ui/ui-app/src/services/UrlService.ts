@@ -1,4 +1,4 @@
-import { createOptions, httpGet } from "@utils/rest.utils.ts";
+import { createOptions, httpGet } from "@utils/rest.utils";
 
 const githubRegex: RegExp = /^https:\/\/github\.com\/([^/]+)\/([^/]+)\/blob\/([^/]+)\/(.+)$/;
 

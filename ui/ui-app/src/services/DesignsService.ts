@@ -10,9 +10,10 @@ import {
     DesignsSort,
     Paging, RenameDesign,
 } from "@models/designs";
-import { ServiceConfig, useServiceConfig } from "./ServiceConfigContext";
+import { ServiceConfig } from "./ServiceConfigContext";
 import { useBrowserDesignsService } from "./BrowserDesignsService";
-import { createEndpoint, createOptions, httpDelete, httpGet, httpPostWithReturn, httpPut } from "@utils/rest.utils.ts";
+import { createEndpoint, createOptions, httpDelete, httpGet, httpPostWithReturn, httpPut } from "@utils/rest.utils";
+import { useServiceConfig } from "@services/useServiceConfig";
 
 function limit(value: string | undefined, size: number): string {
     if (value != undefined && value.length > size) {

@@ -34,14 +34,12 @@ const icon = (type: string | undefined): string => {
  * Properties
  */
 export type ArtifactTypeIconProps = {
+    className?: string;
     type: string;
     isShowIcon: boolean;
     isShowLabel: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ArtifactTypeIcon: FunctionComponent<ArtifactTypeIconProps> = ({ className, type, isShowIcon, isShowLabel }: ArtifactTypeIconProps) => {
     const getTitle = (): string => {
         let title: string = type;

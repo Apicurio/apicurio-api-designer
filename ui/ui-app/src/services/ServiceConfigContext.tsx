@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 export type DesignsServiceConfigType = {
     type: string;
@@ -40,7 +40,3 @@ export const ServiceConfigContext: React.Context<ServiceConfig> = React.createCo
         getUsername: defaultGetUsername
     }
 });
-
-export const useServiceConfig: () => ServiceConfig = (): ServiceConfig => {
-    return useContext(ServiceConfigContext);
-};

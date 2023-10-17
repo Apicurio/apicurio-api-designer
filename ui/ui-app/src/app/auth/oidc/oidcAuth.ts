@@ -1,13 +1,11 @@
 import { UserManager } from "oidc-client-ts";
 import { ApiDesignerConfigType } from "@app/contexts/config";
+import { getApiDesignerConfig } from "@utils/config.utils.ts";
 
 const OIDC_CONFIG_OPTIONS: string[] = ["url", "clientId", "redirectUri"];
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const apiDesignerConfig: ApiDesignerConfigType = (ApiDesignerConfig || window["ApiDesignerConfig"]) as ApiDesignerConfigType;
+const apiDesignerConfig: ApiDesignerConfigType = getApiDesignerConfig();
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function only(items: string[], allOptions: any): any {
     const rval: any = {};
     items.forEach(item => {

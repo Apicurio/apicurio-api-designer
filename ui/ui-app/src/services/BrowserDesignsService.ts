@@ -11,7 +11,7 @@ import {
 import Dexie from "dexie";
 import { v4 as uuidv4 } from "uuid";
 import { DesignsService } from "./DesignsService";
-import { limit } from "@utils/design.utils.ts";
+import { limit } from "@utils/design.utils";
 
 
 const db = new Dexie("designsDB");

@@ -1,16 +1,12 @@
 import { FunctionComponent, useState } from "react";
 import { ObjectDropdown } from "@app/components";
+import { ImportFrom } from "@app/pages";
 
 type ImportDropdownItem = {
     label: string,
     shortLabel: string,
     handler: () => void;
 };
-
-export enum ImportFrom {
-    FILE,
-    URL
-}
 
 /**
  * Properties

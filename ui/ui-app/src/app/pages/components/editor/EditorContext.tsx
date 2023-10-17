@@ -13,13 +13,12 @@ import {
     Text,
     TextContent
 } from "@patternfly/react-core";
-import { NavLink } from "../common/NavLink";
-import { DesignDescription } from "../common/DesignDescription";
 import { ArtifactTypes, Design, DesignEvent } from "@models/designs";
 import { LocalStorageService, useLocalStorageService } from "@services/LocalStorageService.ts";
 import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
 import { DropdownSeparator } from "@patternfly/react-core/deprecated";
 import { If, ToggleIcon, ArtifactTypeIcon } from "@app/components";
+import { DesignDescription, NavLink } from "@app/pages";
 
 /**
  * Properties

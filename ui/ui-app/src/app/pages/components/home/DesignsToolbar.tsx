@@ -9,8 +9,8 @@ import {
     ToolbarContent,
     ToolbarItem
 } from "@patternfly/react-core";
-import { ImportDropdown, ImportFrom } from "./ImportDropdown";
 import { DesignsSearchCriteria, DesignsSearchResults, Paging } from "@models/designs";
+import { ImportDropdown, ImportFrom } from "@app/pages";
 
 
 /**

@@ -7,3 +7,4 @@ export * from "./NavigationService";
 export * from "./ServiceConfigContext";
 export * from "./TemplatesService";
 export * from "./UrlService";
+export * from "./useServiceConfig";

@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/Apicurio/apicurio-api-designer.git",
   "scripts": {
     "postinstall": "node .fix_yaml.cjs",
     "clean": "rimraf dist",

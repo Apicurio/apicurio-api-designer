@@ -194,3 +194,21 @@ export function contentToString(content: any): string {
         return JSON.stringify(content as string, null, 4);
     }
 }
+
+export const designContentToString = (content: DesignContent): string => {
+    return contentToString(content.data);
+};
+
+
+export const designContentToLanguage = (content: DesignContent): string => {
+    if (content.contentType === ContentTypes.APPLICATION_YAML) {
+        return "yaml";
+    } else if (content.contentType === ContentTypes.APPLICATION_XML) {
+        return "xml";
+    } else if (content.contentType === ContentTypes.TEXT_XML) {
+        return "xml";
+    } else if (content.contentType === ContentTypes.APPLICATION_WSDL) {
+        return "xml";
+    }
+    return "json";
+};

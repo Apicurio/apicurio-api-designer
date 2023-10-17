@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext } from "react";
+import React, { FunctionComponent } from "react";
 import { ServiceConfig, ServiceConfigContext } from "@services/ServiceConfigContext.tsx";
 import { EditorConfig, EditorConfigContext } from "@editors/EditorConfigContext.ts";
 
@@ -31,11 +31,7 @@ const defaultPageConfig: PageConfig = {
     }
 };
 
-const PageConfigContext: React.Context<PageConfig> = React.createContext(defaultPageConfig);
-
-export const usePageConfig: () => PageConfig = (): PageConfig => {
-    return useContext(PageConfigContext);
-};
+export const PageConfigContext: React.Context<PageConfig> = React.createContext(defaultPageConfig);
 
 /**
  * Properties

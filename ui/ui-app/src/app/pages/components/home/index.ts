@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export * from "./DesignEventType";
 export * from "./DesignsEmptyStateFiltered";
 export * from "./DesignsToolbar";
@@ -15,5 +14,6 @@ export * from "./CreateDesignModal";
 export * from "./DesignDetailsPanel";
 export * from "./UrlUpload";
 export * from "./ImportDesignModal";
+export * from "./ImportFrom";
 export * from "./type-options";
 export * from "./version-options";

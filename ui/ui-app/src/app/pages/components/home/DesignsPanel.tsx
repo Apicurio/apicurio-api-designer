@@ -1,13 +1,15 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Alert, AlertActionCloseButton, Card, CardBody } from "@patternfly/react-core";
-import { ImportFrom } from "./ImportDropdown";
-import { DesignsEmptyState } from "./DesignsEmptyState";
-import { DesignsEmptyStateFiltered } from "./DesignsEmptyStateFiltered";
-import { DesignsToolbar } from "./DesignsToolbar";
-import { DesignList } from "./DesignList";
-import { DeleteDesignModal } from "./DeleteDesignModal";
-import { RenameModal } from "../common/RenameModal";
-import { PageConfig, usePageConfig } from "@app/pages";
+import {
+    DeleteDesignModal,
+    DesignList,
+    DesignsEmptyState,
+    DesignsEmptyStateFiltered,
+    DesignsToolbar,
+    ImportFrom,
+    PageConfig, RenameModal,
+    usePageConfig
+} from "@app/pages";
 import {
     Design,
     DesignsSearchCriteria,

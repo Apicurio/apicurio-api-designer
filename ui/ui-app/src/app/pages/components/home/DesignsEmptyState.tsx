@@ -9,7 +9,7 @@ import {
     EmptyStateIcon
 } from "@patternfly/react-core";
 import { AddCircleOIcon } from "@patternfly/react-icons";
-import { ImportDropdown, ImportFrom } from "./ImportDropdown";
+import { ImportDropdown, ImportFrom } from "@app/pages";
 
 /**
  * Properties
