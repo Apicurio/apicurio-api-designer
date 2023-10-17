@@ -110,7 +110,7 @@
 
         <!-- Quarkus -->
 
-        <version.quarkus>3.2.6.Final</version.quarkus>
+        <version.quarkus>3.4.3</version.quarkus>
         <quarkus.profile>dev</quarkus.profile>
 
         <!-- Dependency Versions -->
