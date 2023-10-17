@@ -1,27 +1,30 @@
-# React + TypeScript + Vite
+# Apicurio API Designer UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Apicurio API Designer UI is a React based Single Page Application based on Patternfly 5.
 
-Currently, two official plugins are available:
+## Requirements
+This project requires node version 16.x.x and npm version > 8.3.x.
+Prior to building this project make sure you have these applications installed.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Development Scripts
 
-## Expanding the ESLint configuration
+Install development/build dependencies
+`npm install`
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Run a full build
+`npm run build`
 
-- Configure the top-level `parserOptions` property like this:
+Initialize config.js
+`./init-dev.sh none`
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+Note: the init-dev.sh script just copies an appropriate file from config/config-*.js to the right place.  You can either specify `none` or `keycloakjs` as the argument to the script.  The choice depends on how you are running the back-end component.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Start the development server
+`npm run dev`
+
+Once the development server is running you can access the UI via http://localhost:8888
+
+Note that you will need a registry back-end running for the UI to actually work.  The easiest way to do this is using
+docker, but you could also run the registry from maven or any other way you choose.  Here is how you do it with Docker:
+
+`docker run -it -p 8080:8080 apicurio/apicurio-api-designer-mem:latest-snapshot`
