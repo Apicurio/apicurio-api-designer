@@ -14,7 +14,7 @@
         "package": "node .scripts/package.cjs"
     },
     "devDependencies": {
-        "rimraf": "3.0.2",
+        "rimraf": "5.0.5",
         "shelljs": "0.8.5"
     }
   }
