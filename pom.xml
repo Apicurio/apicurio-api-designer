@@ -115,7 +115,7 @@
 
         <!-- Dependency Versions -->
 
-        <lombok.version>1.18.26</lombok.version>
+        <lombok.version>1.18.30</lombok.version>
         <commons-codec.version>1.15</commons-codec.version>
         <httpclient.version>4.5.14</httpclient.version>
         <apicurio-common-app-components.version>0.2.2.Final</apicurio-common-app-components.version>
