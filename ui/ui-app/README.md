@@ -14,10 +14,12 @@ Install development/build dependencies
 Run a full build
 `npm run build`
 
-Initialize config.js
+Initialize config-oidc.js
 `./init-dev.sh none`
 
-Note: the init-dev.sh script just copies an appropriate file from config/config-*.js to the right place.  You can either specify `none` or `keycloakjs` as the argument to the script.  The choice depends on how you are running the back-end component.
+Note: the init-dev.sh script just copies an appropriate file from config/config-*.js to the right place.  You can 
+either specify `none` or `oidc` as the argument to the script.  The choice depends on how you are running the 
+back-end component.
 
 Start the development server
 `npm run dev`

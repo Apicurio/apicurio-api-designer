@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# The DEV config.js file - don't check this is.
+# The DEV config-oidc.js file - don't check this is.
 /config.js
+/version.js
