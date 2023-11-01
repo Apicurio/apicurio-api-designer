@@ -181,21 +181,7 @@
 
     </dependencies>
 
-    <dependencyManagement>
-        <dependencies>
-
-            <!-- Needed for the codegen plugin -->
-            <dependency>
-                <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-data-models</artifactId>
-                <scope>compile</scope>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
-
     <build>
-
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
