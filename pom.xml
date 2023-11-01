@@ -145,7 +145,6 @@
         <version.assembly.plugin>3.6.0</version.assembly.plugin>
         <version.resources.plugin>3.3.1</version.resources.plugin>
         <version.clean.plugin>3.3.1</version.clean.plugin>
-        <version.frontend-maven.plugin>1.12.1</version.frontend-maven.plugin>
         <version.git-commit-id-maven-plugin>7.0.0</version.git-commit-id-maven-plugin>
         <version.apicurio-codegen-maven-plugin>1.1.0.Final</version.apicurio-codegen-maven-plugin>
         <version.maven-gpg-plugin>3.1.0</version.maven-gpg-plugin>
@@ -456,12 +455,6 @@
                     <groupId>io.github.git-commit-id</groupId>
                     <artifactId>git-commit-id-maven-plugin</artifactId>
                     <version>${version.git-commit-id-maven-plugin}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>com.github.eirslett</groupId>
-                    <artifactId>frontend-maven-plugin</artifactId>
-                    <version>${version.frontend-maven.plugin}</version>
                 </plugin>
 
             </plugins>
