@@ -53,7 +53,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'true'
+          cache: 'npm'
           cache-dependency-path: 'ui/**/package-lock.json'
 
       # Open-Source Machine emulator that allows you to emulate multiple CPU architectures on your machine
