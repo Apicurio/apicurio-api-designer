@@ -6,8 +6,16 @@ updates:
     interval: daily
   open-pull-requests-limit: 10
 
-- package-ecosystem: "npm"
-  directory: "/ui/"
+- package-ecosystem: npm
+  directory: "/ui"
   schedule:
-    interval: "daily"
+    interval: daily
   open-pull-requests-limit: 10
+  versioning-strategy: increase
+
+- package-ecosystem: npm
+  directory: "/ui/ui-app"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  versioning-strategy: increase
