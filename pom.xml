@@ -143,7 +143,7 @@
         <version.properties.plugin>1.2.0</version.properties.plugin>
         <version.dependency.plugin>3.6.1</version.dependency.plugin>
         <version.assembly.plugin>3.6.0</version.assembly.plugin>
-        <version.resources.plugin>3.3.0</version.resources.plugin>
+        <version.resources.plugin>3.3.1</version.resources.plugin>
         <version.clean.plugin>3.3.1</version.clean.plugin>
         <version.frontend-maven.plugin>1.12.1</version.frontend-maven.plugin>
         <version.git-commit-id-maven-plugin>6.0.0</version.git-commit-id-maven-plugin>
