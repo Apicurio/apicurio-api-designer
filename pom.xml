@@ -129,7 +129,7 @@
         <!-- Test Dependency Versions -->
 
         <version.org.testcontainers.postgresql>1.19.1</version.org.testcontainers.postgresql>
-        <version.wiremock>2.35.0</version.wiremock>
+        <version.wiremock>2.35.1</version.wiremock>
 
         <!-- Plugin Versions -->
 
