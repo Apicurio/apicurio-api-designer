@@ -20,6 +20,7 @@ import { OpenApiEditor } from "@editors/OpenApiEditor.tsx";
 import { AsyncApiEditor } from "@editors/AsyncApiEditor.tsx";
 import { IsLoading } from "@app/components";
 import { CompareModal, DeleteDesignModal, EditorContext, RenameData, RenameModal } from "@app/pages/components";
+import { useParams } from "react-router-dom";
 
 const sectionContextStyle: CSSProperties = {
     borderBottom: "1px solid #ccc",
@@ -39,7 +40,7 @@ const editorParentStyle: CSSProperties = {
 
 
 export type EditorPageProps = {
-    params: any;
+    // No props
 };
 
 
@@ -51,7 +52,7 @@ const onBeforeUnload = (e: Event): void => {
     e.returnValue = true;
 };
 
-export const EditorPage: FunctionComponent<EditorPageProps> = ({ params }: EditorPageProps) => {
+export const EditorPage: FunctionComponent<EditorPageProps> = () => {
     const [isLoading, setLoading] = useState(true);
     const [design, setDesign] = useState<Design>();
     const [designContent, setDesignContent] = useState<DesignContent>();
@@ -60,6 +61,8 @@ export const EditorPage: FunctionComponent<EditorPageProps> = ({ params }: Edito
     const [isRenameModalOpen, setRenameModalOpen] = useState(false);
     const [isCompareModalOpen, setCompareModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+    const params = useParams();
 
     const designsService: DesignsService = useDesignsService();
     const downloadSvc: DownloadService = useDownloadService();
@@ -76,9 +79,9 @@ export const EditorPage: FunctionComponent<EditorPageProps> = ({ params }: Edito
     // Load the design based on the design ID (from the path param).
     useEffect(() => {
         setLoading(true);
-        const designId: string = params["designId"];
+        const designId: string | undefined = params["designId"];
 
-        designsService.getDesign(designId).then(design => {
+        designsService.getDesign(designId as string).then(design => {
             setDesign(design);
         }).catch(error => {
             // TODO handle error
@@ -97,8 +100,8 @@ export const EditorPage: FunctionComponent<EditorPageProps> = ({ params }: Edito
 
     // Load the design content
     useEffect(() => {
-        const designId: string = params["designId"];
-        designsService.getDesignContent(designId).then(content => {
+        const designId: string | undefined = params["designId"];
+        designsService.getDesignContent(designId as string).then(content => {
             setDesignContent(content);
             setLoading(false);
             setDirty(false);

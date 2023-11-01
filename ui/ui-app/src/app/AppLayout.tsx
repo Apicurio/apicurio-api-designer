@@ -8,7 +8,6 @@ export type AppLayoutProps = {
 };
 
 export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children }) => {
-
     const apiDesignerConfigType: ApiDesignerConfigType | undefined = useApiDesignerConfig();
 
     const logoProps = {
@@ -17,8 +16,7 @@ export const AppLayout: React.FunctionComponent<AppLayoutProps> = ({ children })
 
     const logo: React.ReactNode = (
         <div className="app-logo">
-            <img className="pf-c-brand logo-make" src="/logo.png" alt="apicurio-logo"/>
-            <span className="logo-model">{ apiDesignerConfigType?.components.masthead.label }</span>
+            <img className="pf-c-brand logo-make" src="/apicurio_apidesigner_logo_reverse.svg" alt="Apicurio API Designer"/>
         </div>
     );
 

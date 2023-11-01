@@ -26,10 +26,7 @@
       "@models/*": [ "./src/models/*" ],
       "@editors/*": [ "./src/editors/*" ],
       "@services/*": [ "./src/services/*" ],
-      "@utils/*": [ "./src/utils/*" ],
-      "@assets/*": [
-        "./node_modules/@patternfly/react-core/dist/styles/assets/*"
-      ]
+      "@utils/*": [ "./src/utils/*" ]
     }
   },
   "include": [

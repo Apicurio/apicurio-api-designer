@@ -8,6 +8,8 @@ html, body, #root {
 
 .app-logo {
   display: flex;
+  width: 400px;
+  height: 46px;
 }
 
 span.logo-make {

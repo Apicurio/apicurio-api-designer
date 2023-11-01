@@ -1,20 +1,14 @@
+import "./App.css";
+import "@patternfly/patternfly/patternfly.css";
+
 import React, { useEffect, useState } from "react";
 import { EmptyState, EmptyStateBody, EmptyStateHeader, Spinner } from "@patternfly/react-core";
 import { BrowserRouter as Router } from "react-router-dom";
-import { AppLayout } from "./app-layout";
-import { AppRoutes } from "./routes";
+import { AppLayout } from "./AppLayout.tsx";
+import { AppRoutes } from "./AppRoutes.tsx";
 import { getOidc, useOidcAuth } from "@app/auth";
 import { ApiDesignerConfigContext, ApiDesignerConfigType } from "@app/contexts/config";
 
-import "./app.css";
-
-import "@patternfly/react-core/dist/styles/base.css";
-import "@patternfly/patternfly/patternfly.css";
-import "@patternfly/patternfly/utilities/Accessibility/accessibility.css";
-import "@patternfly/patternfly/utilities/Sizing/sizing.css";
-import "@patternfly/patternfly/utilities/Spacing/spacing.css";
-import "@patternfly/patternfly/utilities/Display/display.css";
-import "@patternfly/patternfly/utilities/Flex/flex.css";
 import { AuthConfig } from "@services/ServiceConfigContext.tsx";
 import { PageConfig, PageContextProvider } from "@app/pages";
 

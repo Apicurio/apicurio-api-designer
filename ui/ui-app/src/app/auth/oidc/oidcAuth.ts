@@ -27,6 +27,8 @@ export const initUserManager: (() => UserManager | undefined) = () => {
             response_type: "code",
             scope: "openid profile email",
             filterProtocolClaims: true,
+            includeIdTokenInSilentRenew: true,
+            includeIdTokenInSilentSignout: true,
             loadUserInfo: true
         });
     } else {
