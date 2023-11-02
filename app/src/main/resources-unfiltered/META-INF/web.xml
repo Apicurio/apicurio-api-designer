@@ -15,16 +15,6 @@
     </filter-mapping>
 
     <filter>
-        <filter-name>DesignerApplicationServletFilter</filter-name>
-        <filter-class>io.apicurio.designer.rest.DesignerApplicationServletFilter</filter-class>
-        <async-supported>true</async-supported>
-    </filter>
-    <filter-mapping>
-        <filter-name>DesignerApplicationServletFilter</filter-name>
-        <url-pattern>/apis/*</url-pattern>
-    </filter-mapping>
-
-    <filter>
         <filter-name>ResourceCacheControlFilter</filter-name>
         <filter-class>io.apicurio.common.apps.web.filters.ResourceCacheControlFilter</filter-class>
         <async-supported>true</async-supported>
@@ -52,64 +42,17 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
 
-    <filter>
-        <filter-name>BaseHrefFilter</filter-name>
-        <filter-class>io.apicurio.common.apps.web.filters.BaseHrefFilter</filter-class>
-        <init-param>
-            <param-name>fromHref</param-name>
-            <param-value>/</param-value>
-        </init-param>
-        <init-param>
-            <param-name>toHref</param-name>
-            <param-value>/ui/</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>BaseHrefFilter</filter-name>
-        <url-pattern>/ui/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-
 <!--    <filter>-->
 <!--        <filter-name>SpecUrlFilter</filter-name>-->
 <!--        <filter-class>io.apicurio.registry.ui.servlets.SpecUrlFilter</filter-class>-->
 <!--    </filter>-->
 <!--    <filter-mapping>-->
 <!--        <filter-name>SpecUrlFilter</filter-name>-->
-<!--        <url-pattern>/apis/registry/v2</url-pattern>-->
-<!--        <url-pattern>/apis/registry/v2/</url-pattern>-->
-<!--        <url-pattern>/apis/registry/v1</url-pattern>-->
-<!--        <url-pattern>/apis/registry/v1/</url-pattern>-->
-<!--        <url-pattern>/apis/ccompat/v6</url-pattern>-->
-<!--        <url-pattern>/apis/ccompat/v6/</url-pattern>-->
-<!--        <url-pattern>/apis/ccompat/v7</url-pattern>-->
-<!--        <url-pattern>/apis/ccompat/v7/</url-pattern>-->
-<!--        <url-pattern>/apis/ibmcompat/v1</url-pattern>-->
-<!--        <url-pattern>/apis/ibmcompat/v1/</url-pattern>-->
-<!--        <url-pattern>/apis/cncf/v0</url-pattern>-->
-<!--        <url-pattern>/apis/cncf/v0/</url-pattern>-->
+<!--        <url-pattern>/apis/designer/v0</url-pattern>-->
+<!--        <url-pattern>/apis/designer/v0/</url-pattern>-->
 <!--        <dispatcher>REQUEST</dispatcher>-->
 <!--        <dispatcher>FORWARD</dispatcher>-->
 <!--    </filter-mapping>-->
-
-    <servlet>
-        <servlet-name>ReactAppServlet</servlet-name>
-        <servlet-class>io.apicurio.common.apps.web.servlets.ReactAppServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ReactAppServlet</servlet-name>
-        <url-pattern>/ui/designs/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ConfigJsServlet</servlet-name>
-        <servlet-class>io.apicurio.designer.ui.ConfigJsServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ConfigJsServlet</servlet-name>
-        <url-pattern>/ui/config.js</url-pattern>
-    </servlet-mapping>
 
 <!--    <servlet>-->
 <!--        <servlet-name>ApiDocsServlet</servlet-name>-->
