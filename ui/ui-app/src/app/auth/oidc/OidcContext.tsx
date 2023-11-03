@@ -1,4 +1,4 @@
-import { getOidcToken, getUsername } from "@app/auth/oidc/oidcAuth";
+import { doLogout, getOidcToken, getUsername } from "@app/auth/oidc/oidcAuth";
 import { ApiDesignerConfigType, useApiDesignerConfig } from "@app/contexts/config";
 import { AuthConfig } from "@services/ServiceConfigContext.tsx";
 
@@ -10,12 +10,14 @@ export const useOidcAuth: () => AuthConfig = (): AuthConfig => {
     if (apiDesignerConfig?.auth.type === "oidc") {
         return {
             getToken: getOidcToken,
-            getUsername: getUsername
+            getUsername: getUsername,
+            logout: doLogout
         };
     } else {
         return {
             getToken: () => Promise.resolve(""),
-            getUsername: () => Promise.resolve("local-user")
+            getUsername: () => Promise.resolve("local-user"),
+            logout: () => Promise.resolve()
         };
     }
 };

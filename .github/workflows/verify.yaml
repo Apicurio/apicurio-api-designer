@@ -138,3 +138,4 @@ jobs:
     needs: [build-test]
     if: github.event_name == 'push'
     uses: apicurio/apicurio-operate-first/.github/workflows/deploy_latest_designer.yml@main
+    secrets: inherit

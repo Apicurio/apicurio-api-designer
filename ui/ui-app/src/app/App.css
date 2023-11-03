@@ -5,24 +5,3 @@ html, body, #root {
 .pf-c-page__header-brand-link {
   text-decoration: none;
 }
-
-.app-logo {
-  display: flex;
-  width: 400px;
-  height: 46px;
-}
-
-span.logo-make {
-}
-
-span.logo-model {
-  color: #fafafa;
-  font-size: 24px;
-  height: 46px;
-  text-align: center;
-  vertical-align: bottom;
-  text-transform: uppercase;
-  display: table-cell;
-  padding-top: 10px;
-  padding-left: 10px;
-}

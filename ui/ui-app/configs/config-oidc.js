@@ -1,6 +1,6 @@
 const ApiDesignerConfig = {
     "ui": {
-        "contextPath": "/ui/",
+        "contextPath": "/",
         "navPrefixPath": ""
     },
     "apis": {

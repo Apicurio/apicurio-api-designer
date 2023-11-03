@@ -29,11 +29,20 @@ export type AuthType = {
     options?: any;
 };
 
+export interface VersionType {
+    name: string;
+    version: string;
+    digest: string;
+    builtOn: string;
+    url: string;
+}
+
 export type ApiDesignerConfigType = {
     apis: ApisType;
     ui: UiType;
     components: ComponentsType;
     auth: AuthType;
+    version?: VersionType;
 };
 
 const apiDesignerConfig: ApiDesignerConfigType = getApiDesignerConfig();

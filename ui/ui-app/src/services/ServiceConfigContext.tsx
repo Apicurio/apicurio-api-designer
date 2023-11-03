@@ -12,6 +12,7 @@ export type NavigationServiceConfigType = {
 export type AuthConfig = {
     getUsername: () => Promise<string> | undefined;
     getToken: () => Promise<string> | undefined;
+    logout: () => Promise<any> | undefined;
 };
 
 export type ServiceConfig = {
@@ -26,6 +27,9 @@ const defaultGetToken: (() => (Promise<string> | undefined)) = () => {
 const defaultGetUsername: (() => (Promise<string> | undefined)) = () => {
     return undefined;
 };
+const defaultLogout: (() => (Promise<any> | undefined)) = () => {
+    return undefined;
+};
 
 export const ServiceConfigContext: React.Context<ServiceConfig> = React.createContext({
     designs: {
@@ -37,6 +41,7 @@ export const ServiceConfigContext: React.Context<ServiceConfig> = React.createCo
     },
     auth: {
         getToken: defaultGetToken,
-        getUsername: defaultGetUsername
+        getUsername: defaultGetUsername,
+        logout: defaultLogout
     }
 });

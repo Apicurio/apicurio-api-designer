@@ -81,8 +81,7 @@ export const init = async (): Promise<void> => {
 };
 
 /**
- * Use oidc update token function to retrieve
- * oidc token
+ * Use oidc update token function to retrieve the OIDC token.
  *
  * @return oidc token or empty string if oidc
  * isn't configured
@@ -94,8 +93,7 @@ export const getOidcToken = async (): Promise<string> => {
 };
 
 /**
- * Use oidc update token function to retrieve
- * oidc token
+ * Use oidc update token function to retrieve the authenticated user name.
  *
  * @return oidc token or empty string if oidc
  * isn't configured
@@ -110,10 +108,13 @@ export const getUsername = async (): Promise<string> => {
  * logout of oidc, clear cache and offline store then redirect to
  * oidc login page
  */
-export const getLogout = async (): Promise<void> => {
+export const doLogout = (): Promise<any> => {
     if (userManager) {
-        await userManager.removeUser();
-        await userManager.signoutRedirect({ post_logout_redirect_uri: window.location.href });
+        return userManager.removeUser().then(() => {
+            return userManager.signoutRedirect({ post_logout_redirect_uri: window.location.href });
+        });
+    } else {
+        return Promise.resolve();
     }
 };
 

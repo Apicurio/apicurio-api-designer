@@ -23,6 +23,9 @@ const defaultPageConfig: PageConfig = {
             },
             getUsername: () => {
                 return undefined;
+            },
+            logout: () => {
+                return undefined;
             }
         },
         navigation: {
