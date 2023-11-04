@@ -39,7 +39,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     @Override
     public String getStorageProperty() {
         return """
-                SELECT a."value" FROM apicurio a WHERE a."key" = ?\
+                SELECT a.prop_value FROM apicurio a WHERE a.prop_key = ?\
                 """;
     }
 
@@ -48,16 +48,16 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     @Override
     public String insertDesignContent() {
         return """
-                INSERT INTO content (tenantId, contentId, contentHash, content) \
-                VALUES (?, ?, ?, ?)\
+                INSERT INTO content (contentId, contentHash, content) \
+                VALUES (?, ?, ?)\
                 """;
     }
 
     @Override
     public String insertDesign() {
         return """
-                INSERT INTO designs (tenantId, designId, contentId) \
-                VALUES (?, ?, ?)\
+                INSERT INTO designs (designId, contentId) \
+                VALUES (?, ?)\
                 """;
     }
 
@@ -65,15 +65,15 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String selectDesign() {
         return """
                 SELECT d.* FROM designs d \
-                WHERE d.tenantId = ? AND d.designId = ?\
+                WHERE d.designId = ?\
                 """;
     }
 
     @Override
     public String insertMetadata() {
         return """
-                INSERT INTO design_metadata (tenantId, designId, name, description, createdBy, createdOn, modifiedBy, modifiedOn, type, origin) \
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\
+                INSERT INTO design_metadata (designId, name, description, createdBy, createdOn, modifiedBy, modifiedOn, type, origin) \
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)\
                 """;
     }
 
@@ -81,8 +81,8 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String selectContentByDesignId() {
         return """
                 SELECT c.content FROM content c \
-                JOIN designs d ON c.tenantId = d.tenantId AND c.contentId = d.contentId \
-                WHERE d.tenantId = ? AND d.designId = ?\
+                JOIN designs d ON c.contentId = d.contentId \
+                WHERE d.designId = ?\
                 """;
     }
 
@@ -91,8 +91,8 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
         return """
                 UPDATE content c \
                 SET content = ? \
-                WHERE c.tenantId = ? AND c.contentId = \
-                   (SELECT d.contentId FROM designs d WHERE d.tenantId = ? AND d.designId = ?)\
+                WHERE c.contentId = \
+                   (SELECT d.contentId FROM designs d WHERE d.designId = ?)\
                 """;
     }
 
@@ -100,16 +100,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String selectDesignMetadata() {
         return """
                 SELECT m.* FROM design_metadata m \
-                WHERE m.tenantId = ? AND m.designId = ?\
-                """;
-    }
-
-    @Override
-    public String selectDesignMetadataPage() {
-        return """
-                SELECT m.* FROM design_metadata m \
-                WHERE m.tenantId = ? \
-                ORDER BY m.createdOn ASC LIMIT ? OFFSET ?\
+                WHERE m.designId = ?\
                 """;
     }
 
@@ -117,7 +108,6 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String countDesigns() {
         return """
                 SELECT COUNT(*) FROM designs d \
-                WHERE d.tenantId = ?\
                 """;
     }
 
@@ -126,7 +116,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
         return """
                 UPDATE design_metadata m \
                 SET name = ?, description = ?, createdBy = ?, createdOn = ?, modifiedBy = ?, modifiedOn = ?, type = ?, origin = ? \
-                WHERE m.tenantId = ? AND m.designId = ?\
+                WHERE m.designId = ?\
                 """;
     }
 
@@ -134,7 +124,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String deleteDesign() {
         return """
                 DELETE FROM designs d \
-                WHERE d.tenantId = ? AND d.designId = ?\
+                WHERE d.designId = ?\
                 """;
     }
 
@@ -142,7 +132,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String deleteDesignMetadata() {
         return """
                 DELETE FROM design_metadata m \
-                WHERE m.tenantId = ? AND m.designId = ?\
+                WHERE m.designId = ?\
                 """;
     }
 
@@ -151,15 +141,15 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String deleteDesignContent() {
         return """
                 DELETE FROM content c \
-                WHERE c.tenantId = ? AND c.contentId = ?\
+                WHERE c.contentId = ?\
                 """;
     }
 
     @Override
     public String insertDesignEvent() {
         return """
-                INSERT INTO design_events (tenantId, eventId, designId, createdOn, type, data) \
-                VALUES (?, ?, ?, ?, ?, ?)\
+                INSERT INTO design_events (eventId, designId, createdOn, type, data) \
+                VALUES (?, ?, ?, ?, ?)\
                 """;
     }
 
@@ -167,7 +157,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String selectDesignEvents() {
         return """
                 SELECT e.* FROM design_events e \
-                WHERE e.tenantId = ? AND e.designId = ? \
+                WHERE e.designId = ? \
                 ORDER BY e.createdOn DESC\
                 """;
     }
@@ -176,7 +166,7 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
     public String searchDesignMetadata(SearchQuerySpecification spec) {
         return """
                 SELECT m.* FROM design_metadata m \
-                WHERE m.tenantId = ? \
+                WHERE 1=1 \
                 """
                 + spec.getWherePart() + spec.getOrderByPart() + spec.getLimitPart();
     }

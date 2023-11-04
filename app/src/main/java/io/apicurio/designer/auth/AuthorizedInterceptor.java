@@ -16,15 +16,12 @@
 
 package io.apicurio.designer.auth;
 
-import io.apicurio.common.apps.multitenancy.MultitenancyProperties;
-import io.apicurio.common.apps.multitenancy.TenantContext;
-import io.quarkus.security.ForbiddenException;
-import io.quarkus.security.UnauthorizedException;
-import io.quarkus.security.identity.SecurityIdentity;
-import jakarta.annotation.Priority;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
+import io.quarkus.security.UnauthorizedException;
+import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.annotation.Priority;
 import jakarta.inject.Inject;
 import jakarta.interceptor.AroundInvoke;
 import jakarta.interceptor.Interceptor;
@@ -49,25 +46,8 @@ public class AuthorizedInterceptor {
     @ConfigProperty(name = "app.authn.enabled")
     boolean authenticationEnabled;
 
-    @Inject
-    MultitenancyProperties mtProperties;
-
-    @Inject
-    TenantContext tenantContext;
-
     @AroundInvoke
     public Object authorizeMethod(InvocationContext context) throws Exception {
-
-        //execute multitenancy related authorization checks
-        if (mtProperties.isMultitenancyEnabled()) {
-
-            //if multitenancy is enabled but no tenant context is loaded, because no tenant was resolved from request, reject it
-            //this is to avoid access to default tenant "_" when multitenancy is enabled
-            if (!tenantContext.isLoaded()) {
-                log.warn("Request is rejected because the tenant could not be found, and access to default tenant is disabled in a multitenant deployment");
-                throw new ForbiddenException("Default tenant access is not allowed in multitenancy mode.");
-            }
-        }
 
         // If authentication is not enabled, just do it.
         if (!authenticationEnabled) {
