@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
-import { If } from "./If";
-import { IsLoading } from "./IsLoading";
+import { If } from "./If.tsx";
+import { IsLoading } from "./IsLoading.tsx";
 import { Alert } from "@patternfly/react-core";
 
 /**

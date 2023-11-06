@@ -48,9 +48,9 @@ public class PostgresDesignerSqlStatements extends AbstractDesignerSqlStatements
     @Override
     public Update setStorageProperty(String key, String value) {
         var q = new UpdateImpl("""
-                INSERT INTO apicurio ("key", "value") VALUES (?, ?) \
-                ON CONFLICT ("key") \
-                DO UPDATE SET "value" = ?\
+                INSERT INTO apicurio (prop_key, prop_value) VALUES (?, ?) \
+                ON CONFLICT (prop_key) \
+                DO UPDATE SET prop_value = ?\
                 """);
         return q.bind(0, key)
                 .bind(1, value)
@@ -60,10 +60,10 @@ public class PostgresDesignerSqlStatements extends AbstractDesignerSqlStatements
     @Override
     public String getNextSequenceValue() {
         return """
-                INSERT INTO sequences (tenantId, "key", "value") VALUES (?, ?, 1) \
-                ON CONFLICT (tenantId, "key") \
-                DO UPDATE SET value = sequences.value + 1 \
-                RETURNING value
+                INSERT INTO sequences (seq_key, seq_value) VALUES (?, 1) \
+                ON CONFLICT (seq_key) \
+                DO UPDATE SET seq_value = sequences.seq_value + 1 \
+                RETURNING seq_value
                 """;
     }
 

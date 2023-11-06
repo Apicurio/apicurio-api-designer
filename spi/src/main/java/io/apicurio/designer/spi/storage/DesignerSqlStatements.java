@@ -37,8 +37,6 @@ public interface DesignerSqlStatements extends BaseSqlStatements {
 
     String selectDesignMetadata();
 
-    String selectDesignMetadataPage();
-
     String countDesigns();
 
     String updateDesignMetadata();

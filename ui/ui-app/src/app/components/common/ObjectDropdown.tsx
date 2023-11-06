@@ -7,37 +7,35 @@ import {
     MenuToggle,
     MenuToggleElement
 } from "@patternfly/react-core";
-
-export const ObjectDropdownItemDivider = {};
+import { EllipsisVIcon } from "@patternfly/react-icons";
 
 /**
  * Properties
  */
 export type ObjectDropdownProps = {
-    value: any | undefined;
+    value?: any | undefined;
     items: any[];
     onSelect: (value: any | undefined) => void;
     itemToString: (value: any) => string;
+    itemIsDivider?: (value: any) => boolean;
     noSelectionLabel?: string;
     menuAppendTo?: HTMLElement | (() => HTMLElement) | "inline";
-    variant?: "single" | "checkbox" | "typeahead" | "typeaheadmulti";
+    isKebab?: boolean;
 };
 
 /**
  * A generic control that makes it easier to create a <Select> from an array of objects.
  */
-export const ObjectDropdown: FunctionComponent<ObjectDropdownProps> = (
-    { value, items, onSelect, itemToString, noSelectionLabel, menuAppendTo }: ObjectDropdownProps) => {
-
+export const ObjectDropdown: FunctionComponent<ObjectDropdownProps> = (props: ObjectDropdownProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const onSelectInternal = (_event: any, value?: string | number | undefined): void => {
         setIsOpen(false);
         const idx: number | undefined = value as number | undefined;
-        if (idx && idx >= 0) {
-            onSelect(items[idx]);
+        if (idx !== undefined && idx >= 0) {
+            props.onSelect(props.items[idx]);
         } else {
-            onSelect(undefined);
+            props.onSelect(undefined);
         }
     };
 
@@ -46,8 +44,17 @@ export const ObjectDropdown: FunctionComponent<ObjectDropdownProps> = (
     };
 
     const popperProps: DropdownPopperProps = {
-        appendTo: menuAppendTo
+        appendTo: props.menuAppendTo
     };
+
+    let toggleValue = <EllipsisVIcon />;
+    if (!props.isKebab) {
+        if (props.value) {
+            toggleValue = <React.Fragment>{ props.itemToString(props.value) }</React.Fragment>;
+        } else {
+            toggleValue = <React.Fragment>{ props.noSelectionLabel }</React.Fragment>;
+        }
+    }
 
     return (
         <Dropdown
@@ -55,9 +62,9 @@ export const ObjectDropdown: FunctionComponent<ObjectDropdownProps> = (
             onSelect={onSelectInternal}
             onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
             toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-                <MenuToggle ref={toggleRef} onClick={onToggleClick} isExpanded={isOpen}>
+                <MenuToggle ref={toggleRef} onClick={onToggleClick} isExpanded={isOpen} variant={props.isKebab ? "plain" : "default"}>
                     {
-                        value ? itemToString(value) : noSelectionLabel
+                        toggleValue
                     }
                 </MenuToggle>
             )}
@@ -67,13 +74,13 @@ export const ObjectDropdown: FunctionComponent<ObjectDropdownProps> = (
         >
             <DropdownList>
                 {
-                    items.map((item, index) => {
+                    props.items.map((item, index) => {
                         return (
-                            item == ObjectDropdownItemDivider ?
+                            (props.itemIsDivider && props.itemIsDivider(item)) ?
                                 <Divider component="li" key={`divider-${index}`} />
                                 :
                                 <DropdownItem value={index} key={`action-${index}`}>
-                                    { itemToString(item) }
+                                    { props.itemToString(item) }
                                 </DropdownItem>
                         );
                     })

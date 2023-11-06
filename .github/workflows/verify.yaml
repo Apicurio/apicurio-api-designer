@@ -1,4 +1,4 @@
-name: Build PR
+name: Build & Verify
 
 on:
   push:
@@ -130,3 +130,12 @@ jobs:
           tags: |
             docker.io/${{env.IMAGE_ORG}}/apicurio-api-designer-ui:${{env.IMAGE_TAG}}
             quay.io/${{env.IMAGE_ORG}}/apicurio-api-designer-ui:${{env.IMAGE_TAG}}
+
+  # Trigger a deployment workflow in the apicurio-operate-first repository, which will
+  # deploy the `latest-snapshot` version of designer into the 3scale OpenShift cluster
+  # that we just built and pushed in the steps above.
+  trigger-3scale-deploy:
+    needs: [build-test]
+    if: github.event_name == 'push'
+    uses: apicurio/apicurio-operate-first/.github/workflows/deploy_latest_designer.yml@main
+    secrets: inherit

@@ -51,7 +51,7 @@ public class H2DesignerSqlStatements extends AbstractDesignerSqlStatements imple
     @Override
     public Update setStorageProperty(String key, String value) {
         var q = new UpdateImpl("""
-                MERGE INTO apicurio ("key", "value") KEY("key") VALUES (?, ?)\
+                MERGE INTO apicurio (prop_key, prop_value) KEY(prop_key) VALUES (?, ?)\
                 """);
         return q.bind(0, key)
                 .bind(1, value);
@@ -66,8 +66,8 @@ public class H2DesignerSqlStatements extends AbstractDesignerSqlStatements imple
     @Override
     public String getSequenceValue() {
         return """
-                SELECT s."value" FROM sequences s \
-                WHERE s.tenantId = ? AND s."key" = ?\
+                SELECT s.seq_value FROM sequences s \
+                WHERE s.seq_key = ?\
                 """;
     }
 
@@ -75,16 +75,16 @@ public class H2DesignerSqlStatements extends AbstractDesignerSqlStatements imple
     public String casSequenceValue() {
         return """
                 UPDATE sequences s \
-                SET "value" = ? \
-                WHERE s.tenantId = ? AND s."key" = ? AND s."value" = ?\
+                SET seq_value = ? \
+                WHERE s.seq_key = ? AND s.seq_value = ?\
                 """;
     }
 
     @Override
     public String insertSequenceValue() {
         return """
-                INSERT INTO sequences (tenantId, "key", "value") \
-                VALUES (?, ?, ?)\
+                INSERT INTO sequences (seq_key, seq_value) \
+                VALUES (?, ?)\
                 """;
     }
 }
