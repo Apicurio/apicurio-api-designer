@@ -55,7 +55,12 @@ const onBeforeUnload = (e: Event): void => {
 export const EditorPage: FunctionComponent<EditorPageProps> = () => {
     const [isLoading, setLoading] = useState(true);
     const [design, setDesign] = useState<Design>();
-    const [designContent, setDesignContent] = useState<DesignContent>();
+    const [editorDesignContent, setEditorDesignContent] = useState<DesignContent>({
+        id: "",
+        contentType: ContentTypes.APPLICATION_JSON,
+        data: ""
+    });
+    const [originalContent, setOriginalContent] = useState<any>();
     const [currentContent, setCurrentContent] = useState<any>();
     const [isDirty, setDirty] = useState(false);
     const [isRenameModalOpen, setRenameModalOpen] = useState(false);
@@ -81,11 +86,21 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
         setLoading(true);
         const designId: string | undefined = params["designId"];
 
-        designsService.getDesign(designId as string).then(design => {
-            setDesign(design);
+        Promise.all([
+            designsService.getDesign(designId as string).then(design => {
+                setDesign(design);
+            }),
+            designsService.getDesignContent(designId as string).then(content => {
+                setOriginalContent(content.data);
+                setCurrentContent(content.data);
+                setEditorDesignContent(content);
+            })
+        ]).then(() => {
+            setLoading(false);
+            setDirty(false);
         }).catch(error => {
-            // TODO handle error
-            console.error(`[EditorPage] Failed to get design with id ${designId}: `, error);
+            // TODO better error handling needed!
+            console.error(`[EditorPage] Failed to get design content with id ${designId}: `, error);
         });
     }, [params]);
 
@@ -98,42 +113,25 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
         }
     }, [isDirty]);
 
-    // Load the design content
-    useEffect(() => {
-        const designId: string | undefined = params["designId"];
-        designsService.getDesignContent(designId as string).then(content => {
-            setDesignContent(content);
-            setLoading(false);
-            setDirty(false);
-            setCurrentContent(content.data);
-        }).catch(error => {
-            // TODO handle error
-            console.error(`[EditorPage] Failed to get design content with id ${designId}: `, error);
-        });
-    }, [design]);
-
     // Called when the user makes an edit in the editor.
     const onEditorChange = (value: any): void => {
         setCurrentContent(value);
-        setDirty(true);
     };
+
+    useEffect(() => {
+        setDirty(originalContent != currentContent);
+    }, [currentContent]);
 
     // Called when the user makes an edit in the editor.
     const onSave = (): void => {
         designsService.updateDesignContent({
-            ...designContent as DesignContent,
+            contentType: editorDesignContent.contentType,
+            id: design?.id as string,
             data: currentContent
         }).then(() => {
             if (design) {
                 design.modifiedOn = new Date();
-                setDesign({
-                    ...design,
-                    modifiedOn: new Date(),
-                });
-                setDesignContent({
-                    ...(designContent as DesignContent),
-                    data: currentContent
-                });
+                setOriginalContent(currentContent);
                 setDirty(false);
             }
             alerts.designSaved(design as Design);
@@ -145,10 +143,11 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
 
     const onFormat = (): void => {
         console.info("[EditorPage] Formatting content.");
-        const formattedContent: string = formatContent(currentContent, designContent?.contentType || ContentTypes.APPLICATION_JSON);
+        const formattedContent: string = formatContent(currentContent, editorDesignContent.contentType);
         console.info("[EditorPage] New content is: ", formattedContent);
-        setDesignContent({
-            ...designContent as DesignContent,
+        setEditorDesignContent({
+            id: design?.id as string,
+            contentType: editorDesignContent.contentType,
             data: formattedContent
         });
         setCurrentContent(formattedContent);
@@ -170,9 +169,9 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
     };
 
     const onDownload = (): void => {
-        if (design && designContent) {
-            const filename: string = `${convertToValidFilename(design.name)}.${fileExtensionForDesign(design, designContent)}`;
-            const contentType: string = contentTypeForDesign(design, designContent);
+        if (design) {
+            const filename: string = `${convertToValidFilename(design.name)}.${fileExtensionForDesign(design, editorDesignContent)}`;
+            const contentType: string = contentTypeForDesign(design, editorDesignContent);
             const theContent: string = typeof currentContent === "object" ? JSON.stringify(currentContent, null, 4) : currentContent as string;
             downloadSvc.downloadToFS(theContent, contentType, filename);
         }
@@ -193,19 +192,19 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
     };
 
     const textEditor: React.ReactElement = (
-        <TextEditor content={designContent as DesignContent} onChange={onEditorChange}/>
+        <TextEditor content={editorDesignContent} onChange={onEditorChange}/>
     );
 
     const protoEditor: React.ReactElement = (
-        <ProtoEditor content={designContent as DesignContent} onChange={onEditorChange}/>
+        <ProtoEditor content={editorDesignContent} onChange={onEditorChange}/>
     );
 
     const openapiEditor: React.ReactElement = (
-        <OpenApiEditor content={designContent as DesignContent} onChange={onEditorChange}/>
+        <OpenApiEditor content={editorDesignContent} onChange={onEditorChange}/>
     );
 
     const asyncapiEditor: React.ReactElement = (
-        <AsyncApiEditor content={designContent as DesignContent} onChange={onEditorChange}/>
+        <AsyncApiEditor content={editorDesignContent} onChange={onEditorChange}/>
     );
 
     const editor = (): React.ReactElement => {
@@ -250,7 +249,7 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
             </PageSection>
             <CompareModal isOpen={isCompareModalOpen}
                 onClose={closeCompareEditor}
-                before={designContent?.data}
+                before={originalContent}
                 beforeName={design?.name || ""}
                 after={currentContent}
                 afterName={design?.name || ""}/>

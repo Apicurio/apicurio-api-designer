@@ -4,7 +4,7 @@ const ApiDesignerConfig = {
         "navPrefixPath": ""
     },
     "apis": {
-        "designer": "http://localhost:8080/apis/designer/v0"
+        "designer": "https://apicurio-designer-api-rhaf-apicurio.apps.dev-eng-ocp4-mas.dev.3sca.net/apis/designer/v0"
     },
     "components": {
         "masthead": {
@@ -23,8 +23,8 @@ const ApiDesignerConfig = {
         "type": "oidc",
         "options": {
             "redirectUri": "http://localhost:8888",
-            "clientId": "apicurio-studio",
-            "url": "https://auth.apicur.io/auth/realms/apicurio-local"
+            "clientId": "designer-ui",
+            "url": "https://keycloak-rhaf-apicurio.apps.dev-eng-ocp4-mas.dev.3sca.net/realms/apicurio"
         }
     }
 };

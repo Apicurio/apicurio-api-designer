@@ -274,7 +274,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
             isOpen={isOpen}
             onClose={onCancel}
             actions={[
-                <Button key="import" variant="primary" isDisabled={!isValid || isImporting} onClick={doImport}>
+                <Button key="import" variant="primary" isDisabled={!isValid || isImporting} onClick={doImport} data-testid="btn-modal-import" >
                     <If condition={isImporting as boolean}>
                         <Spinner size="sm" style={{ marginRight: "5px" }} />
                         Importing
@@ -283,7 +283,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                         Import
                     </If>
                 </Button>,
-                <Button key="cancel" variant="link" onClick={onCancel}>
+                <Button key="cancel" variant="link" onClick={onCancel} data-testid="btn-modal-cancel">
                     Cancel
                 </Button>
             ]}
@@ -300,6 +300,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                             value={designContent}
                             filename={fileName}
                             filenamePlaceholder="Drag and drop a file or upload one"
+                            data-testid="file-upload-design"
                             onDataChange={onFileTextChange}
                             onTextChange={onFileTextChange}
                             onClearClick={onFileClear}
@@ -311,6 +312,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                     <FormGroup label="URL" isRequired={true} fieldId="import-design-url">
                         <UrlUpload
                             id="design-text-url"
+                            testId="url-upload-design"
                             urlPlaceholder="Enter a valid and accessible URL"
                             onChange={onUrlChange}
                         />
@@ -318,18 +320,29 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                 </If>
                 <If condition={hasDesignContent}>
                     <FormGroup label="Type" isRequired={true} fieldId="import-design-type">
-                        <ObjectSelect value={typeSelection} items={TYPE_ITEMS}
-                            onSelect={setTypeSelection} itemToString={(item) => item.label} />
+                        <ObjectSelect
+                            value={typeSelection}
+                            testId="select-design-type"
+                            items={TYPE_ITEMS}
+                            onSelect={setTypeSelection}
+                            itemToTestId={(item) => `select-design-type-${item.value}`}
+                            itemToString={(item) => item.label} />
                     </FormGroup>
                     <If condition={type === ArtifactTypes.OPENAPI}>
-                        <ObjectSelect value={version} items={OPENAPI_VERSIONS}
-                            onSelect={setVersion} itemToString={item => item} />
+                        <ObjectSelect
+                            value={version}
+                            testId="select-design-version"
+                            items={OPENAPI_VERSIONS}
+                            onSelect={setVersion}
+                            itemToTestId={(item) => `select-design-version-${item}`}
+                            itemToString={item => item} />
                     </If>
                     <FormGroup label="Name" isRequired={true} fieldId="import-design-name">
                         <TextInput
                             isRequired
                             type="text"
                             id="import-design-name"
+                            data-testid="text-design-name"
                             name="import-design-name"
                             aria-describedby="import-design-name-helper"
                             value={name}
@@ -340,6 +353,7 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                         <TextArea
                             type="text"
                             id="import-design-description"
+                            data-testid="text-design-description"
                             name="import-design-description"
                             aria-describedby="import-design-description-helper"
                             value={description}

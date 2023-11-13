@@ -24,7 +24,6 @@ function limit(value: string | undefined, size: number): string {
 
 async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: CreateDesignContent, cde?: CreateDesignEvent): Promise<Design> {
     console.debug("[DesignsService] Creating a new design: ", cd);
-    console.info("===> CDE 1: ", cde);
     const token: string | undefined = await svcConfig.auth.getToken();
 
     const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs");
@@ -38,7 +37,6 @@ async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: Cre
     };
 
     return httpPostWithReturn<any, Design>(endpoint, cdc.data, createOptions(headers)).then(response => {
-        console.info("===> CDE 2: ", cde);
         const cevent: CreateDesignEvent = cde || {
             type: "CREATE",
             data: {

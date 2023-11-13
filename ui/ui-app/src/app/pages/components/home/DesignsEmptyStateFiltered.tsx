@@ -32,7 +32,7 @@ export const DesignsEmptyStateFiltered: FunctionComponent<DesignsEmptyStateFilte
                 </EmptyStateBody>
                 <EmptyStateFooter>
                     <EmptyStateActions>
-                        <Button variant="link" onClick={onClear}>Clear all filters</Button>
+                        <Button data-testid="btn-clear-all-filters" variant="link" onClick={onClear}>Clear all filters</Button>
                     </EmptyStateActions>
                 </EmptyStateFooter>
             </EmptyState>

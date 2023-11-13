@@ -32,7 +32,7 @@ export const DesignsEmptyState: FunctionComponent<DesignsEmptyStateProps> = ({ o
             </EmptyStateBody>
             <EmptyStateFooter>
                 <EmptyStateActions>
-                    <Button variant="primary" onClick={onCreate}>Create design</Button>
+                    <Button data-testid="btn-create-design" variant="primary" onClick={onCreate}>Create design</Button>
                 </EmptyStateActions>
                 <EmptyStateActions>
                     <ImportDropdown onImport={onImport} />

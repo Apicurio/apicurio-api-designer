@@ -81,10 +81,16 @@ export const DesignsToolbar: FunctionComponent<DesignsToolbarProps> = (
         <Toolbar id="designs-toolbar" className="designs-toolbar" style={{ paddingLeft: "8px", paddingRight: "24px" }}>
             <ToolbarContent style={{ width: "100%" }}>
                 <ToolbarItem variant="search-filter">
-                    <SearchInput aria-label="Filter designs" value={filterValue} onChange={onFilterChange} onSearch={onSearch} onClear={onClear} />
+                    <SearchInput
+                        aria-label="Filter designs"
+                        data-testid="search-design-filter"
+                        value={filterValue}
+                        onChange={onFilterChange}
+                        onSearch={onSearch}
+                        onClear={onClear} />
                 </ToolbarItem>
                 <ToolbarItem>
-                    <Button variant="primary" onClick={onCreate}>Create design</Button>
+                    <Button variant="primary" data-testid="btn-create-design" onClick={onCreate}>Create design</Button>
                 </ToolbarItem>
                 <ToolbarItem>
                     <ImportDropdown onImport={onImport} />

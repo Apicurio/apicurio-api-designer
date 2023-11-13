@@ -3,7 +3,8 @@ import {
     Divider,
     Dropdown,
     DropdownItem,
-    DropdownList, DropdownPopperProps,
+    DropdownList,
+    DropdownPopperProps,
     MenuToggle,
     MenuToggleElement
 } from "@patternfly/react-core";
@@ -13,14 +14,18 @@ import { EllipsisVIcon } from "@patternfly/react-icons";
  * Properties
  */
 export type ObjectDropdownProps = {
-    value?: any | undefined;
+    value?: any;
     items: any[];
-    onSelect: (value: any | undefined) => void;
+    onSelect: (value: any) => void;
     itemToString: (value: any) => string;
+    itemToTestId?: (value: any) => string;
     itemIsDivider?: (value: any) => boolean;
+    itemIsVisible?: (value: any) => boolean;
+    itemIsDisabled?: (value: any) => boolean;
     noSelectionLabel?: string;
     menuAppendTo?: HTMLElement | (() => HTMLElement) | "inline";
     isKebab?: boolean;
+    testId?: string;
 };
 
 /**
@@ -39,8 +44,16 @@ export const ObjectDropdown: FunctionComponent<ObjectDropdownProps> = (props: Ob
         }
     };
 
-    const onToggleClick = () => {
+    const onToggleClick = (): void => {
         setIsOpen(!isOpen);
+    };
+
+    const itemToTestId = (item: any): string | undefined => {
+        let testId: string | undefined = undefined;
+        if (props.itemToTestId !== undefined) {
+            testId = props.itemToTestId(item);
+        }
+        return testId;
     };
 
     const popperProps: DropdownPopperProps = {
@@ -62,7 +75,13 @@ export const ObjectDropdown: FunctionComponent<ObjectDropdownProps> = (props: Ob
             onSelect={onSelectInternal}
             onOpenChange={(isOpen: boolean) => setIsOpen(isOpen)}
             toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-                <MenuToggle ref={toggleRef} onClick={onToggleClick} isExpanded={isOpen} variant={props.isKebab ? "plain" : "default"}>
+                <MenuToggle
+                    data-testid={props.testId}
+                    ref={toggleRef}
+                    onClick={onToggleClick}
+                    isExpanded={isOpen}
+                    variant={props.isKebab ? "plain" : "default"}
+                >
                     {
                         toggleValue
                     }
@@ -75,11 +94,19 @@ export const ObjectDropdown: FunctionComponent<ObjectDropdownProps> = (props: Ob
             <DropdownList>
                 {
                     props.items.map((item, index) => {
+                        if (props.itemIsVisible !== undefined && !props.itemIsVisible(item)) {
+                            return <></>;
+                        }
                         return (
                             (props.itemIsDivider && props.itemIsDivider(item)) ?
                                 <Divider component="li" key={`divider-${index}`} />
                                 :
-                                <DropdownItem value={index} key={`action-${index}`}>
+                                <DropdownItem
+                                    value={index}
+                                    key={`action-${index}`}
+                                    isDisabled={props.itemIsDisabled === undefined ? false : props.itemIsDisabled(item) }
+                                    component={props => <button {...props} data-testid={itemToTestId(item)} />}
+                                >
                                     { props.itemToString(item) }
                                 </DropdownItem>
                         );

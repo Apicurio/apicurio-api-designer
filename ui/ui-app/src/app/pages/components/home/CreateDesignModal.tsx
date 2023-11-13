@@ -113,7 +113,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
             isOpen={isOpen}
             onClose={onCancel}
             actions={[
-                <Button key="create" variant="primary" isDisabled={!isValid || isCreating} onClick={doCreate}>
+                <Button key="create" variant="primary" isDisabled={!isValid || isCreating} onClick={doCreate} data-testid="btn-modal-create">
                     <If condition={!!isCreating}>
                         <Spinner size="sm" style={{ marginRight: "5px" }} />
                         Creating
@@ -122,7 +122,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
                         Create
                     </If>
                 </Button>,
-                <Button key="cancel" variant="link" onClick={onCancel}>
+                <Button key="cancel" variant="link" onClick={onCancel} data-testid="btn-modal-cancel">
                     Cancel
                 </Button>
             ]}
@@ -135,6 +135,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
                         isRequired
                         type="text"
                         id="create-design-name"
+                        data-testid="text-design-name"
                         name="create-design-name"
                         aria-describedby="create-design-name-helper"
                         value={name}
@@ -145,6 +146,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
                     <TextArea
                         type="text"
                         id="create-design-description"
+                        data-testid="textarea-design-description"
                         name="create-design-description"
                         aria-describedby="create-design-description-helper"
                         value={description}
@@ -152,13 +154,23 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
                     />
                 </FormGroup>
                 <FormGroup label="Type" isRequired={true} fieldId="create-design-type">
-                    <ObjectSelect value={typeSelection} items={TYPE_ITEMS}
-                        onSelect={setTypeSelection} itemToString={(item) => item.label} />
+                    <ObjectSelect
+                        value={typeSelection}
+                        testId="select-design-type"
+                        items={TYPE_ITEMS}
+                        onSelect={setTypeSelection}
+                        itemToTestId={item => `select-design-type-item-${item.value}`}
+                        itemToString={item => item.label} />
                 </FormGroup>
                 <If condition={type === ArtifactTypes.OPENAPI}>
                     <FormGroup label="Version" isRequired={true} fieldId="create-design-version">
-                        <ObjectSelect value={version} items={OPENAPI_VERSIONS}
-                            onSelect={setVersion} itemToString={item => item} />
+                        <ObjectSelect
+                            value={version}
+                            testId="select-design-version"
+                            items={OPENAPI_VERSIONS}
+                            onSelect={setVersion}
+                            itemToTestId={item => `select-design-version-item-${item}`}
+                            itemToString={item => item} />
                     </FormGroup>
                 </If>
                 <If condition={(templates && templates.length > 1) as boolean}>
@@ -167,7 +179,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
                             {
                                 templates?.map(t => (
                                     <GalleryItem key={t.id}>
-                                        <TemplateItem template={t} isSelected={t === template} onSelect={() => {
+                                        <TemplateItem testId={`template-${t.id}`} template={t} isSelected={t === template} onSelect={() => {
                                             setTemplate(t);
                                         }} />
                                     </GalleryItem>

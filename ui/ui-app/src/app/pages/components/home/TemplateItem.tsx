@@ -6,22 +6,23 @@ import "./TemplateItem.css";
 export type TemplateItemProps = {
     template: Template;
     isSelected: boolean;
+    testId?: string;
     onSelect: (template: Template) => void;
 }
 
-export const TemplateItem: FunctionComponent<TemplateItemProps> = ({ template, isSelected, onSelect }: TemplateItemProps) => {
+export const TemplateItem: FunctionComponent<TemplateItemProps> = (props: TemplateItemProps) => {
     const onClick = (): void => {
-        if (!isSelected) {
-            onSelect(template);
+        if (!props.isSelected) {
+            props.onSelect(props.template);
         }
     };
 
     return (
-        <div className={`template ${isSelected ? "selected" : ""}`} onClick={onClick}>
+        <div data-testid={props.testId} className={`template ${props.isSelected ? "selected" : ""}`} onClick={onClick}>
             <div className="icon">
                 <PlusCircleIcon />
             </div>
-            <div className="name">{template.name}</div>
+            <div className="name">{props.template.name}</div>
         </div>
     );
 };

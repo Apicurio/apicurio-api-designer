@@ -10,6 +10,7 @@ import { If, IsLoading } from "@app/components";
 export type UrlUploadProps = {
     id: string|"url-upload";
     urlPlaceholder: string|"";
+    testId?: string;
     onChange: (value: string|undefined, url: string|undefined) => void;
 };
 
@@ -17,7 +18,7 @@ export type UrlUploadProps = {
  * A control similar to the FileUpload control from patternfly that allows uploading from
  * a URL instead of a file.
  */
-export const UrlUpload: FunctionComponent<UrlUploadProps> = ({ id, urlPlaceholder, onChange }: UrlUploadProps) => {
+export const UrlUpload: FunctionComponent<UrlUploadProps> = (props: UrlUploadProps) => {
     const [url, setUrl] = useState<string>();
     const [previewContent, setPreviewContent] = useState<string>();
     const [isLoading, setLoading] = useState<boolean>(false);
@@ -43,7 +44,7 @@ export const UrlUpload: FunctionComponent<UrlUploadProps> = ({ id, urlPlaceholde
             setDownloadError(undefined);
             setPreviewContent(content);
             setLoading(false);
-            onChange(content, url);
+            props.onChange(content, url);
         }).catch((error: any) => {
             setDownloadError(error.message);
             setLoading(false);
@@ -53,7 +54,7 @@ export const UrlUpload: FunctionComponent<UrlUploadProps> = ({ id, urlPlaceholde
     const onClear = (): void => {
         setUrl("");
         setPreviewContent("");
-        onChange(undefined, undefined);
+        props.onChange(undefined, undefined);
     };
 
     const spinner: React.ReactNode = (
@@ -64,17 +65,17 @@ export const UrlUpload: FunctionComponent<UrlUploadProps> = ({ id, urlPlaceholde
     );
 
     return (
-        <div className="url-upload">
+        <div className="url-upload" data-testid={props.testId}>
             <div className="url-upload-flex">
                 <div className="url-upload-url">
-                    <TextInput value={url} type="text" placeholder={urlPlaceholder} id={id}
+                    <TextInput data-testid={`${props.testId}-input`} value={url} type="text" placeholder={props.urlPlaceholder} id={props.id}
                         onChange={onTextInputChange} aria-label="url input" />
                 </div>
                 <div className="url-upload-button">
-                    <Button variant="control" isDisabled={!hasUrl()} onClick={onFetch}>Fetch</Button>
+                    <Button data-testid={`${props.testId}-fetch`} variant="control" isDisabled={!hasUrl()} onClick={onFetch}>Fetch</Button>
                 </div>
                 <div className="url-upload-button">
-                    <Button variant="control" isDisabled={!hasUrl()} onClick={onClear}>Clear</Button>
+                    <Button data-testid={`${props.testId}-clear`} variant="control" isDisabled={!hasUrl()} onClick={onClear}>Clear</Button>
                 </div>
             </div>
             <div className="url-upload-preview">
@@ -90,7 +91,7 @@ export const UrlUpload: FunctionComponent<UrlUploadProps> = ({ id, urlPlaceholde
                         </div>
                     </If>
                     <If condition={!hasError()}>
-                        <TextArea id="url-content-preview" value={previewContent} readOnlyVariant="default"></TextArea>
+                        <TextArea data-testid={`${props.testId}-preview`} id="url-content-preview" value={previewContent} readOnlyVariant="default"></TextArea>
                     </If>
                 </IsLoading>
             </div>

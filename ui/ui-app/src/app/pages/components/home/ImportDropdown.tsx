@@ -48,7 +48,9 @@ export const ImportDropdown: FunctionComponent<ImportDropdownProps> = ({ onImpor
         <ObjectDropdown
             value={value}
             items={items}
+            testId="drop-import-design"
             itemToString={(item) => item.label as string}
+            itemToTestId={(item) => `drop-import-design-option-${item.shortLabel}`}
             noSelectionLabel="Import design"
             onSelect={onSelect}
         />
