@@ -35,7 +35,7 @@
     "@patternfly/react-core": "5.1.1",
     "@patternfly/react-icons": "5.1.1",
     "@patternfly/react-table": "5.1.1",
-    "axios": "1.6.0",
+    "axios": "1.6.2",
     "dexie": "3.2.4",
     "oidc-client-ts": "2.4.0",
     "prop-types": "15.8.1",
