@@ -20,10 +20,10 @@ export const useNavigation: () => NavigationService = (): NavigationService => {
     const svcConfig: ServiceConfig = useServiceConfig();
 
     return {
-        navigateTo: (path: string) => {
-            return navigateTo(path, svcConfig, navigate);
+        navigateTo: (path: string): void => {
+            navigateTo(path, svcConfig, navigate);
         },
-        createLink: (path: string) => {
+        createLink: (path: string): string => {
             return `${svcConfig.navigation.basename}${path}`;
         },
     };

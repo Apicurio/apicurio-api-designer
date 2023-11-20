@@ -132,7 +132,7 @@ jobs:
             quay.io/${{env.IMAGE_ORG}}/apicurio-api-designer-ui:${{env.IMAGE_TAG}}
 
       - name: Google Chat Notification (Always)
-        if: always()
+        if: github.event_name == 'push' && always()
         uses: Co-qn/google-chat-notification@b9227d9daa4638c9782a5bd16c4abb86268127a1
         with:
           name: ${{ github.job }}
@@ -140,7 +140,7 @@ jobs:
           status: ${{ job.status }}
 
       - name: Google Chat Notification (Error)
-        if: failure()
+        if: github.event_name == 'push' && failure()
         uses: Co-qn/google-chat-notification@b9227d9daa4638c9782a5bd16c4abb86268127a1
         with:
           name: ${{ github.job }}
