@@ -4,18 +4,28 @@ updates:
   directory: "/"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
+  groups:
+    app-dependencies:
+      patterns:
+        - "*"
 
 - package-ecosystem: npm
   directory: "/ui"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
   versioning-strategy: increase
+  groups:
+    ui-dependencies:
+      patterns:
+        - "*"
 
 - package-ecosystem: npm
   directory: "/ui/ui-app"
   schedule:
     interval: daily
-  open-pull-requests-limit: 10
   versioning-strategy: increase
+  groups:
+    ui-app-dependencies:
+      patterns:
+        - "*"
+  
