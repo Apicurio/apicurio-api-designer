@@ -95,7 +95,7 @@ export const DesignsToolbar: FunctionComponent<DesignsToolbarProps> = (
                 <ToolbarItem>
                     <ImportDropdown onImport={onImport} />
                 </ToolbarItem>
-                <ToolbarItem className="design-paging-item" align={{ default: "alignRight" }} style={{ flexGrow: "1" }}>
+                <ToolbarItem className="design-paging-item" align={{ default: "alignRight" }}>
                     <Pagination
                         style={{ padding: "0" }}
                         variant="bottom"

@@ -1,12 +1,10 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Truncate } from "@patternfly/react-core";
-import { DesignDescription } from "../common/DesignDescription";
-import { NavLink } from "../common/NavLink";
-import { DesignOriginLabel } from "./DesignOriginLabel";
 import { Design, DesignsSearchResults, DesignsSort, SortBy } from "@models/designs";
-import { ArtifactTypeIcon, ResponsiveTable } from "@app/components";
-import { KebabToggle } from "@patternfly/react-core/deprecated";
-import { CustomActionsToggleProps, IAction, ThProps } from "@patternfly/react-table";
+import { ArtifactTypeIcon } from "@app/components";
+import { ThProps } from "@patternfly/react-table";
+import { ObjectDropdown, ResponsiveTable } from "@apicurio/common-ui-components";
+import { DesignDescription, DesignOriginLabel, NavLink } from "@app/pages";
 
 
 export type DesignListProps = {
@@ -20,6 +18,16 @@ export type DesignListProps = {
     onDownload: (design: Design) => void;
     onSelect: (design: Design|undefined) => void;
 }
+type DesignAction = {
+    label: string;
+    testId: string;
+    onClick: () => void;
+};
+
+type DesignActionSeparator = {
+    isSeparator: true;
+};
+
 
 export const DesignList: FunctionComponent<DesignListProps> = (
     { designs, selectedDesign, sort, onSort, onEdit, onRename, onDelete, onDownload, onSelect }: DesignListProps) => {
@@ -70,30 +78,16 @@ export const DesignList: FunctionComponent<DesignListProps> = (
         );
     };
 
-    const renderActionsToggle = (props: CustomActionsToggleProps): React.ReactNode => {
-        return (
-            <KebabToggle isDisabled={props.isDisabled} isOpen={props.isOpen} onToggle={(event, value) => {
-                if (value) {
-                    // Do something?
-                }
-                event.preventDefault();
-                event.stopPropagation();
-                props.onToggle(event as any);
-            }} />
-        );
-    };
-
-    const actionsFor = (design: any): IAction[] => {
-        const actions: IAction[] = [
-            { title: "View design details", onClick: () => onSelect(design) },
+    const actionsFor = (design: Design): (DesignAction | DesignActionSeparator)[] => {
+        return [
+            { label: "View design details", onClick: () => onSelect(design), testId: `view-design-${design.id}` },
             { isSeparator: true, },
-            { title: "Edit design content", onClick: () => onEdit(design) },
-            { title: "Edit design metadata", onClick: () => onRename(design) },
-            { title: "Download design", onClick: () => onDownload(design) },
+            { label: "Edit design content", onClick: () => onEdit(design), testId: `edit-design-content-${design.id}` },
+            { label: "Edit design metadata", onClick: () => onRename(design), testId: `edit-design-metadata-${design.id}` },
+            { label: "Download design", onClick: () => onDownload(design), testId: `download-design-${design.id}` },
             { isSeparator: true, },
-            { title: "Delete design", onClick: () => onDelete(design) }
+            { label: "Delete design", onClick: () => onDelete(design), testId: `delete-design-${design.id}` }
         ];
-        return actions;
     };
 
     const sortParams = (column: any): ThProps["sort"] | undefined => {
@@ -139,10 +133,20 @@ export const DesignList: FunctionComponent<DesignListProps> = (
                         style={{ maxWidth: "0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
                         children={renderColumnData(row as Design, colIndex) as any} />
                 )}
-                renderActions={({ row, ActionsColumn }) => (
-                    <ActionsColumn key={`actions-${row["id"]}`}
-                        actionsToggle={renderActionsToggle as any}
-                        items={actionsFor(row)}/>
+                renderActions={({ row }) => (
+                    <ObjectDropdown
+                        items={actionsFor(row)}
+                        isKebab={true}
+                        label="Actions"
+                        itemToString={item => item.label}
+                        itemToTestId={item => item.testId}
+                        itemIsDivider={item => item.isSeparator}
+                        onSelect={item => item.onClick()}
+                        testId={`api-actions-${row.id}`}
+                        popperProps={{
+                            position: "right"
+                        }}
+                    />
                 )}
                 isRowSelected={({ row }) => row.id === selectedDesign?.id}
             />

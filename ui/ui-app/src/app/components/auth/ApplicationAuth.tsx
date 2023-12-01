@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { EmptyState, EmptyStateBody, EmptyStateHeader, EmptyStateIcon, Spinner } from "@patternfly/react-core";
 import { ErrorCircleOIcon } from "@patternfly/react-icons";
-import { If } from "@app/components";
 import { getOidc } from "@app/auth";
 import { ApiDesignerConfigType, useApiDesignerConfig } from "@app/contexts/config.ts";
+import { If } from "@apicurio/common-ui-components";
 
 enum AuthState {
     AUTHENTICATING, AUTHENTICATED, AUTHENTICATION_FAILED

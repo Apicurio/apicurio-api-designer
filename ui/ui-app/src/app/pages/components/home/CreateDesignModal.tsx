@@ -14,8 +14,8 @@ import {
 import { ArtifactTypes, CreateDesign } from "@models/designs";
 import { Template } from "@models/templates";
 import { TemplatesService, useTemplatesService } from "@services/TemplatesService.ts";
-import { If, ObjectSelect } from "@app/components";
 import { BrowserDataWarning, OPENAPI_VERSIONS, TemplateItem, TYPE_ITEMS, TypeItem } from "@app/pages";
+import { If, ObjectSelect } from "@apicurio/common-ui-components";
 
 export type CreateDesignModalProps = {
     isOpen: boolean|undefined;

@@ -18,9 +18,9 @@ import { TextEditor } from "@editors/TextEditor.tsx";
 import { ProtoEditor } from "@editors/ProtoEditor.tsx";
 import { OpenApiEditor } from "@editors/OpenApiEditor.tsx";
 import { AsyncApiEditor } from "@editors/AsyncApiEditor.tsx";
-import { IsLoading } from "@app/components";
 import { CompareModal, DeleteDesignModal, EditorContext, RenameData, RenameModal } from "@app/pages/components";
 import { useParams } from "react-router-dom";
+import { IfNotLoading } from "@apicurio/common-ui-components";
 
 const sectionContextStyle: CSSProperties = {
     borderBottom: "1px solid #ccc",
@@ -230,7 +230,7 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
     };
 
     return (
-        <IsLoading condition={isLoading}>
+        <IfNotLoading isLoading={isLoading}>
             <PageSection variant={PageSectionVariants.light} id="section-context" style={sectionContextStyle}>
                 <EditorContext
                     design={design as Design}
@@ -263,6 +263,6 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
                 onDownload={onDownload}
                 onCancel={() => setDeleteModalOpen(false)}/>
             {/*<Prompt when={isDirty} message={ "You have unsaved changes.  Do you really want to leave?" }/>*/}
-        </IsLoading>
+        </IfNotLoading>
     );
 };

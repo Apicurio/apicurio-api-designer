@@ -16,8 +16,8 @@
 .url-upload .url-upload-preview .url-upload-loading, .url-upload .url-upload-preview .url-upload-error {
     padding: 5px;
     min-height: 128px;
-    border-right: 0px;
-    border-left: 0px;
+    border-right: 0;
+    border-left: 0;
     border-bottom: 1px solid #666;
     background-color: rgb(240, 240, 240);
 }

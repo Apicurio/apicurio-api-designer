@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from "react";
-import { DesignEventType } from "./DesignEventType";
 import { DesignEvent } from "@models/designs";
-import { DateTime, IfNotEmpty } from "@app/components";
 import "./DesignHistory.css";
+import { DateTime, IfNotEmpty } from "@apicurio/common-ui-components";
+import { DesignEventType } from "@app/pages";
 
 /**
  * Properties

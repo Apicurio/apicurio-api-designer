@@ -19,7 +19,6 @@ import {
     DesignOriginType
 } from "@models/designs";
 import { isJson, isProto, isYaml, parseJson, parseYaml } from "@utils/content.utils.ts";
-import { If, ObjectSelect } from "@app/components";
 import {
     ASYNCAPI_TYPE, AVRO_TYPE,
     BrowserDataWarning,
@@ -30,6 +29,7 @@ import {
     TypeItem,
     UrlUpload
 } from "@app/pages";
+import { If, ObjectSelect } from "@apicurio/common-ui-components";
 
 
 export type ImportDesignModalProps = {

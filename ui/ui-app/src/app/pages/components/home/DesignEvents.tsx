@@ -3,8 +3,8 @@ import { DesignEventType } from "./DesignEventType";
 import { Design, DesignEvent } from "@models/designs";
 import "./DesignEvents.css";
 import { DesignOriginLabel } from "@app/pages/components/home/DesignOriginLabel.tsx";
-import { DateTime, If, IfNotEmpty } from "@app/components";
 import { hasOrigin } from "@utils/design.utils.ts";
+import { DateTime, If, IfNotEmpty } from "@apicurio/common-ui-components";
 
 export type DesignEventsProps = {
     design: Design | undefined;

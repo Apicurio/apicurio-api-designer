@@ -1,13 +1,11 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { Tab, Tabs, TabTitleText } from "@patternfly/react-core";
-import { DesignDescription } from "../common/DesignDescription";
-import { DesignOriginLabel } from "./DesignOriginLabel";
-import { DesignEvents } from "./DesignEvents";
-import { DesignHistory } from "./DesignHistory";
 import { Design, DesignEvent } from "@models/designs";
-import { ArtifactTypeIcon, DateTime, IsLoading } from "@app/components";
+import { ArtifactTypeIcon } from "@app/components";
 import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
 import "./DesignDetailsPanel.css";
+import { DateTime, IfNotLoading } from "@apicurio/common-ui-components";
+import { DesignDescription, DesignEvents, DesignHistory, DesignOriginLabel } from "@app/pages";
 
 /**
  * Properties
@@ -39,7 +37,7 @@ export const DesignDetailsPanel: FunctionComponent<DesignDetailsPanelProps> = ({
     }, [design]);
 
     return (
-        <IsLoading condition={isLoading}>
+        <IfNotLoading isLoading={isLoading}>
             <Tabs
                 activeKey={activeTabKey}
                 onSelect={(_event, eventKey) => {setActiveTabKey(eventKey as string);}}
@@ -76,6 +74,6 @@ export const DesignDetailsPanel: FunctionComponent<DesignDetailsPanelProps> = ({
                     <DesignHistory events={events} />
                 </Tab>
             </Tabs>
-        </IsLoading>
+        </IfNotLoading>
     );
 };

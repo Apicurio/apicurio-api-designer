@@ -14,8 +14,9 @@ import {
 import { ArtifactTypes, Design, DesignEvent } from "@models/designs";
 import { LocalStorageService, useLocalStorageService } from "@services/LocalStorageService.ts";
 import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
-import { ArtifactTypeIcon, If, ObjectDropdown, ToggleIcon } from "@app/components";
+import { ArtifactTypeIcon } from "@app/components";
 import { DesignDescription, NavLink } from "@app/pages";
+import { If, ObjectDropdown, ToggleIcon } from "@apicurio/common-ui-components";
 
 /**
  * Properties
@@ -131,6 +132,7 @@ export const EditorContext: FunctionComponent<EditorContextProps> = (props: Edit
                 </div>
                 <div className="editor-context-actions">
                     <ObjectDropdown
+                        label="Actions"
                         items={menuItems}
                         testId="select-actions"
                         onSelect={item => item.onSelect()}

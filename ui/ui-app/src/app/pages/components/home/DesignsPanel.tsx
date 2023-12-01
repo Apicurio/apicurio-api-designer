@@ -18,13 +18,13 @@ import {
     Paging,
     RenameDesign
 } from "@models/designs";
-import { If, ListWithToolbar } from "@app/components";
 import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
 import { DownloadService, useDownloadService } from "@services/DownloadService.ts";
 import { NavigationService, useNavigation } from "@services/NavigationService.ts";
 import { AlertsService, useAlertsService } from "@services/AlertsService.tsx";
 import { LocalStorageService, useLocalStorageService } from "@services/LocalStorageService.ts";
 import { contentTypeForDesign, convertToValidFilename, fileExtensionForDesign } from "@utils/content.utils.ts";
+import { If, ListWithToolbar } from "@apicurio/common-ui-components";
 
 
 export type DesignsPanelProps = {
@@ -113,7 +113,7 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
             const filename: string = `${convertToValidFilename(design.name)}.${fileExtensionForDesign(design, content)}`;
             const contentType: string = contentTypeForDesign(design, content);
             const theContent: string = typeof content.data === "object" ? JSON.stringify(content.data, null, 4) : content.data as string;
-            downloadSvc.downloadToFS(theContent, contentType, filename);
+            return downloadSvc.downloadToFS(theContent, contentType, filename);
         }).catch((error: any) => {
             // TODO error handling
             console.error(error);

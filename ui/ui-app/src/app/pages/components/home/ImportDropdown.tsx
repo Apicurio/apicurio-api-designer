@@ -1,6 +1,6 @@
-import { FunctionComponent, useState } from "react";
-import { ObjectDropdown } from "@app/components";
+import { FunctionComponent } from "react";
 import { ImportFrom } from "@app/pages";
+import { ObjectDropdown } from "@apicurio/common-ui-components";
 
 type ImportDropdownItem = {
     label: string,
@@ -20,8 +20,6 @@ export type ImportDropdownProps = {
  * into the API Designer).
  */
 export const ImportDropdown: FunctionComponent<ImportDropdownProps> = ({ onImport }: ImportDropdownProps) => {
-    const [value, setValue] = useState<ImportDropdownItem>();
-
     const items: ImportDropdownItem[] = [
         {
             label: "Import from URL",
@@ -39,20 +37,15 @@ export const ImportDropdown: FunctionComponent<ImportDropdownProps> = ({ onImpor
         }
     ];
 
-    const onSelect = (value: any | undefined) => {
-        setValue(value);
-        value.handler();
-    };
-
     return (
         <ObjectDropdown
-            value={value}
+            label="Import design"
             items={items}
             testId="drop-import-design"
             itemToString={(item) => item.label as string}
             itemToTestId={(item) => `drop-import-design-option-${item.shortLabel}`}
             noSelectionLabel="Import design"
-            onSelect={onSelect}
+            onSelect={item => item.handler()}
         />
     );
 };
