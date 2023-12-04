@@ -59,5 +59,5 @@ fs.writeFile(CONFIG_OUTPUT_PATH, FILE_CONTENT, "utf8", (err) => {
       console.error("Error writing config to file:", err);
       return;
     }
-    console.log("Config successfully writen to file.");
+    console.log("Config successfully written to file.");
 });
