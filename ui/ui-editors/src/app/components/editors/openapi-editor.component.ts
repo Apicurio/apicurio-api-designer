@@ -53,7 +53,11 @@ export class OpenApiEditorComponent implements EditorComponent {
                 content: newValue.spec
             }
         };
-        this.window.window.top.postMessage(message, "*");
+        if (parent) {
+            parent.postMessage(message, "*");
+        } else {
+            this.window.window.top.postMessage(message, "*");
+        }
     }
 
     public getValue(): string {

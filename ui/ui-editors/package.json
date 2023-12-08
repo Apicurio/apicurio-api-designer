@@ -4,7 +4,7 @@
     "scripts": {
         "clean": "rimraf dist",
         "dev": "ng serve --port 9011",
-	"lint": "",
+        "lint": "",
         "build": "ng build --outputHashing=all"
     },
     "private": true,
