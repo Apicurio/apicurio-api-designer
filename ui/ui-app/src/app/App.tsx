@@ -8,7 +8,7 @@ import { useOidcAuth } from "@app/auth";
 import { ApiDesignerConfigContext, ApiDesignerConfigType } from "@app/contexts/config";
 
 import { AuthConfig } from "@services/ServiceConfigContext.tsx";
-import { EditorPage, HomePage, PageConfig, PageContextProvider } from "@app/pages";
+import { EditorPage, EmbeddedEditorPage, HomePage, PageConfig, PageContextProvider } from "@app/pages";
 import { AppHeader, ApplicationAuth } from "@app/components";
 import { Page } from "@patternfly/react-core";
 
@@ -50,6 +50,7 @@ export const App: React.FunctionComponent = () => {
                             <Routes>
                                 <Route path="/" element={<HomePage />}/>
                                 <Route path="/designs/:designId/editor" element={<EditorPage />}/>
+                                <Route path="/editor-embedded" element={<EmbeddedEditorPage />}/>
                             </Routes>
                         </Page>
                     </Router>
