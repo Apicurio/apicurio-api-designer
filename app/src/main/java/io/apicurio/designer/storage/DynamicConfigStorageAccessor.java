@@ -17,7 +17,6 @@
 package io.apicurio.designer.storage;
 
 import io.apicurio.common.apps.config.DynamicConfigStorage;
-import io.apicurio.common.apps.config.DynamicConfigStorageAccessor;
 import io.apicurio.designer.spi.storage.DesignerStorage;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,13 +26,13 @@ import jakarta.inject.Inject;
  * @author eric.wittmann@gmail.com
  */
 @ApplicationScoped
-public class InMemoryDynamicConfigStorageAccessor implements DynamicConfigStorageAccessor {
+public class DynamicConfigStorageAccessor implements io.apicurio.common.apps.config.DynamicConfigStorageAccessor {
 
     @Inject
     DesignerStorage designerStorage;
 
     /**
-     * @see DynamicConfigStorageAccessor#getConfigStorage()
+     * @see io.apicurio.common.apps.config.DynamicConfigStorageAccessor#getConfigStorage()
      */
     @Override
     public DynamicConfigStorage getConfigStorage() {

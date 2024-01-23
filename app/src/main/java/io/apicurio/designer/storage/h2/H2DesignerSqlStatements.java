@@ -16,22 +16,27 @@
 
 package io.apicurio.designer.storage.h2;
 
+import io.apicurio.common.apps.storage.exceptions.StorageException;
+import io.apicurio.common.apps.storage.sql.jdbi.Handle;
 import io.apicurio.common.apps.storage.sql.jdbi.query.Update;
 import io.apicurio.common.apps.storage.sql.jdbi.query.UpdateImpl;
 import io.apicurio.designer.spi.storage.DesignerSqlStatements;
 import io.apicurio.designer.storage.common.AbstractDesignerSqlStatements;
-import io.quarkus.arc.DefaultBean;
 
 import java.sql.SQLException;
-import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * @author eric.wittmann@gmail.com
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
-@ApplicationScoped
-@DefaultBean
 public class H2DesignerSqlStatements extends AbstractDesignerSqlStatements implements DesignerSqlStatements {
+
+    @Override
+    public boolean isDatabaseInitialized(Handle handle) throws StorageException {
+        int count = handle.createQuery("SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_name = 'APICURIO'")
+                .mapTo(Integer.class).one();
+        return count > 0;
+    }
 
     @Override
     public String dbType() {

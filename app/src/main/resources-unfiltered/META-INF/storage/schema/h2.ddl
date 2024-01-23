@@ -20,3 +20,7 @@ ALTER TABLE design_metadata ADD PRIMARY KEY (designId);
 
 CREATE TABLE design_events (eventId VARCHAR(128) NOT NULL, designId VARCHAR(128) NOT NULL, createdOn TIMESTAMP WITHOUT TIME ZONE NOT NULL, type VARCHAR(128), data BYTEA NOT NULL);
 ALTER TABLE design_events ADD PRIMARY KEY (eventId);
+
+CREATE TABLE config (pname VARCHAR(255) NOT NULL, pvalue VARCHAR(1024), modifiedOn BIGINT NOT NULL);
+ALTER TABLE config ADD PRIMARY KEY (pname);
+CREATE INDEX IDX_config_1 ON config(modifiedOn);

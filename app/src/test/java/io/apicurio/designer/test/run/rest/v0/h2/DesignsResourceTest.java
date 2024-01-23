@@ -1,15 +1,18 @@
-package io.apicurio.designer.test.run.rest.v0;
+package io.apicurio.designer.test.run.rest.v0.h2;
 
 import io.apicurio.designer.test.shared.rest.v0.DesignsResourceTestShared;
 import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import jakarta.inject.Inject;
+import org.junit.jupiter.api.TestInstance;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
 @QuarkusTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class DesignsResourceTest {
 
     @Inject
@@ -33,5 +36,10 @@ class DesignsResourceTest {
     @Test
     void searchDesigns() {
         drts.runSearchDesigns();
+    }
+
+    @AfterAll
+    public void cleanUp() {
+        drts.cleanUp();
     }
 }

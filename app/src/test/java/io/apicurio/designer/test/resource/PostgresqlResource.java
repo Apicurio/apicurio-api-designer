@@ -21,9 +21,9 @@ public class PostgresqlResource implements QuarkusTestResourceLifecycleManager {
     public Map<String, String> start() {
         POSTGRESQL.start();
         return Map.of(
-                "quarkus.datasource.jdbc.url", POSTGRESQL.getJdbcUrl(),
-                "quarkus.datasource.username", "postgres",
-                "quarkus.datasource.password", "postgres"
+                "apicurio.datasource.url", POSTGRESQL.getJdbcUrl(),
+                "apicurio.datasource.username", "postgres",
+                "apicurio.datasource.password", "postgres"
         );
     }
 

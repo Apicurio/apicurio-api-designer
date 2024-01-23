@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package io.apicurio.designer.storage.postgres;
+package io.apicurio.designer.storage.postgresql;
 
+import io.apicurio.common.apps.storage.exceptions.StorageException;
+import io.apicurio.common.apps.storage.sql.jdbi.Handle;
 import io.apicurio.common.apps.storage.sql.jdbi.query.Update;
 import io.apicurio.common.apps.storage.sql.jdbi.query.UpdateImpl;
 import io.apicurio.designer.spi.storage.DesignerSqlStatements;
 import io.apicurio.designer.storage.common.AbstractDesignerSqlStatements;
 
 import java.sql.SQLException;
-import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
-@ApplicationScoped
 public class PostgresDesignerSqlStatements extends AbstractDesignerSqlStatements implements DesignerSqlStatements {
 
     @Override
@@ -43,6 +43,13 @@ public class PostgresDesignerSqlStatements extends AbstractDesignerSqlStatements
     @Override
     public boolean isForeignKeyViolation(SQLException ex) {
         return ex.getMessage() != null && ex.getMessage().contains("violates foreign key constraint");
+    }
+
+    @Override
+    public boolean isDatabaseInitialized(Handle handle) throws StorageException {
+        int count = handle.createQuery("SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_name = 'apicurio'")
+                .mapTo(Integer.class).one();
+        return count > 0;
     }
 
     @Override

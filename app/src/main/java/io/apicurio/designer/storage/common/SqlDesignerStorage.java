@@ -3,9 +3,10 @@ package io.apicurio.designer.storage.common;
 import io.apicurio.common.apps.config.DynamicConfigPropertyDto;
 import io.apicurio.common.apps.config.impl.storage.DynamicConfigSqlStorageComponent;
 import io.apicurio.common.apps.content.handle.ContentHandle;
+import io.apicurio.common.apps.logging.LoggerProducer;
 import io.apicurio.common.apps.storage.exceptions.StorageException;
 import io.apicurio.common.apps.storage.exceptions.StorageExceptionMapper;
-import io.apicurio.common.apps.storage.sql.BaseSqlStorageComponent;
+import io.apicurio.common.apps.storage.sql.SqlStorageComponent;
 import io.apicurio.common.apps.storage.sql.jdbi.HandleFactory;
 import io.apicurio.designer.spi.storage.DesignerSqlStatements;
 import io.apicurio.designer.spi.storage.DesignerStorage;
@@ -14,12 +15,16 @@ import io.apicurio.designer.spi.storage.SearchQuerySpecification.SearchQuery;
 import io.apicurio.designer.spi.storage.model.DesignDto;
 import io.apicurio.designer.spi.storage.model.DesignEventDto;
 import io.apicurio.designer.spi.storage.model.DesignMetadataDto;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 
-import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static io.apicurio.common.apps.storage.sql.jdbi.query.Sql.RESOURCE_CONTEXT_KEY;
@@ -28,7 +33,11 @@ import static io.apicurio.common.apps.storage.sql.jdbi.query.Sql.RESOURCE_IDENTI
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
-public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
+@ApplicationScoped
+public class SqlDesignerStorage extends SqlStorageComponent implements DesignerStorage {
+
+    @Inject
+    LoggerProducer loggerProducer;
 
     protected static String CONTENT_SEQUENCE_KEY = "content";
     protected static String DESIGN_EVENT_SEQUENCE_KEY = "design_event";
@@ -37,10 +46,8 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
     protected HandleFactory handles;
 
     @Inject
+    @Named("apicurioSqlStatements")
     protected DesignerSqlStatements sqlStatements;
-
-    @Inject
-    protected BaseSqlStorageComponent storageEngine;
 
     @Inject
     protected DynamicConfigSqlStorageComponent dynamicConfigSqlStorageComponent;
@@ -51,12 +58,22 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
     @Inject
     Logger log;
 
-    /**
-     * The overriding method MUST be annotated with:
-     * \@PostConstruct
-     * \@Transactional
-     */
-    protected abstract void init();
+    @PostConstruct
+    @Transactional
+    protected void init() {
+        start(loggerProducer, handles, SqlStorageComponent.Configuration.builder()
+                .sqlStatements(sqlStatements)
+                .supportsAtomicSequenceIncrement(!Objects.equals(sqlStatements.dbType(), "h2"))
+                .ddlDirRootPath("META-INF/storage/schema")
+                .build());
+
+        dynamicConfigSqlStorageComponent.start(loggerProducer, handles, sqlStatements);
+    }
+
+    @Override
+    public boolean isReady() {
+        return true;
+    }
 
     @Override
     @Transactional
@@ -65,7 +82,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
         // Create Content
         // TODO Deduplication
         var contentId = exceptionMapper.with(() ->
-                storageEngine.nextSequenceValue(CONTENT_SEQUENCE_KEY)
+                nextSequenceValue(CONTENT_SEQUENCE_KEY)
         );
         handles.withHandleNoExceptionMapped(handle ->
                 handle.createUpdate(sqlStatements.insertDesignContent())
@@ -282,7 +299,7 @@ public abstract class AbstractSqlDesignerStorage implements DesignerStorage {
     @Transactional
     public DesignEventDto createDesignEvent(DesignEventDto event) {
         var eventId = exceptionMapper.with(() ->
-                storageEngine.nextSequenceValue(DESIGN_EVENT_SEQUENCE_KEY)
+                nextSequenceValue(DESIGN_EVENT_SEQUENCE_KEY)
         );
         event.setId(String.valueOf(eventId));
         event.setCreatedOn(Instant.now());
