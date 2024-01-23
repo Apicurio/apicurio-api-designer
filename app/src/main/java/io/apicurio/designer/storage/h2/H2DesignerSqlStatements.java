@@ -24,15 +24,11 @@ import io.apicurio.designer.spi.storage.DesignerSqlStatements;
 import io.apicurio.designer.storage.common.AbstractDesignerSqlStatements;
 
 import java.sql.SQLException;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
 
 /**
  * @author eric.wittmann@gmail.com
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
-@ApplicationScoped
-@Named("h2sqlStatements")
 public class H2DesignerSqlStatements extends AbstractDesignerSqlStatements implements DesignerSqlStatements {
 
     @Override

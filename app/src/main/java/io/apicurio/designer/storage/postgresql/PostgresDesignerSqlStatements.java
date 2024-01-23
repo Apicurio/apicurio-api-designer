@@ -22,16 +22,12 @@ import io.apicurio.common.apps.storage.sql.jdbi.query.Update;
 import io.apicurio.common.apps.storage.sql.jdbi.query.UpdateImpl;
 import io.apicurio.designer.spi.storage.DesignerSqlStatements;
 import io.apicurio.designer.storage.common.AbstractDesignerSqlStatements;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
 
 import java.sql.SQLException;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
-@ApplicationScoped
-@Named("postgresqlStatements")
 public class PostgresDesignerSqlStatements extends AbstractDesignerSqlStatements implements DesignerSqlStatements {
 
     @Override

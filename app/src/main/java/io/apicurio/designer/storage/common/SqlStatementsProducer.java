@@ -3,6 +3,8 @@ package io.apicurio.designer.storage.common;
 import io.apicurio.common.apps.config.Info;
 import io.apicurio.common.apps.storage.sql.SqlStatements;
 import io.apicurio.designer.spi.storage.DesignerSqlStatements;
+import io.apicurio.designer.storage.h2.H2DesignerSqlStatements;
+import io.apicurio.designer.storage.postgresql.PostgresDesignerSqlStatements;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
@@ -15,14 +17,6 @@ public class SqlStatementsProducer {
 
     @Inject
     Logger log;
-
-    @Inject
-    @Named("postgresqlStatements")
-    DesignerSqlStatements postgresqlStatements;
-
-    @Inject
-    @Named("h2sqlStatements")
-    DesignerSqlStatements h2sqlStatements;
 
     @ConfigProperty(name = "apicurio.storage.db-kind", defaultValue = "h2")
     @Info(category = "storage", description = "Datasource Db kind", availableSince = "0.1.0.Final")
@@ -37,10 +31,10 @@ public class SqlStatementsProducer {
     public DesignerSqlStatements createSqlStatements() {
         log.debug("Creating an instance of ISqlStatements for DB: " + databaseType);
         if ("h2".equals(databaseType)) {
-            return h2sqlStatements;
+            return new H2DesignerSqlStatements();
         }
         if ("postgresql".equals(databaseType)) {
-            return postgresqlStatements;
+            return new PostgresDesignerSqlStatements();
         }
         throw new RuntimeException("Unsupported database type: " + databaseType);
     }
