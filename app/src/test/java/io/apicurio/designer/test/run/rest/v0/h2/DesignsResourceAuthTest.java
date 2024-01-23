@@ -1,4 +1,4 @@
-package io.apicurio.designer.test.run.rest.v0;
+package io.apicurio.designer.test.run.rest.v0.h2;
 
 import io.apicurio.designer.test.profile.AuthTestProfile;
 import io.apicurio.designer.test.resource.JWSMockResource;
@@ -42,6 +42,7 @@ class DesignsResourceAuthTest {
 
     @BeforeAll
     void beforeAll() {
+        drts.cleanUp();
 
         ApicurioHttpClientFactory.setProvider(new VertxHttpClientProvider(Vertx.vertx()));
         var oidcAuth = new OidcAuth(ApicurioHttpClientFactory.create(tokenEndpoint, new AuthErrorHandler()), JWSMockResource.ADMIN_CLIENT_ID, "test");

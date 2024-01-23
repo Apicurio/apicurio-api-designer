@@ -16,8 +16,6 @@
 
 package io.apicurio.designer.storage.common;
 
-import io.apicurio.common.apps.storage.exceptions.StorageException;
-import io.apicurio.common.apps.storage.sql.jdbi.Handle;
 import io.apicurio.designer.spi.storage.DesignerSqlStatements;
 import io.apicurio.designer.spi.storage.SearchQuerySpecification;
 
@@ -28,13 +26,6 @@ import io.apicurio.designer.spi.storage.SearchQuerySpecification;
 public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatements {
 
     // ==================== BaseSqlStatements ====================
-
-    @Override
-    public boolean isDatabaseInitialized(Handle handle) throws StorageException {
-        int count = handle.createQuery("SELECT COUNT(*) FROM information_schema.tables WHERE table_name = 'apicurio'")
-                .mapTo(Integer.class).one();
-        return count > 0;
-    }
 
     @Override
     public String getStorageProperty() {
@@ -193,5 +184,35 @@ public abstract class AbstractDesignerSqlStatements implements DesignerSqlStatem
                 .addOrderByColumn("type", "m")
                 .addOrderByColumn("modifiedOn", "m")
                 .addOrderByColumn("createdOn", "m");
+    }
+
+    @Override
+    public String selectConfigProperties() {
+        return "SELECT c.* FROM config c ";
+    }
+
+    @Override
+    public String deleteConfigProperty() {
+        return "DELETE FROM config WHERE pname = ?";
+    }
+
+    @Override
+    public String insertConfigProperty() {
+        return "INSERT INTO config (pname, pvalue, modifiedOn) VALUES (?, ?, ?)";
+    }
+
+    @Override
+    public String deleteAllConfigProperties() {
+        return "DELETE FROM config ";
+    }
+
+    @Override
+    public String selectConfigPropertyByName() {
+        return "SELECT c.* FROM config c WHERE c.pname = ?";
+    }
+
+    @Override
+    public String selectTenantIdsByConfigModifiedOn() {
+        return null;
     }
 }

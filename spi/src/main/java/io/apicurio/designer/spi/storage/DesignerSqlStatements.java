@@ -16,12 +16,13 @@
 
 package io.apicurio.designer.spi.storage;
 
-import io.apicurio.common.apps.storage.sql.BaseSqlStatements;
+import io.apicurio.common.apps.config.DynamicConfigSqlStorageStatements;
+import io.apicurio.common.apps.storage.sql.SqlStatements;
 
 /**
  * @author Jakub Senko <em>m@jsenko.net</em>
  */
-public interface DesignerSqlStatements extends BaseSqlStatements {
+public interface DesignerSqlStatements extends SqlStatements, DynamicConfigSqlStorageStatements {
 
     String insertDesignContent();
 

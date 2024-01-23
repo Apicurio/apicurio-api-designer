@@ -84,8 +84,6 @@
         <module>common</module>
         <module>spi</module>
         <module>app</module>
-        <module>storage</module>
-        <module>storage/postgresql</module>
         <module>dist</module>
         <module>dist/docker</module>
     </modules>
@@ -105,13 +103,13 @@
 
         <!-- Quarkus -->
 
-        <version.quarkus>3.2.6.Final</version.quarkus>
+        <version.quarkus>3.6.6</version.quarkus>
         <quarkus.profile>dev</quarkus.profile>
 
         <!-- Dependency Versions -->
 
         <lombok.version>1.18.30</lombok.version>
-        <apicurio-common-app-components.version>0.2.4.Final</apicurio-common-app-components.version>
+        <apicurio-common-app-components.version>0.2.5.Final</apicurio-common-app-components.version>
         <apicurio-common-rest-client.version>0.1.18.Final</apicurio-common-rest-client.version>
         <annotation-api.version>1.3.5</annotation-api.version>
         <version.puppycrawl>10.12.6</version.puppycrawl>
@@ -161,12 +159,6 @@
             <dependency>
                 <groupId>io.apicurio</groupId>
                 <artifactId>apicurio-api-designer-app</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.apicurio</groupId>
-                <artifactId>apicurio-api-designer-storage-postgresql</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

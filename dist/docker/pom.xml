@@ -18,9 +18,6 @@
 
     <properties>
         <docker.app.files>app-files/apicurio-api-designer-app-${project.version}-all.tar.gz</docker.app.files>
-        <docker.postgresql.files>
-            postgresql-files/apicurio-api-designer-storage-postgresql-${project.version}-all.tar.gz
-        </docker.postgresql.files>
     </properties>
 
     <dependencies>
@@ -30,12 +27,6 @@
         <dependency>
             <groupId>io.apicurio</groupId>
             <artifactId>apicurio-api-designer-app</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.apicurio</groupId>
-            <artifactId>apicurio-api-designer-storage-postgresql</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -58,25 +49,6 @@
                             <resources>
                                 <resource>
                                     <directory>${basedir}/../../app/target</directory>
-                                    <filtering>false</filtering>
-                                    <includes>
-                                        <include>apicurio-*-all.tar.gz</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-target-postgresql</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/docker/postgresql-files</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${basedir}/../../storage/postgresql/target</directory>
                                     <filtering>false</filtering>
                                     <includes>
                                         <include>apicurio-*-all.tar.gz</include>

@@ -1,16 +1,11 @@
 package io.apicurio.designer.test.shared.rest.v0;
 
-import io.apicurio.designer.rest.v0.beans.CreateDesignEvent;
-import io.apicurio.designer.rest.v0.beans.Design;
-import io.apicurio.designer.rest.v0.beans.DesignEvent;
-import io.apicurio.designer.rest.v0.beans.DesignEventData;
-import io.apicurio.designer.rest.v0.beans.DesignEventDataCreate;
-import io.apicurio.designer.rest.v0.beans.DesignEventType;
-import io.apicurio.designer.rest.v0.beans.DesignOriginType;
-import io.apicurio.designer.rest.v0.beans.DesignSearchResults;
-import io.apicurio.designer.rest.v0.beans.EditableDesignMetadata;
+import io.apicurio.designer.rest.v0.beans.*;
+import io.apicurio.designer.spi.storage.DesignerStorage;
+import io.apicurio.designer.spi.storage.SearchQuerySpecification;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.http.ContentType;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
 
 import java.io.BufferedReader;
@@ -40,6 +35,18 @@ public class DesignsResourceTestShared {
     private static final String DESIGNS_BASE_URL = "/apis/designer/v0/designs";
     private static final String DESIGNS_METADATA_BASE_URL = "/apis/designer/v0/designs/{designId}/meta";
     private static final String DESIGNS_EVENTS_BASE_URL = "/apis/designer/v0/designs/{designId}/events";
+
+    @Inject
+    DesignerStorage storage;
+
+    public void cleanUp() {
+        SearchQuerySpecification.SearchQuery searchQuery = new SearchQuerySpecification.SearchQuery();
+        searchQuery.orderBy("createdOn", SearchQuerySpecification.SearchOrdering.ASC);
+
+        storage.searchDesignMetadata(searchQuery).forEach(designMetadataDto -> {
+            storage.deleteDesign(designMetadataDto.getId());
+        });
+    }
 
     public void runBasicCRUD() {
 
