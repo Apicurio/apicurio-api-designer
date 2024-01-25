@@ -21,7 +21,6 @@ import {
 import { isJson, isProto, isYaml, parseJson, parseYaml } from "@utils/content.utils.ts";
 import {
     ASYNCAPI_TYPE, AVRO_TYPE,
-    BrowserDataWarning,
     ImportFrom, JSON_TYPE,
     OPENAPI_TYPE,
     OPENAPI_VERSIONS, PROTOBUF_TYPE,
@@ -288,8 +287,6 @@ export const ImportDesignModal: FunctionComponent<ImportDesignModalProps> = ({ i
                 </Button>
             ]}
         >
-            <BrowserDataWarning />
-
             <Form>
                 <If condition={importType === ImportFrom.FILE}>
                     <FormGroup label="File" isRequired={true} fieldId="import-design-file">

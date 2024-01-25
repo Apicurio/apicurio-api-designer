@@ -12,8 +12,8 @@ import {
     TextContent
 } from "@patternfly/react-core";
 import { ArtifactTypes, Design, DesignEvent } from "@models/designs";
-import { LocalStorageService, useLocalStorageService } from "@services/LocalStorageService.ts";
-import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
+import { UseLocalStorageService, useLocalStorageService } from "@services/useLocalStorageService.ts";
+import { DesignsService, useDesignsService } from "@services/useDesignsService.ts";
 import { ArtifactTypeIcon } from "@app/components";
 import { DesignDescription, NavLink } from "@app/pages";
 import { If, ObjectDropdown, ToggleIcon } from "@apicurio/common-ui-components";
@@ -47,7 +47,7 @@ type EditorContextMenuItem = {
  * The context of the design when editing a design on the editor page.
  */
 export const EditorContext: FunctionComponent<EditorContextProps> = (props: EditorContextProps) => {
-    const lss: LocalStorageService = useLocalStorageService();
+    const lss: UseLocalStorageService = useLocalStorageService();
 
     const [originEvent, setOriginEvent] = useState<DesignEvent>();
     const [isExpanded, setExpanded] = useState(lss.getConfigProperty("editor-context.isExpanded", "false") === "true");

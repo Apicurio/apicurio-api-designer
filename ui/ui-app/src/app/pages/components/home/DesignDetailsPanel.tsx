@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { Tab, Tabs, TabTitleText } from "@patternfly/react-core";
 import { Design, DesignEvent } from "@models/designs";
 import { ArtifactTypeIcon } from "@app/components";
-import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
+import { DesignsService, useDesignsService } from "@services/useDesignsService.ts";
 import "./DesignDetailsPanel.css";
 import { DateTime, IfNotLoading } from "@apicurio/common-ui-components";
 import { DesignDescription, DesignEvents, DesignHistory, DesignOriginLabel } from "@app/pages";

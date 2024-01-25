@@ -1,4 +1,3 @@
-export * from "./BrowserDataWarning";
 export * from "./DesignDescription";
 export * from "./ErrorModal";
 export * from "./NavLink";

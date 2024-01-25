@@ -10,10 +10,9 @@ import {
     DesignsSort,
     Paging, RenameDesign,
 } from "@models/designs";
-import { ServiceConfig } from "./ServiceConfigContext";
-import { useBrowserDesignsService } from "./BrowserDesignsService";
 import { createEndpoint, createOptions, httpDelete, httpGet, httpPostWithReturn, httpPut } from "@utils/rest.utils";
-import { useServiceConfig } from "@services/useServiceConfig";
+import { ApiDesignerConfig, useApiDesignerConfig } from "@services/useApiDesignerConfig.ts";
+import { AuthService, useAuth } from "@apicurio/common-ui-components";
 
 function limit(value: string | undefined, size: number): string {
     if (value != undefined && value.length > size) {
@@ -22,11 +21,11 @@ function limit(value: string | undefined, size: number): string {
     return value || "";
 }
 
-async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: CreateDesignContent, cde?: CreateDesignEvent): Promise<Design> {
+async function createDesign(appConfig: ApiDesignerConfig, auth: AuthService, cd: CreateDesign, cdc: CreateDesignContent, cde?: CreateDesignEvent): Promise<Design> {
     console.debug("[DesignsService] Creating a new design: ", cd);
-    const token: string | undefined = await svcConfig.auth.getToken();
+    const token: string | undefined = await auth.getToken();
 
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs");
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs");
     const headers: any = {
         "Authorization": `Bearer ${token}`,
         "Content-Type": cdc.contentType,
@@ -45,16 +44,16 @@ async function createDesign(svcConfig: ServiceConfig, cd: CreateDesign, cdc: Cre
                 }
             }
         };
-        createEvent(svcConfig, response.id, cevent);
+        createEvent(appConfig, auth, response.id, cevent);
         return response;
     });
 }
 
-async function searchDesigns(svcConfig: ServiceConfig, criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort): Promise<DesignsSearchResults> {
+async function searchDesigns(appConfig: ApiDesignerConfig, auth: AuthService, criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort): Promise<DesignsSearchResults> {
     console.debug("[DesignsService] Searching for designs: ", criteria, paging, sort);
-    const token: string | undefined = await svcConfig.auth.getToken();
+    const token: string | undefined = await auth.getToken();
 
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs", {}, {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs", {}, {
         page: paging.page,
         pageSize: paging.pageSize,
         order: sort.direction,
@@ -67,11 +66,11 @@ async function searchDesigns(svcConfig: ServiceConfig, criteria: DesignsSearchCr
 }
 
 
-async function getDesign(svcConfig: ServiceConfig, id: string): Promise<Design> {
-    const token: string | undefined = await svcConfig.auth.getToken();
+async function getDesign(appConfig: ApiDesignerConfig, auth: AuthService, id: string): Promise<Design> {
+    const token: string | undefined = await auth.getToken();
 
     console.info("[DesignsService] Getting design with ID: ", id);
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/meta", {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs/:designId/meta", {
         designId: id
     });
     const headers: any = {
@@ -80,11 +79,11 @@ async function getDesign(svcConfig: ServiceConfig, id: string): Promise<Design> 
     return httpGet<Design>(endpoint, createOptions(headers));
 }
 
-async function deleteDesign(svcConfig: ServiceConfig, id: string): Promise<void> {
-    const token: string | undefined = await svcConfig.auth.getToken();
+async function deleteDesign(appConfig: ApiDesignerConfig, auth: AuthService, id: string): Promise<void> {
+    const token: string | undefined = await auth.getToken();
 
     console.info("[DesignsService] Deleting design with ID: ", id);
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId", {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs/:designId", {
         designId: id
     });
     const headers: any = {
@@ -93,11 +92,11 @@ async function deleteDesign(svcConfig: ServiceConfig, id: string): Promise<void>
     return httpDelete(endpoint, createOptions(headers));
 }
 
-async function renameDesign(svcConfig: ServiceConfig, id: string, newName: string, newDescription?: string): Promise<void> {
+async function renameDesign(appConfig: ApiDesignerConfig, auth: AuthService, id: string, newName: string, newDescription?: string): Promise<void> {
     console.debug("[DesignsService] Renaming design with ID: ", id, newName);
-    const token: string | undefined = await svcConfig.auth.getToken();
+    const token: string | undefined = await auth.getToken();
 
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/meta", {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs/:designId/meta", {
         designId: id
     });
     const headers: any = {
@@ -110,11 +109,11 @@ async function renameDesign(svcConfig: ServiceConfig, id: string, newName: strin
 
 }
 
-async function getDesignContent(svcConfig: ServiceConfig, id: string): Promise<DesignContent> {
-    const token: string | undefined = await svcConfig.auth.getToken();
+async function getDesignContent(appConfig: ApiDesignerConfig, auth: AuthService, id: string): Promise<DesignContent> {
+    const token: string | undefined = await auth.getToken();
 
     console.info("[DesignsService] Getting design *content* with ID: ", id);
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId", {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs/:designId", {
         designId: id
     });
     const headers: any = {
@@ -135,11 +134,11 @@ async function getDesignContent(svcConfig: ServiceConfig, id: string): Promise<D
     });
 }
 
-async function updateDesignContent(svcConfig: ServiceConfig, content: DesignContent): Promise<void> {
+async function updateDesignContent(appConfig: ApiDesignerConfig, auth: AuthService, content: DesignContent): Promise<void> {
     console.debug("[DesignsService] Updating the content of a design: ", content.id);
-    const token: string | undefined = await svcConfig.auth.getToken();
+    const token: string | undefined = await auth.getToken();
 
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId", {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs/:designId", {
         designId: content.id
     });
     const headers: any = {
@@ -155,16 +154,16 @@ async function updateDesignContent(svcConfig: ServiceConfig, content: DesignCont
                 }
             }
         };
-        createEvent(svcConfig, content.id, cevent);
+        createEvent(appConfig, auth, content.id, cevent);
         return response;
     });
 }
 
-async function getEvents(svcConfig: ServiceConfig, id: string): Promise<DesignEvent[]> {
-    const token: string | undefined = await svcConfig.auth.getToken();
+async function getEvents(appConfig: ApiDesignerConfig, auth: AuthService, id: string): Promise<DesignEvent[]> {
+    const token: string | undefined = await auth.getToken();
 
     console.info("[DesignsService] Getting events for design with ID: ", id);
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/events", {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs/:designId/events", {
         designId: id
     });
     const headers: any = {
@@ -173,11 +172,11 @@ async function getEvents(svcConfig: ServiceConfig, id: string): Promise<DesignEv
     return httpGet<DesignEvent[]>(endpoint, createOptions(headers));
 }
 
-async function getFirstEvent(svcConfig: ServiceConfig, id: string): Promise<DesignEvent> {
-    const token: string | undefined = await svcConfig.auth.getToken();
+async function getFirstEvent(appConfig: ApiDesignerConfig, auth: AuthService, id: string): Promise<DesignEvent> {
+    const token: string | undefined = await auth.getToken();
 
     console.info("[DesignsService] Getting first event for design with ID: ", id);
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/events/first", {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs/:designId/events/first", {
         designId: id
     });
     const headers: any = {
@@ -186,11 +185,11 @@ async function getFirstEvent(svcConfig: ServiceConfig, id: string): Promise<Desi
     return httpGet<DesignEvent>(endpoint, createOptions(headers));
 }
 
-async function createEvent(svcConfig: ServiceConfig, id: string, cevent: CreateDesignEvent): Promise<DesignEvent> {
+async function createEvent(appConfig: ApiDesignerConfig, auth: AuthService, id: string, cevent: CreateDesignEvent): Promise<DesignEvent> {
     console.debug("[DesignsService] Creating an event for design with ID: ", id);
-    const token: string | undefined = await svcConfig.auth.getToken();
+    const token: string | undefined = await auth.getToken();
 
-    const endpoint: string = createEndpoint(svcConfig.designs.api, "/designs/:designId/events", {
+    const endpoint: string = createEndpoint(appConfig.apis.designer, "/designs/:designId/events", {
         designId: id
     });
     const headers: any = {
@@ -221,20 +220,19 @@ export interface DesignsService {
  * React hook to get the Designs service.
  */
 export const useDesignsService: () => DesignsService = (): DesignsService => {
-    const svcConfig: ServiceConfig = useServiceConfig();
-    const browserDesignsService: DesignsService = useBrowserDesignsService();
-    const remoteDesignsService: DesignsService = {
-        createDesign: (cd: CreateDesign, cdc: CreateDesignContent, cde: CreateDesignEvent) => createDesign(svcConfig, cd, cdc, cde),
-        searchDesigns: (criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort) => searchDesigns(svcConfig, criteria, paging, sort),
-        getDesign: (id: string) => getDesign(svcConfig, id),
-        deleteDesign: (id: string) => deleteDesign(svcConfig, id),
-        renameDesign: (id: string, newName: string, newDescription?: string) => renameDesign(svcConfig, id, newName, newDescription),
-        getDesignContent: (id: string) => getDesignContent(svcConfig, id),
-        updateDesignContent: (content: DesignContent) => updateDesignContent(svcConfig, content),
-        getEvents: (id: string) => getEvents(svcConfig, id),
-        getFirstEvent: (id: string) => getFirstEvent(svcConfig, id),
-        createEvent: (id: string, cevent: CreateDesignEvent) => createEvent(svcConfig, id, cevent)
-    };
+    const appConfig: ApiDesignerConfig = useApiDesignerConfig();
+    const auth: AuthService = useAuth();
 
-    return (svcConfig.designs.type === "browser") ? browserDesignsService : remoteDesignsService;
+    return {
+        createDesign: (cd: CreateDesign, cdc: CreateDesignContent, cde: CreateDesignEvent) => createDesign(appConfig, auth, cd, cdc, cde),
+        searchDesigns: (criteria: DesignsSearchCriteria, paging: Paging, sort: DesignsSort) => searchDesigns(appConfig, auth, criteria, paging, sort),
+        getDesign: (id: string) => getDesign(appConfig, auth, id),
+        deleteDesign: (id: string) => deleteDesign(appConfig, auth, id),
+        renameDesign: (id: string, newName: string, newDescription?: string) => renameDesign(appConfig, auth, id, newName, newDescription),
+        getDesignContent: (id: string) => getDesignContent(appConfig, auth, id),
+        updateDesignContent: (content: DesignContent) => updateDesignContent(appConfig, auth, content),
+        getEvents: (id: string) => getEvents(appConfig, auth, id),
+        getFirstEvent: (id: string) => getFirstEvent(appConfig, auth, id),
+        createEvent: (id: string, cevent: CreateDesignEvent) => createEvent(appConfig, auth, id, cevent)
+    };
 };

@@ -13,8 +13,8 @@ import {
 } from "@patternfly/react-core";
 import { ArtifactTypes, CreateDesign } from "@models/designs";
 import { Template } from "@models/templates";
-import { TemplatesService, useTemplatesService } from "@services/TemplatesService.ts";
-import { BrowserDataWarning, OPENAPI_VERSIONS, TemplateItem, TYPE_ITEMS, TypeItem } from "@app/pages";
+import { UseTemplatesService, useTemplatesService } from "@services/useTemplatesService.ts";
+import { OPENAPI_VERSIONS, TemplateItem, TYPE_ITEMS, TypeItem } from "@app/pages";
 import { If, ObjectSelect } from "@apicurio/common-ui-components";
 
 export type CreateDesignModalProps = {
@@ -36,7 +36,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
     const [templates, setTemplates] = useState<Template[]>();
     const [template, setTemplate] = useState<Template>();
 
-    const templatesSvc: TemplatesService = useTemplatesService();
+    const templatesSvc: UseTemplatesService = useTemplatesService();
 
     // Called when the user clicks the Create button in the modal
     const doCreate = (): void => {
@@ -127,8 +127,6 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
                 </Button>
             ]}
         >
-            <BrowserDataWarning />
-
             <Form>
                 <FormGroup label="Name" isRequired={true} fieldId="create-design-name">
                     <TextInput

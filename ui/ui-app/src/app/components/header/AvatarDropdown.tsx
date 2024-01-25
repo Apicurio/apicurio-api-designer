@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Avatar, Dropdown, DropdownItem, DropdownList, MenuToggle, MenuToggleElement } from "@patternfly/react-core";
-import { useOidcAuth } from "@app/auth";
-import { AuthConfig } from "@services/ServiceConfigContext.tsx";
+import { AuthService, useAuth } from "@apicurio/common-ui-components";
 
 
 export type AvatarDropdownProps = {
@@ -12,7 +11,7 @@ export type AvatarDropdownProps = {
 export const AvatarDropdown: FunctionComponent<AvatarDropdownProps> = () => {
     const [username, setUsername] = useState("User");
     const [isOpen, setIsOpen] = useState(false);
-    const auth: AuthConfig = useOidcAuth();
+    const auth: AuthService = useAuth();
 
     const onSelect = (): void => {
         setIsOpen(!isOpen);
@@ -23,7 +22,9 @@ export const AvatarDropdown: FunctionComponent<AvatarDropdownProps> = () => {
     };
 
     useEffect(() => {
-        auth.getUsername()?.then(setUsername);
+        if (auth.isAuthEnabled()) {
+            auth.getUsername()?.then(username => setUsername(username as string));
+        }
     }, []);
 
     return (

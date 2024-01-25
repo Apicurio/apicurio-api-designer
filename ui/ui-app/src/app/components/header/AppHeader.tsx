@@ -1,9 +1,9 @@
 import { FunctionComponent } from "react";
 import { Brand, Masthead, MastheadBrand, MastheadContent, MastheadMain } from "@patternfly/react-core";
 import { Link } from "react-router-dom";
-import { NavigationService, useNavigation } from "@services/NavigationService.ts";
 import { AppHeaderToolbar } from "@app/components";
-import { ApiDesignerConfigType, useApiDesignerConfig } from "@app/contexts/config.ts";
+import { ApiDesignerConfig, useApiDesignerConfig } from "@services/useApiDesignerConfig.ts";
+import { AppNavigationService, useAppNavigation } from "@services/useAppNavigation.ts";
 
 
 export type AppHeaderProps = {
@@ -12,8 +12,8 @@ export type AppHeaderProps = {
 
 
 export const AppHeader: FunctionComponent<AppHeaderProps> = () => {
-    const appNav: NavigationService = useNavigation();
-    const config: ApiDesignerConfigType | undefined = useApiDesignerConfig();
+    const appNav: AppNavigationService = useAppNavigation();
+    const config: ApiDesignerConfig | undefined = useApiDesignerConfig();
 
     if (config?.components.masthead.show === false) {
         return (<></>);

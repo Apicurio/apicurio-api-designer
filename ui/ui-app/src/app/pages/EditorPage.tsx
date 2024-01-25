@@ -4,10 +4,9 @@ import {
     PageSectionVariants
 } from "@patternfly/react-core";
 import { ArtifactTypes, ContentTypes, Design, DesignContent } from "@models/designs";
-import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
-import { DownloadService, useDownloadService } from "@services/DownloadService.ts";
-import { NavigationService, useNavigation } from "@services/NavigationService.ts";
-import { AlertsService, useAlertsService } from "@services/AlertsService.tsx";
+import { DesignsService, useDesignsService } from "@services/useDesignsService.ts";
+import { UseDownloadService, useDownloadService } from "@services/useDownloadService.ts";
+import { UseAlertsService, useAlertsService } from "@services/useAlertsService.tsx";
 import {
     contentTypeForDesign,
     convertToValidFilename,
@@ -21,6 +20,7 @@ import { AsyncApiEditor } from "@editors/AsyncApiEditor.tsx";
 import { CompareModal, DeleteDesignModal, EditorContext, RenameData, RenameModal } from "@app/pages/components";
 import { useParams } from "react-router-dom";
 import { IfNotLoading } from "@apicurio/common-ui-components";
+import { AppNavigationService, useAppNavigation } from "@services/useAppNavigation.ts";
 
 const sectionContextStyle: CSSProperties = {
     borderBottom: "1px solid #ccc",
@@ -70,9 +70,9 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
     const params = useParams();
 
     const designsService: DesignsService = useDesignsService();
-    const downloadSvc: DownloadService = useDownloadService();
-    const navigation: NavigationService = useNavigation();
-    const alerts: AlertsService = useAlertsService();
+    const downloadSvc: UseDownloadService = useDownloadService();
+    const navigation: AppNavigationService = useAppNavigation();
+    const alerts: UseAlertsService = useAlertsService();
 
     useEffect(() => {
         // Cleanup any possible event listener we might still have registered

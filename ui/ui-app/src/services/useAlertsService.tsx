@@ -1,7 +1,7 @@
 import { Design, RenameDesign } from "@models/designs";
 
 
-export interface AlertsService {
+export interface UseAlertsService {
     designDeleted(design: Design): void;
     designDeleteFailed(design: Design, error: any): void;
     designSaved(design: Design): void;
@@ -12,7 +12,7 @@ export interface AlertsService {
 /**
  * React hook to get the Alerts service.
  */
-export const useAlertsService: () => AlertsService = (): AlertsService => {
+export const useAlertsService: () => UseAlertsService = (): UseAlertsService => {
     // const serviceConfig: ServiceConfig = useServiceConfig();
 
     return {

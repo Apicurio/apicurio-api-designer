@@ -34,7 +34,7 @@ async function downloadToFS(content: string, contentType: string, filename: stri
 /**
  * The Download Service interface.
  */
-export interface DownloadService {
+export interface UseDownloadService {
     downloadToFS(content: string, contentType: string, filename: string): Promise<void>;
 }
 
@@ -42,10 +42,8 @@ export interface DownloadService {
 /**
  * React hook to get the Download service.
  */
-export const useDownloadService: () => DownloadService = (): DownloadService => {
+export const useDownloadService: () => UseDownloadService = (): UseDownloadService => {
     return {
-        downloadToFS: (content: string, contentType: string, filename: string): Promise<void> => {
-            return downloadToFS(content, contentType, filename);
-        }
+        downloadToFS
     };
 };

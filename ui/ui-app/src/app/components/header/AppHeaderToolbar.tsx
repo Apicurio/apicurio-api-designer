@@ -1,9 +1,9 @@
 import { FunctionComponent, useState } from "react";
 import { Button, Toolbar, ToolbarContent, ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
 import { QuestionCircleIcon } from "@patternfly/react-icons";
-import { AvatarDropdown, IfAuth } from "@app/components";
-import { AppAboutModal, BackendInfo, FrontendInfo } from "@apicurio/common-ui-components";
-import { ApiDesignerConfigType, useApiDesignerConfig, VersionType } from "@app/contexts/config.ts";
+import { AvatarDropdown } from "@app/components";
+import { AppAboutModal, BackendInfo, FrontendInfo, IfAuth } from "@apicurio/common-ui-components";
+import { ApiDesignerConfig, useApiDesignerConfig, VersionType } from "@services/useApiDesignerConfig.ts";
 
 
 export type AppHeaderToolbarProps = {
@@ -13,7 +13,7 @@ export type AppHeaderToolbarProps = {
 
 export const AppHeaderToolbar: FunctionComponent<AppHeaderToolbarProps> = () => {
     const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
-    const config: ApiDesignerConfigType | undefined = useApiDesignerConfig();
+    const config: ApiDesignerConfig = useApiDesignerConfig();
     const version: VersionType = config?.version as VersionType;
 
     const frontendInfo: FrontendInfo = {
@@ -35,7 +35,7 @@ export const AppHeaderToolbar: FunctionComponent<AppHeaderToolbarProps> = () => 
                 frontendInfo={frontendInfo}
                 backendInfo={fetchBackendInfo}
                 backendLabel="Designer API info"
-                brandImageSrc="/apicurio_apidesigner_icon_reverse.svg"
+                brandImageSrc="/apicurio_apidesigner_logo_reverse.svg"
                 brandImageAlt={version.name}
                 isOpen={isAboutModalOpen}
                 onClose={() => setIsAboutModalOpen(false)} />

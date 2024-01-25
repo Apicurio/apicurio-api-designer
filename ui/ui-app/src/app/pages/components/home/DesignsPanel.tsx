@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Alert, AlertActionCloseButton, Card, CardBody } from "@patternfly/react-core";
+import { Card, CardBody } from "@patternfly/react-core";
 import {
     DeleteDesignModal,
     DesignList,
@@ -7,8 +7,7 @@ import {
     DesignsEmptyStateFiltered,
     DesignsToolbar,
     ImportFrom,
-    PageConfig, RenameModal,
-    usePageConfig
+    RenameModal
 } from "@app/pages";
 import {
     Design,
@@ -18,13 +17,12 @@ import {
     Paging,
     RenameDesign
 } from "@models/designs";
-import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
-import { DownloadService, useDownloadService } from "@services/DownloadService.ts";
-import { NavigationService, useNavigation } from "@services/NavigationService.ts";
-import { AlertsService, useAlertsService } from "@services/AlertsService.tsx";
-import { LocalStorageService, useLocalStorageService } from "@services/LocalStorageService.ts";
+import { DesignsService, useDesignsService } from "@services/useDesignsService.ts";
+import { UseDownloadService, useDownloadService } from "@services/useDownloadService.ts";
+import { UseAlertsService, useAlertsService } from "@services/useAlertsService.tsx";
 import { contentTypeForDesign, convertToValidFilename, fileExtensionForDesign } from "@utils/content.utils.ts";
-import { If, ListWithToolbar } from "@apicurio/common-ui-components";
+import { ListWithToolbar } from "@apicurio/common-ui-components";
+import { AppNavigationService, useAppNavigation } from "@services/useAppNavigation.ts";
 
 
 export type DesignsPanelProps = {
@@ -37,7 +35,6 @@ export type DesignsPanelProps = {
 export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDesign, onDesignSelected, onCreate, onImport }: DesignsPanelProps) => {
     const [ isLoading, setLoading ] = useState(false);
     const [ error, setError ] = useState<any>();
-    const [ showDataWarning, setShowDataWarning ] = useState(true);
     const [ refresh, setRefresh ] = useState(1);
     const [ isFiltered, setFiltered ] = useState(false);
     const [ paging, setPaging ] = useState<Paging>({
@@ -58,12 +55,10 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
     const [ designToRename, setDesignToRename ] = useState<Design>();
     const [ isRenameModalOpen, setRenameModalOpen ] = useState(false);
 
-    const pageConfig: PageConfig = usePageConfig();
     const designsSvc: DesignsService = useDesignsService();
-    const downloadSvc: DownloadService = useDownloadService();
-    const nav: NavigationService = useNavigation();
-    const alerts: AlertsService = useAlertsService();
-    const local: LocalStorageService = useLocalStorageService();
+    const downloadSvc: UseDownloadService = useDownloadService();
+    const nav: AppNavigationService = useAppNavigation();
+    const alerts: UseAlertsService = useAlertsService();
 
     const doRefresh = (): void => {
         setRefresh(refresh + 1);
@@ -141,11 +136,6 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
     };
 
     useEffect(() => {
-        const defaultShowDataWarning: string = `${pageConfig.serviceConfig.designs.type === "browser"}`;
-        setShowDataWarning("true" === local.getConfigProperty("designs.panel.show-data-warning", defaultShowDataWarning));
-    }, [local, pageConfig]);
-
-    useEffect(() => {
         setLoading(true);
         setError(undefined);
         onDesignSelected(undefined);
@@ -179,11 +169,6 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
             onCriteriaChange={onCriteriaChange} onPagingChange={onPagingChange} />
     );
 
-    const onCloseDataWarning = (): void => {
-        setShowDataWarning(false);
-        local.setConfigProperty("designs.panel.show-data-warning", "false");
-    };
-
     return (
         <div className="designs-panel" style={{ minHeight: "100%" }}>
             <ListWithToolbar toolbar={toolbar}
@@ -195,21 +180,6 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
                 isEmpty={!designs || designs.count === 0}>
                 <Card isSelectable={false}>
                     <CardBody className="panel-body first-child-no-padding" style={{ padding: "0px" }}>
-                        <If condition={showDataWarning}>
-                            <Alert className="panel-alert"
-                                isInline={true}
-                                variant="info"
-                                title="Service Preview: Data is stored locally in your browser"
-                                actionClose={<AlertActionCloseButton onClose={onCloseDataWarning} />}
-                                style={{ marginBottom: "15px" }}>
-                                <p>
-                                    In this configuration of API Designer, all designs are stored
-                                    locally in your browser. Clearing your browser cache or switching to a new browser
-                                    might result in loss of data. Make sure you save your work by downloading your
-                                    designs locally.
-                                </p>
-                            </Alert>
-                        </If>
                         <DesignList designs={designs as DesignsSearchResults}
                             selectedDesign={selectedDesign}
                             sort={sort}

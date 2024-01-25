@@ -37,7 +37,7 @@ async function getTemplatesFor(type: string, version?: string): Promise<Template
 /**
  * The Templates Service interface.
  */
-export interface TemplatesService {
+export interface UseTemplatesService {
     getTemplatesFor(type: string, version?: string): Promise<Template[]>;
 }
 
@@ -45,7 +45,7 @@ export interface TemplatesService {
 /**
  * React hook to get the Templates service.
  */
-export const useTemplatesService: () => TemplatesService = (): TemplatesService => {
+export const useTemplatesService: () => UseTemplatesService = (): UseTemplatesService => {
     return {
         getTemplatesFor
     };

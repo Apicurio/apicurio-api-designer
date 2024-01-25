@@ -17,8 +17,7 @@ import {
     TitleSizes
 } from "@patternfly/react-core";
 import { CreateDesign, CreateDesignContent, CreateDesignEvent, Design } from "@models/designs";
-import { DesignsService, useDesignsService } from "@services/DesignsService.ts";
-import { NavigationService, useNavigation } from "@services/NavigationService.ts";
+import { DesignsService, useDesignsService } from "@services/useDesignsService.ts";
 import { Template } from "@models/templates";
 import { cloneObject, propertyReplace } from "@utils/object.utils.ts";
 import {
@@ -29,6 +28,7 @@ import {
     ImportDesignModal,
     ImportFrom
 } from "@app/pages/components";
+import { AppNavigationService, useAppNavigation } from "@services/useAppNavigation.ts";
 
 export type HomePageProps = Record<string, never>;
 
@@ -45,7 +45,7 @@ export const HomePage: FunctionComponent<HomePageProps> = () => {
     const drawerRef: any = useRef<HTMLSpanElement>();
 
     const designsSvc: DesignsService = useDesignsService();
-    const nav: NavigationService = useNavigation();
+    const nav: AppNavigationService = useAppNavigation();
 
     useEffect(() => {
         console.info("[HomePageProps] --- API Designer UI i-17");

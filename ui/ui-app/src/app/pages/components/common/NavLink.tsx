@@ -1,6 +1,6 @@
 import React, { CSSProperties, FunctionComponent } from "react";
 import { Link } from "react-router-dom";
-import { NavigationService, useNavigation } from "@services/NavigationService.ts";
+import { AppNavigationService, useAppNavigation } from "@services/useAppNavigation.ts";
 
 export type NavLinkProps = {
     location: string;
@@ -12,7 +12,7 @@ export type NavLinkProps = {
 }
 
 export const NavLink: FunctionComponent<NavLinkProps> = ({ testId, location, title, className, style, children }: NavLinkProps) => {
-    const nav: NavigationService = useNavigation();
+    const nav: AppNavigationService = useAppNavigation();
     const to: string = nav.createLink(location);
 
     return (
