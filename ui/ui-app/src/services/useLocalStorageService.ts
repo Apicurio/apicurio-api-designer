@@ -25,7 +25,7 @@ function clearConfigProperty(propertyName: string): void {
 /**
  * The Local Storage Service interface.
  */
-export interface UseLocalStorageService {
+export interface LocalStorageService {
     setConfigProperty(propertyName: string, propertyValue: string | object): void;
     getConfigProperty(propertyName: string, defaultValue: string | object | undefined): string | object | undefined;
     clearConfigProperty(propertyName: string): void;
@@ -35,7 +35,7 @@ export interface UseLocalStorageService {
 /**
  * React hook to get the LocalStorage service.
  */
-export const useLocalStorageService: () => UseLocalStorageService = (): UseLocalStorageService => {
+export const useLocalStorageService: () => LocalStorageService = (): LocalStorageService => {
     return {
         setConfigProperty,
         getConfigProperty,

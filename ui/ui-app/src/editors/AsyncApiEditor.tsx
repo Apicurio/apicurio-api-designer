@@ -2,8 +2,8 @@ import React, { RefObject, useEffect } from "react";
 import "./AsyncApiEditor.css";
 import { Editor as DesignEditor, EditorProps } from "./editor-types";
 import { ContentTypes } from "@models/designs";
-import { EditorConfig, useEditorConfig } from "./EditorConfigContext.ts";
 import { parseJson, parseYaml, toJsonString, toYamlString } from "@utils/content.utils.ts";
+import { ApiDesignerConfig, useApiDesignerConfig } from "@services/useApiDesignerConfig.ts";
 
 
 export type AsyncApiEditorProps = {
@@ -18,7 +18,9 @@ export type AsyncApiEditorProps = {
  */
 export const AsyncApiEditor: DesignEditor = ({ content, onChange, className }: AsyncApiEditorProps) => {
     const ref: RefObject<any> = React.createRef();
-    const cfg: EditorConfig = useEditorConfig();
+    const config: ApiDesignerConfig = useApiDesignerConfig();
+
+    const editorsUrl: string = config.components.editors.url;
 
     // TODO we have a lot of common functionality between the asyncapi and openapi editors.  Need to share!
     useEffect(() => {
@@ -49,7 +51,7 @@ export const AsyncApiEditor: DesignEditor = ({ content, onChange, className }: A
     });
 
     const editorAppUrl = (): string => {
-        return cfg.asyncApiEditorUrl;
+        return editorsUrl;
     };
 
     const onEditorLoaded = (): void => {

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import "./UrlUpload.css";
 import { Button, Spinner, TextArea, TextInput } from "@patternfly/react-core";
-import { UseUrlService, useUrlService } from "@services/useUrlService.ts";
+import { UrlService, useUrlService } from "@services/useUrlService.ts";
 import { If, IfNotLoading } from "@apicurio/common-ui-components";
 
 /**
@@ -24,7 +24,7 @@ export const UrlUpload: FunctionComponent<UrlUploadProps> = (props: UrlUploadPro
     const [isLoading, setLoading] = useState<boolean>(false);
     const [downloadError, setDownloadError] = useState<string>();
 
-    const urlService: UseUrlService = useUrlService();
+    const urlService: UrlService = useUrlService();
 
     const onTextInputChange = (_event: any, value: string): void => {
         setUrl(value);

@@ -1,9 +1,9 @@
 import React, { RefObject, useEffect } from "react";
 import { Editor as DesignEditor, EditorProps } from "./editor-types";
 import "./OpenApiEditor.css";
-import { EditorConfig, useEditorConfig } from "./EditorConfigContext.ts";
 import { ContentTypes } from "@models/designs";
 import { parseJson, parseYaml, toJsonString, toYamlString } from "@utils/content.utils.ts";
+import { ApiDesignerConfig, useApiDesignerConfig } from "@services/useApiDesignerConfig.ts";
 
 
 export type OpenApiEditorProps = {
@@ -18,10 +18,12 @@ export type OpenApiEditorProps = {
  */
 export const OpenApiEditor: DesignEditor = ({ content, onChange, className }: OpenApiEditorProps) => {
     const ref: RefObject<any> = React.createRef();
-    const cfg: EditorConfig = useEditorConfig();
+    const config: ApiDesignerConfig = useApiDesignerConfig();
+
+    const editorsUrl: string = config.components.editors.url;
 
     useEffect(() => {
-        console.info("[OpenApiEditor] URL location of ads-editors: ", cfg.openApiEditorUrl);
+        console.info("[OpenApiEditor] URL location of editors: ", editorsUrl);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
 
@@ -50,7 +52,7 @@ export const OpenApiEditor: DesignEditor = ({ content, onChange, className }: Op
     });
 
     const editorAppUrl = (): string => {
-        return cfg.openApiEditorUrl;
+        return editorsUrl;
     };
 
     const onEditorLoaded = (): void => {

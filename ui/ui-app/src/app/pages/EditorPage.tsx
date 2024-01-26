@@ -5,8 +5,8 @@ import {
 } from "@patternfly/react-core";
 import { ArtifactTypes, ContentTypes, Design, DesignContent } from "@models/designs";
 import { DesignsService, useDesignsService } from "@services/useDesignsService.ts";
-import { UseDownloadService, useDownloadService } from "@services/useDownloadService.ts";
-import { UseAlertsService, useAlertsService } from "@services/useAlertsService.tsx";
+import { DownloadService, useDownloadService } from "@services/useDownloadService.ts";
+import { AlertsService, useAlertsService } from "@services/useAlertsService.tsx";
 import {
     contentTypeForDesign,
     convertToValidFilename,
@@ -70,9 +70,9 @@ export const EditorPage: FunctionComponent<EditorPageProps> = () => {
     const params = useParams();
 
     const designsService: DesignsService = useDesignsService();
-    const downloadSvc: UseDownloadService = useDownloadService();
+    const downloadSvc: DownloadService = useDownloadService();
     const navigation: AppNavigationService = useAppNavigation();
-    const alerts: UseAlertsService = useAlertsService();
+    const alerts: AlertsService = useAlertsService();
 
     useEffect(() => {
         // Cleanup any possible event listener we might still have registered

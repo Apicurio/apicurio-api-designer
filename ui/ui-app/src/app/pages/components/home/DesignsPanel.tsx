@@ -18,8 +18,8 @@ import {
     RenameDesign
 } from "@models/designs";
 import { DesignsService, useDesignsService } from "@services/useDesignsService.ts";
-import { UseDownloadService, useDownloadService } from "@services/useDownloadService.ts";
-import { UseAlertsService, useAlertsService } from "@services/useAlertsService.tsx";
+import { DownloadService, useDownloadService } from "@services/useDownloadService.ts";
+import { AlertsService, useAlertsService } from "@services/useAlertsService.tsx";
 import { contentTypeForDesign, convertToValidFilename, fileExtensionForDesign } from "@utils/content.utils.ts";
 import { ListWithToolbar } from "@apicurio/common-ui-components";
 import { AppNavigationService, useAppNavigation } from "@services/useAppNavigation.ts";
@@ -56,9 +56,9 @@ export const DesignsPanel: FunctionComponent<DesignsPanelProps> = ({ selectedDes
     const [ isRenameModalOpen, setRenameModalOpen ] = useState(false);
 
     const designsSvc: DesignsService = useDesignsService();
-    const downloadSvc: UseDownloadService = useDownloadService();
+    const downloadSvc: DownloadService = useDownloadService();
     const nav: AppNavigationService = useAppNavigation();
-    const alerts: UseAlertsService = useAlertsService();
+    const alerts: AlertsService = useAlertsService();
 
     const doRefresh = (): void => {
         setRefresh(refresh + 1);

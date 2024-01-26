@@ -30,7 +30,7 @@ async function fetchUrlContent(url: string): Promise<string> {
 /**
  * The URL Service interface.
  */
-export interface UseUrlService {
+export interface UrlService {
     fetchUrlContent(url: string): Promise<string>;
 }
 
@@ -38,7 +38,7 @@ export interface UseUrlService {
 /**
  * React hook to get the URL service.
  */
-export const useUrlService: () => UseUrlService = (): UseUrlService => {
+export const useUrlService: () => UrlService = (): UrlService => {
     return {
         fetchUrlContent
     };

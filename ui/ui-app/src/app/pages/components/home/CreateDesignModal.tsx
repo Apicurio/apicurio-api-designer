@@ -13,7 +13,7 @@ import {
 } from "@patternfly/react-core";
 import { ArtifactTypes, CreateDesign } from "@models/designs";
 import { Template } from "@models/templates";
-import { UseTemplatesService, useTemplatesService } from "@services/useTemplatesService.ts";
+import { TemplatesService, useTemplatesService } from "@services/useTemplatesService.ts";
 import { OPENAPI_VERSIONS, TemplateItem, TYPE_ITEMS, TypeItem } from "@app/pages";
 import { If, ObjectSelect } from "@apicurio/common-ui-components";
 
@@ -36,7 +36,7 @@ export const CreateDesignModal: FunctionComponent<CreateDesignModalProps> = ({ i
     const [templates, setTemplates] = useState<Template[]>();
     const [template, setTemplate] = useState<Template>();
 
-    const templatesSvc: UseTemplatesService = useTemplatesService();
+    const templatesSvc: TemplatesService = useTemplatesService();
 
     // Called when the user clicks the Create button in the modal
     const doCreate = (): void => {
