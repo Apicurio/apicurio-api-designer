@@ -109,15 +109,15 @@
         <!-- Dependency Versions -->
 
         <lombok.version>1.18.30</lombok.version>
-        <apicurio-common-app-components.version>0.2.6.Final</apicurio-common-app-components.version>
+        <apicurio-common-app-components.version>0.2.7.Final</apicurio-common-app-components.version>
         <apicurio-common-rest-client.version>0.1.18.Final</apicurio-common-rest-client.version>
         <annotation-api.version>1.3.5</annotation-api.version>
-        <version.puppycrawl>10.12.7</version.puppycrawl>
+        <version.puppycrawl>10.14.0</version.puppycrawl>
 
         <!-- Test Dependency Versions -->
 
-        <version.org.testcontainers.postgresql>1.19.4</version.org.testcontainers.postgresql>
-        <version.wiremock>2.35.1</version.wiremock>
+        <version.org.testcontainers.postgresql>1.19.6</version.org.testcontainers.postgresql>
+        <version.wiremock>2.35.2</version.wiremock>
 
         <!-- Plugin Versions -->
 
@@ -133,7 +133,7 @@
         <version.assembly.plugin>3.6.0</version.assembly.plugin>
         <version.resources.plugin>3.3.1</version.resources.plugin>
         <version.clean.plugin>3.3.2</version.clean.plugin>
-        <version.git-commit-id-maven-plugin>7.0.0</version.git-commit-id-maven-plugin>
+        <version.git-commit-id-maven-plugin>8.0.0</version.git-commit-id-maven-plugin>
         <version.apicurio-codegen-maven-plugin>1.1.1.Final</version.apicurio-codegen-maven-plugin>
         <version.maven-gpg-plugin>3.1.0</version.maven-gpg-plugin>
 
