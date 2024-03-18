@@ -35,7 +35,7 @@ class DesignsResourceAuthTest {
     @Inject
     DesignsResourceTestShared drts;
 
-    @ConfigProperty(name = "app.authn.token.endpoint")
+    @ConfigProperty(name = "quarkus.oidc.token-path")
     String tokenEndpoint;
 
     private List<Filter> original;

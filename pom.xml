@@ -103,13 +103,13 @@
 
         <!-- Quarkus -->
 
-        <version.quarkus>3.6.6</version.quarkus>
+        <version.quarkus>3.8.2</version.quarkus>
         <quarkus.profile>dev</quarkus.profile>
 
         <!-- Dependency Versions -->
 
         <lombok.version>1.18.30</lombok.version>
-        <apicurio-common-app-components.version>0.2.6.Final</apicurio-common-app-components.version>
+        <apicurio-common-app-components.version>1.1.0.CR1</apicurio-common-app-components.version>
         <apicurio-common-rest-client.version>0.1.18.Final</apicurio-common-rest-client.version>
         <annotation-api.version>1.3.5</annotation-api.version>
         <version.puppycrawl>10.12.7</version.puppycrawl>
