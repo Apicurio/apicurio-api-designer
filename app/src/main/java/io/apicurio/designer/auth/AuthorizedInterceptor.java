@@ -43,7 +43,7 @@ public class AuthorizedInterceptor {
     @Inject
     SecurityIdentity securityIdentity;
 
-    @ConfigProperty(name = "app.authn.enabled")
+    @ConfigProperty(name = "quarkus.oidc.tenant-enabled")
     boolean authenticationEnabled;
 
     @AroundInvoke

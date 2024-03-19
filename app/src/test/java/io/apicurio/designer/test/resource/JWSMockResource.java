@@ -95,9 +95,10 @@ public class JWSMockResource implements QuarkusTestResourceLifecycleManager {
         Map<String, String> props = new HashMap<>();
 
         //Set registry properties
-        props.put("app.authn.enabled", "true");
-        props.put("designer.config.auth.oidc.url", authServerUrl);
-        props.put("app.authn.token.endpoint", tokenEndpoint);
+        props.put("quarkus.oidc.tenant-enabled", "true");
+        props.put("quarkus.oidc.auth-server-url", authServerUrl);
+        props.put("quarkus.oidc.token-path", tokenEndpoint);
+
 
         return props;
     }
