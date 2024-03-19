@@ -83,7 +83,7 @@ public class ApiDesignerConfig {
      * Constructor.
      * @param kcProperties
      */
-    public ApiDesignerConfig(@DesignerProperties(value = {"designer.ui.config.auth.keycloak"}) Properties kcProperties) {
+    public ApiDesignerConfig(@DesignerProperties(value = {"designer.ui.config.auth"}) Properties kcProperties) {
         this.keycloakConfig = new HashMap<>();
         kcProperties.stringPropertyNames().forEach(key -> keycloakConfig.put(key, kcProperties.get(key)));
     }
