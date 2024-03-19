@@ -1,6 +1,6 @@
 import { FunctionComponent } from "react";
 import {
-    Button,
+    Button, Card, CardBody,
     EmptyState,
     EmptyStateActions,
     EmptyStateBody,
@@ -25,19 +25,23 @@ export type DesignsEmptyStateProps = {
  */
 export const DesignsEmptyState: FunctionComponent<DesignsEmptyStateProps> = ({ onCreate, onImport }: DesignsEmptyStateProps) => {
     return (
-        <EmptyState>
-            <EmptyStateHeader titleText="No designs" headingLevel="h4" icon={<EmptyStateIcon icon={AddCircleOIcon} />} />
-            <EmptyStateBody>
-                To get started, create or import a design.
-            </EmptyStateBody>
-            <EmptyStateFooter>
-                <EmptyStateActions>
-                    <Button data-testid="btn-create-design" variant="primary" onClick={onCreate}>Create design</Button>
-                </EmptyStateActions>
-                <EmptyStateActions>
-                    <ImportDropdown onImport={onImport} />
-                </EmptyStateActions>
-            </EmptyStateFooter>
-        </EmptyState>
+        <Card>
+            <CardBody>
+                <EmptyState>
+                    <EmptyStateHeader titleText="No designs" headingLevel="h4" icon={<EmptyStateIcon icon={AddCircleOIcon} />} />
+                    <EmptyStateBody>
+                        To get started, create or import a design.
+                    </EmptyStateBody>
+                    <EmptyStateFooter>
+                        <EmptyStateActions>
+                            <Button data-testid="btn-create-design" variant="primary" onClick={onCreate}>Create design</Button>
+                        </EmptyStateActions>
+                        <EmptyStateActions>
+                            <ImportDropdown onImport={onImport} />
+                        </EmptyStateActions>
+                    </EmptyStateFooter>
+                </EmptyState>
+            </CardBody>
+        </Card>
     );
 };

@@ -20,13 +20,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
-import jakarta.annotation.PostConstruct;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 
+import io.apicurio.common.apps.config.Info;
 import io.apicurio.designer.common.config.DesignerProperties;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * @author eric.wittmann@gmail.com
@@ -38,43 +39,43 @@ public class ApiDesignerConfig {
     Logger log;
 
     @Inject
-    @ConfigProperty(name = "designer.ui.config.uiContextPath", defaultValue = "/ui/")
-    //@Info(category = "ui", description = "UI context path", availableSince = "1.0.0.Final")
+    @ConfigProperty(name = "apicurio.ui.config.uiContextPath", defaultValue = "/ui/")
+    @Info(category = "ui", description = "UI context path", availableSince = "1.0.0.Final")
     public String uiContextPath;
 
     @Inject
-    @ConfigProperty(name = "designer.ui.config.apiUrl", defaultValue = "_")
-    //@Info(category = "ui", description = "UI APIs URL", availableSince = "1.0.0.Final")
+    @ConfigProperty(name = "apicurio.ui.config.apiUrl", defaultValue = "_")
+    @Info(category = "ui", description = "UI APIs URL", availableSince = "1.0.0.Final")
     public String apiUrl;
 
     @Inject
-    @ConfigProperty(name = "designer.ui.config.editorsUrl", defaultValue = "/editors/")
-    //@Info(category = "ui", description = "UI APIs URL", availableSince = "1.0.0.Final")
+    @ConfigProperty(name = "apicurio.ui.config.editorsUrl", defaultValue = "/editors/")
+    @Info(category = "ui", description = "UI APIs URL", availableSince = "1.0.0.Final")
     public String editorsUrl;
 
     @Inject
     @ConfigProperty(name = "quarkus.oidc.tenant-enabled", defaultValue = "false")
-    //@Info(category = "ui", description = "UI OIDC tenant enabled", availableSince = "1.0.0.Final")
+    @Info(category = "ui", description = "UI OIDC tenant enabled", availableSince = "1.0.0.Final")
     public boolean authenticationEnabled;
 
     @Inject
-    @ConfigProperty(name = "designer.ui.config.auth.type", defaultValue = "none")
-    //@Info(category = "ui", description = "UI auth type", availableSince = "1.0.0.Final")
+    @ConfigProperty(name = "apicurio.ui.config.auth.type", defaultValue = "none")
+    @Info(category = "ui", description = "UI auth type", availableSince = "1.0.0.Final")
     public String uiAuthType;
 
     @Inject
-    @ConfigProperty(name = "designer.ui.config.auth.oidc.url", defaultValue = "none")
-    //@Info(category = "ui", description = "UI auth OIDC URL", availableSince = "1.0.0.Final")
+    @ConfigProperty(name = "apicurio.ui.config.auth.oidc.url", defaultValue = "none")
+    @Info(category = "ui", description = "UI auth OIDC URL", availableSince = "1.0.0.Final")
     public String oidcUrl;
 
     @Inject
-    @ConfigProperty(name = "designer.ui.config.auth.oidc.client-id", defaultValue = "none")
-    //@Info(category = "ui", description = "UI auth OIDC client ID", availableSince = "1.0.0.Final")
+    @ConfigProperty(name = "apicurio.ui.config.auth.oidc.client-id", defaultValue = "none")
+    @Info(category = "ui", description = "UI auth OIDC client ID", availableSince = "1.0.0.Final")
     public String oidcClientId;
 
     @Inject
-    @ConfigProperty(name = "designer.ui.config.auth.oidc.redirect-url", defaultValue = "none")
-    //@Info(category = "ui", description = "UI auth OIDC redirect URL", availableSince = "1.0.0.Final")
+    @ConfigProperty(name = "apicurio.ui.config.auth.oidc.redirect-url", defaultValue = "none")
+    @Info(category = "ui", description = "UI auth OIDC redirect URL", availableSince = "1.0.0.Final")
     public String oidcRedirectUri;
 
     public final Map<String, Object> keycloakConfig;
@@ -83,7 +84,7 @@ public class ApiDesignerConfig {
      * Constructor.
      * @param kcProperties
      */
-    public ApiDesignerConfig(@DesignerProperties(value = {"designer.ui.config.auth"}) Properties kcProperties) {
+    public ApiDesignerConfig(@DesignerProperties(value = {"apicurio.ui.config.auth"}) Properties kcProperties) {
         this.keycloakConfig = new HashMap<>();
         kcProperties.stringPropertyNames().forEach(key -> keycloakConfig.put(key, kcProperties.get(key)));
     }
