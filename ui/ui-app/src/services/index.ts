@@ -4,5 +4,6 @@ export * from "./useAppNavigation";
 export * from "./useDesignsService";
 export * from "./useDownloadService";
 export * from "./useLocalStorageService";
+export * from "./useSystemService";
 export * from "./useTemplatesService";
 export * from "./useUrlService";

@@ -4,6 +4,7 @@ import { QuestionCircleIcon } from "@patternfly/react-icons";
 import { AvatarDropdown } from "@app/components";
 import { AppAboutModal, BackendInfo, FrontendInfo, IfAuth } from "@apicurio/common-ui-components";
 import { ApiDesignerConfig, useApiDesignerConfig, VersionType } from "@services/useApiDesignerConfig.ts";
+import { SystemService, useSystemService } from "@services/useSystemService.ts";
 
 
 export type AppHeaderToolbarProps = {
@@ -15,17 +16,20 @@ export const AppHeaderToolbar: FunctionComponent<AppHeaderToolbarProps> = () => 
     const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
     const config: ApiDesignerConfig = useApiDesignerConfig();
     const version: VersionType = config?.version as VersionType;
+    const system: SystemService = useSystemService();
 
     const frontendInfo: FrontendInfo = {
         ...version
     };
     const fetchBackendInfo = async (): Promise<BackendInfo> => {
-        return Promise.resolve({
-            name: "TBD",
-            description: "TBD",
-            version: "TBD",
-            builtOn: "TBD",
-            digest: "TBD"
+        return system.getInfo().then(info => {
+            return {
+                name: info.name,
+                description: info.description,
+                version: info.version,
+                builtOn: info.builtOn,
+                digest: ""
+            } as BackendInfo;
         });
     };
 
