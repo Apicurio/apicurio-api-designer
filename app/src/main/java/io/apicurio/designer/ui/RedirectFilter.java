@@ -20,6 +20,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
+import io.apicurio.common.apps.config.Info;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -30,21 +34,18 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import jakarta.annotation.PostConstruct;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 /**
  * @author eric.wittmann@gmail.com
  */
 @ApplicationScoped
 public class RedirectFilter implements Filter {
     
-    @ConfigProperty(name = "designer.enable-redirects", defaultValue = "true")
-//    @Info(category = "redirects", description = "Enable redirects", availableSince = "2.1.2.Final")
+    @ConfigProperty(name = "apicurio.enable-redirects", defaultValue = "true")
+    @Info(category = "redirects", description = "Enable redirects", availableSince = "1.0.0.Final")
     Boolean redirectsEnabled;
 
-    @ConfigProperty(name = "designer.redirects")
-//    @Info(category = "redirects", description = "Registry redirects", availableSince = "2.1.2.Final")
+    @ConfigProperty(name = "apicurio.redirects")
+    @Info(category = "redirects", description = "Designer redirects", availableSince = "1.0.0.Final")
     Map<String, String> redirectsConfig;
     Map<String, String> redirects = new HashMap<>();
 

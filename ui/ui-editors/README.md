@@ -6,7 +6,7 @@ To run the app locally, do the following:
 
 ```bash
 $ npm install
-$ npm run start
+$ npm run dev
 ```
 
 Then open your browser (if it doesn't automatically open) to http://localhost:9011/?demo 
@@ -16,7 +16,6 @@ To run a production build using docker:
 
 ```bash
 $ npm install
-$ npm run prebuild
 $ npm run build
 $ docker build -t="apicurio/apicurio-studio-editors" --rm .
 $ docker run --rm -it -p 8080:8080 apicurio/apicurio-studio-editors

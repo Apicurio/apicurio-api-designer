@@ -19,7 +19,7 @@ public class SqlStatementsProducer {
     Logger log;
 
     @ConfigProperty(name = "apicurio.storage.db-kind", defaultValue = "h2")
-    @Info(category = "storage", description = "Datasource Db kind", availableSince = "0.1.0.Final")
+    @Info(category = "storage", description = "Datasource Db kind", availableSince = "1.0.0.Final")
     String databaseType;
 
     /**

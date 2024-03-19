@@ -15,7 +15,7 @@ public class DesignerConfigSource implements ConfigSource {
     public synchronized Map<String, String> getProperties() {
         if (properties == null) {
             properties = new HashMap<>();
-            String prefix = System.getenv("DESIGNER_PROPERTIES_PREFIX");
+            String prefix = System.getenv("APICURIO_PROPERTIES_PREFIX");
             if (prefix != null) {
                 String profile = ProfileManager.getActiveProfile();
                 String profilePrefix = "%" + profile + ".";
